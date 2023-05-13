@@ -34,25 +34,25 @@ class ClassListViewModel: ObservableObject {
     }
     
     func addUser() {
-//        UserService_Firestore.shared.createUser(User(name: "Vaughn", role: "Student", uid: AuthService.shared.user!.uid, birthdate: Date()))
-//            .sink { completion in
-//                switch completion {
-//                case .failure(let e):
-//                    print("Failed to push user")
-//                    print("\(e)")
-//                case .finished:
-//                    print("pushed user")
-//                }
-//            } receiveValue: { _ in }
-//            .store(in: &cancellables)
+        UserService.shared.createUser(User(name: "Vaughn", role: "Student", uid: AuthService.shared.user!.uid, birthdate: Date()))
+            .sink { completion in
+                switch completion {
+                case .failure(let e):
+                    print("Failed to push user")
+                    print("\(e)")
+                case .finished:
+                    print("pushed user")
+                }
+            } receiveValue: { _ in }
+            .store(in: &cancellables)
 
-        UserService_CoreData.shared.createUser(User(name: "Vaughn", role: "Student", uid: "123", birthdate: Date()))
+//        UserService_CoreData.shared.createUser(User(name: "Vaughn", role: "Student", uid: "123", birthdate: Date()))
     }
     
     func updateName() {
         if user != nil {
             user!.name = "VVV"
-            UserService_Firestore.shared.updateName(user!, docID: user!.documentID!)
+            UserService.shared.updateName(user!, docID: user!.documentID!)
                 .sink { completion in
                     switch completion {
                     case .failure(let e):
@@ -71,50 +71,50 @@ class ClassListViewModel: ObservableObject {
     }
     
     func fetchUser() {
-//        UserService_Firestore.shared.fetchUser(with: AuthService.shared.user!.uid)
-//            .sink { completion in
-//                switch completion {
-//                case .failure(let e):
-//                    print("Failed to fetch user")
-//                    print("\(e)")
-//                case .finished:
-//                    print("fetched user")
-//                }
-//            } receiveValue: { [weak self] user in
-//                print("got it")
-//                if let u = user {
-//                    self?.user = user
-//                } else {
-//                    print("nil nil fam")
-//                }
-//            }
-//            .store(in: &cancellables)
+        UserService.shared.fetchUser(with: AuthService.shared.user!.uid)
+            .sink { completion in
+                switch completion {
+                case .failure(let e):
+                    print("Failed to fetch user")
+                    print("\(e)")
+                case .finished:
+                    print("fetched user")
+                }
+            } receiveValue: { [weak self] user in
+                print("got it")
+                if let u = user {
+                    self?.user = user
+                } else {
+                    print("nil nil fam")
+                }
+            }
+            .store(in: &cancellables)
         
-        self.user = UserService_CoreData.shared.fetchUser(uid: "123")
+        //self.user = UserService_CoreData.shared.fetchUser(uid: "123")
     }
     
     func deleteUser() {
-//        if user != nil {
-//            UserService_Firestore.shared.deleteUser(docID: user!.documentID!)
-//                .sink { completion in
-//                    switch completion {
-//                    case .failure(let e):
-//                        print("Failed to delete user")
-//                        print("\(e)")
-//                    case .finished:
-//                        print("deleted user")
-//                    }
-//                } receiveValue: { [weak self] _ in
-//                    self?.user = nil
-//                }
-//                .store(in: &cancellables)
-//        }
-        
-        if let u = user {
-            UserService_CoreData.shared.deleteUser(uid: u.uid)
-        } else {
-            print("nanana")
+        if user != nil {
+            UserService.shared.deleteUser(user: user!)
+                .sink { completion in
+                    switch completion {
+                    case .failure(let e):
+                        print("Failed to delete user")
+                        print("\(e)")
+                    case .finished:
+                        print("deleted user")
+                    }
+                } receiveValue: { [weak self] _ in
+                    self?.user = nil
+                }
+                .store(in: &cancellables)
         }
+        
+//        if let u = user {
+//            UserService_CoreData.shared.deleteUser(uid: u.uid)
+//        } else {
+//            print("nanana")
+//        }
         
     }
 }

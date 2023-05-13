@@ -18,6 +18,7 @@
 		FA0CDC412A0F25D4007AF6E7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC402A0F25D4007AF6E7 /* User.swift */; };
 		FA0CDC452A0F281B007AF6E7 /* CoreDataWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC442A0F281B007AF6E7 /* CoreDataWrapper.swift */; };
 		FA0CDC482A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC462A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld */; };
+		FA9CFA832A0FAB43000BDE95 /* Notepad.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA822A0FAB43000BDE95 /* Notepad.swift */; };
 		FABD79B12A098CA100201145 /* AiDucatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79B02A098CA100201145 /* AiDucatorApp.swift */; };
 		FABD79B32A098CA100201145 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79B22A098CA100201145 /* ContentView.swift */; };
 		FABD79B52A098CA300201145 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FABD79B42A098CA300201145 /* Assets.xcassets */; };
@@ -50,6 +51,7 @@
 		FA0CDC402A0F25D4007AF6E7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		FA0CDC442A0F281B007AF6E7 /* CoreDataWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataWrapper.swift; sourceTree = "<group>"; };
 		FA0CDC472A0F71BC007AF6E7 /* ThinklyModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ThinklyModel.xcdatamodel; sourceTree = "<group>"; };
+		FA9CFA822A0FAB43000BDE95 /* Notepad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notepad.swift; sourceTree = "<group>"; };
 		FABD79AD2A098CA100201145 /* AiDucator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiDucator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FABD79B02A098CA100201145 /* AiDucatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiDucatorApp.swift; sourceTree = "<group>"; };
 		FABD79B22A098CA100201145 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 			isa = PBXGroup;
 			children = (
 				FAEC5D312A0EFD9500A48F05 /* ClassList.swift */,
+				FA9CFA822A0FAB43000BDE95 /* Notepad.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -359,6 +362,7 @@
 				FA070DEF2A0E0A7E008EF241 /* LandingView.swift in Sources */,
 				FABD79B32A098CA100201145 /* ContentView.swift in Sources */,
 				FAEC5D182A0EF27B00A48F05 /* SigninSignupValidation.swift in Sources */,
+				FA9CFA832A0FAB43000BDE95 /* Notepad.swift in Sources */,
 				FA0CDC452A0F281B007AF6E7 /* CoreDataWrapper.swift in Sources */,
 				FABD79B12A098CA100201145 /* AiDucatorApp.swift in Sources */,
 				FA0CDC322A0F237D007AF6E7 /* FirestoreWrapper.swift in Sources */,

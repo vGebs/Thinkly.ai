@@ -49,8 +49,8 @@ class UserService_CoreData {
         }
     }
     
-    func updateName(name: String, uid: String) {
-        let userCD = fetchUser_(uid: uid)
+    func updateUser(user: User) {
+        let userCD = fetchUser_(uid: user.uid)
         
         guard userCD != nil else {
             print("UserService_CoreData: Failed to update user")
@@ -58,7 +58,11 @@ class UserService_CoreData {
             return
         }
         
-        userCD!.name = name
+        userCD!.uid = user.uid
+        userCD!.name = user.name
+        userCD!.docID = user.documentID
+        userCD!.birthdate = user.birthdate
+        userCD!.role = user.role
         
         self.saveContext()
     }
