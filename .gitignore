@@ -1,0 +1,95 @@
+# .gitignore
+
+### Xcode ###
+# Xcode user settings and workspace data
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.pbxuser
+!default.pbxuser
+*.moved-aside
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+*.xcodeproj/project.xcworkspace/xcshareddata
+*.xcodeproj/project.xcworkspace/xcuserdata
+*.xcodeproj/xcuserdata
+
+# Build and compile artifacts
+build/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Obj-C and Swift module caches
+*.swiftpm/xcode/xcuserdata
+*.module-cache
+
+# Apple Double files
+._*
+
+# Automatic backup files
+*~.nib
+
+# Carthage
+Carthage/Build
+
+# CocoaPods
+/Pods
+
+### Firebase ###
+# Firebase config file
+GoogleService-Info.plist
+
+### Swift Package Manager ###
+# Build artifacts and metadata
+.build/
+Packages/
+Package.pins
+Package.resolved
+generated/
+
+### App Store Connect ###
+# App Store Connect API Key
+*.authkey
+*.p8
+*.p12
+*.cer
+*.key
+
+### Misc ###
+# OS metadata files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# User-specific files
+*.xcuserdata
+
+# Sensitive information
+*.pem
+*.key
+*.env
+
+# Sourcery
+.sourcery-*
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Code coverage
+*.coverage
+*.xcresult
+
+# Other common ignore items
+.idea/
+*.bak
+*.log
+*.tmp
+*~
+*.swp
+*.lock
