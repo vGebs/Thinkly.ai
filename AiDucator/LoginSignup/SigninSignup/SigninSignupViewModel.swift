@@ -253,6 +253,20 @@ final class SigninSignupViewModel: ObservableObject{
         self.loading = true
         authService.signUp(self.emailText, self.passwordText)
             .subscribe(on: DispatchQueue.global(qos: .userInitiated))
+            .flatMap { [weak self] _ -> AnyPublisher<Void, Error> in
+                
+                var role: String
+                
+                if self!.teacherSelected {
+                    role = "teacher"
+                } else {
+                    role = "student"
+                }
+                
+                let user = User(name: self!.nameText, role: role, uid: AuthService.shared.user!.uid, birthdate: self!.age)
+                
+                return UserService.shared.createUser(user)
+            }
             .receive(on: DispatchQueue.main)
             .sink{ [weak self] completion in
                 switch completion {
