@@ -26,7 +26,7 @@ struct ContentView: View {
                 SigninSignupView(viewModel: SigninSignupViewModel(mode: .signUp))
                     .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .trailing)))
             } else if appState.onMainView {
-                MainView()
+                ClassList()
             }
         }
     }

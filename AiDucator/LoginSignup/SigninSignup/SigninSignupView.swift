@@ -59,6 +59,7 @@ struct SigninSignupView: View {
                         emailTextField
                         passwordTextField
                         reEnterPasswordTextField
+                        teacherOrStudent
                         if viewModel.signUpError {
                             HStack{
                                 Image(systemName: "exclamationmark.circle")
@@ -142,6 +143,54 @@ struct SigninSignupView: View {
         }
     }
     
+    var teacherOrStudent: some View {
+        HStack {
+            Button(action: {
+                viewModel.studentSelected.toggle()
+                
+                if viewModel.teacherSelected {
+                    viewModel.teacherSelected.toggle()
+                }
+            }) {
+                if viewModel.studentSelected {
+                    Image(systemName: "checkmark.square")
+                        .foregroundColor(.primary)
+                        .font(.system(size: 20, weight: .semibold, design: .rounded))
+                } else {
+                    Image(systemName: "square")
+                        .foregroundColor(.primary)
+                        .font(.system(size: 20, weight: .semibold, design: .rounded))
+                }
+                
+                Text("Student")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+            }
+            
+            Button(action: {
+                viewModel.teacherSelected.toggle()
+                
+                if viewModel.studentSelected {
+                    viewModel.studentSelected.toggle()
+                }
+            }) {
+                if viewModel.teacherSelected {
+                    Image(systemName: "checkmark.square")
+                        .foregroundColor(.primary)
+                        .font(.system(size: 20, weight: .semibold, design: .rounded))
+                        .padding(.leading)
+                } else {
+                    Image(systemName: "square")
+                        .foregroundColor(.primary)
+                        .font(.system(size: 20, weight: .semibold, design: .rounded))
+                        .padding(.leading)
+                }
+                
+                Text("Teacher")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+            }
+        }.padding(.vertical)
+    }
+    
     var nameTextField: some View {
         TextFieldView(
             outputText: $viewModel.nameText,
@@ -198,19 +247,19 @@ struct SigninSignupView: View {
         )
     }
     
-    var cellNumberTextField: some View {
-        TextFieldView(
-            outputText: $viewModel.cellNumberText,
-            editing: $editingCellNum,
-            isGoingToEdit: $editingPword,
-            inputWarning: viewModel.mode == .signUp ? $viewModel.cellNumIsValid : .constant(true),
-            title: viewModel.cellNumberPlaceholder,
-            imageString: "iphone",
-            phoneOrTextfield: .phone,
-            warning: viewModel.cellNumWarning,
-            isSecureField: false
-        )
-    }
+//    var cellNumberTextField: some View {
+//        TextFieldView(
+//            outputText: $viewModel.cellNumberText,
+//            editing: $editingCellNum,
+//            isGoingToEdit: $editingPword,
+//            inputWarning: viewModel.mode == .signUp ? $viewModel.cellNumIsValid : .constant(true),
+//            title: viewModel.cellNumberPlaceholder,
+//            imageString: "iphone",
+//            phoneOrTextfield: .phone,
+//            warning: viewModel.cellNumWarning,
+//            isSecureField: false
+//        )
+//    }
     
     var actionButton: some View{
         VStack{

@@ -47,19 +47,23 @@ final class SigninSignupViewModel: ObservableObject{
     @Published var emailIsValid = false
     @Published var passwordIsValid = false
     @Published var rePasswordIsValid = false
-    @Published var cellNumIsValid = false
+    @Published var teacherOrStudentValid = false
             
+    @Published var teacherSelected = false
+    @Published var studentSelected = false
+    
     private var loginReady: Bool {
-         (emailIsValid || cellNumIsValid) && passwordIsValid
+         emailIsValid && passwordIsValid
     }
     
     private var signupReady: Bool {
         ageIsValid &&
-            nameIsValid &&
-            emailIsValid &&
-            passwordIsValid &&
-            rePasswordIsValid
-            //cellNumIsValid
+        nameIsValid &&
+        emailIsValid &&
+        passwordIsValid &&
+        rePasswordIsValid &&
+        teacherOrStudentValid
+        
     }
     
     var isValid: Bool {
@@ -164,17 +168,14 @@ final class SigninSignupViewModel: ObservableObject{
                 }
                 .assign(to: &$rePasswordIsValid)
             
-            $cellNumberText
-                .flatMap{ [weak self] cellNum -> AnyPublisher<Bool, Never> in
-                    do {
-                        try self!.validate.isCellValid(cellNum)
+            Publishers.CombineLatest($teacherSelected, $studentSelected)
+                .flatMap { (teacher, student) -> AnyPublisher<Bool, Never> in
+                    if teacher || student {
                         return Just(true).eraseToAnyPublisher()
-                    } catch {
-                        self!.cellNumWarning = error.localizedDescription
+                    } else {
                         return Just(false).eraseToAnyPublisher()
                     }
-                }
-                .assign(to: &$cellNumIsValid)
+                }.assign(to: &$teacherOrStudentValid)
             
         case .login:
             

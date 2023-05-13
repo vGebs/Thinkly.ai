@@ -9,6 +9,15 @@
 /* Begin PBXBuildFile section */
 		FA070DEF2A0E0A7E008EF241 /* LandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA070DEE2A0E0A7E008EF241 /* LandingView.swift */; };
 		FA070DF22A0E0AF5008EF241 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA070DF12A0E0AF5008EF241 /* Colors.swift */; };
+		FA0CDC322A0F237D007AF6E7 /* FirestoreWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC312A0F237D007AF6E7 /* FirestoreWrapper.swift */; };
+		FA0CDC352A0F23FD007AF6E7 /* DocumentSnapshotPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC342A0F23FD007AF6E7 /* DocumentSnapshotPublisher.swift */; };
+		FA0CDC372A0F241A007AF6E7 /* QuerySnapshotPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC362A0F241A007AF6E7 /* QuerySnapshotPublisher.swift */; };
+		FA0CDC392A0F24E3007AF6E7 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC382A0F24E3007AF6E7 /* UserService.swift */; };
+		FA0CDC3C2A0F2517007AF6E7 /* UserService_CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC3B2A0F2517007AF6E7 /* UserService_CoreData.swift */; };
+		FA0CDC3E2A0F2521007AF6E7 /* UserService_Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC3D2A0F2521007AF6E7 /* UserService_Firestore.swift */; };
+		FA0CDC412A0F25D4007AF6E7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC402A0F25D4007AF6E7 /* User.swift */; };
+		FA0CDC452A0F281B007AF6E7 /* CoreDataWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC442A0F281B007AF6E7 /* CoreDataWrapper.swift */; };
+		FA0CDC482A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC462A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld */; };
 		FABD79B12A098CA100201145 /* AiDucatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79B02A098CA100201145 /* AiDucatorApp.swift */; };
 		FABD79B32A098CA100201145 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79B22A098CA100201145 /* ContentView.swift */; };
 		FABD79B52A098CA300201145 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FABD79B42A098CA300201145 /* Assets.xcassets */; };
@@ -26,12 +35,21 @@
 		FAEC5D292A0EF52000A48F05 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FAEC5D282A0EF52000A48F05 /* FirebaseFirestoreSwift */; };
 		FAEC5D2C2A0EF5DF00A48F05 /* AuthPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEC5D2B2A0EF5DF00A48F05 /* AuthPublisher.swift */; };
 		FAEC5D2E2A0EFBF400A48F05 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAEC5D2D2A0EFBF400A48F05 /* GoogleService-Info.plist */; };
-		FAEC5D322A0EFD9500A48F05 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEC5D312A0EFD9500A48F05 /* MainView.swift */; };
+		FAEC5D322A0EFD9500A48F05 /* ClassList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEC5D312A0EFD9500A48F05 /* ClassList.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		FA070DEE2A0E0A7E008EF241 /* LandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingView.swift; sourceTree = "<group>"; };
 		FA070DF12A0E0AF5008EF241 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		FA0CDC312A0F237D007AF6E7 /* FirestoreWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreWrapper.swift; sourceTree = "<group>"; };
+		FA0CDC342A0F23FD007AF6E7 /* DocumentSnapshotPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentSnapshotPublisher.swift; sourceTree = "<group>"; };
+		FA0CDC362A0F241A007AF6E7 /* QuerySnapshotPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuerySnapshotPublisher.swift; sourceTree = "<group>"; };
+		FA0CDC382A0F24E3007AF6E7 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		FA0CDC3B2A0F2517007AF6E7 /* UserService_CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService_CoreData.swift; sourceTree = "<group>"; };
+		FA0CDC3D2A0F2521007AF6E7 /* UserService_Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService_Firestore.swift; sourceTree = "<group>"; };
+		FA0CDC402A0F25D4007AF6E7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		FA0CDC442A0F281B007AF6E7 /* CoreDataWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataWrapper.swift; sourceTree = "<group>"; };
+		FA0CDC472A0F71BC007AF6E7 /* ThinklyModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ThinklyModel.xcdatamodel; sourceTree = "<group>"; };
 		FABD79AD2A098CA100201145 /* AiDucator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiDucator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FABD79B02A098CA100201145 /* AiDucatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiDucatorApp.swift; sourceTree = "<group>"; };
 		FABD79B22A098CA100201145 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -48,7 +66,7 @@
 		FAEC5D212A0EF3D900A48F05 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		FAEC5D2B2A0EF5DF00A48F05 /* AuthPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthPublisher.swift; sourceTree = "<group>"; };
 		FAEC5D2D2A0EFBF400A48F05 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		FAEC5D312A0EFD9500A48F05 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		FAEC5D312A0EFD9500A48F05 /* ClassList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassList.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +102,60 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		FA0CDC302A0F231B007AF6E7 /* FirestoreWrapper */ = {
+			isa = PBXGroup;
+			children = (
+				FA0CDC332A0F23EA007AF6E7 /* Publishers */,
+				FA0CDC312A0F237D007AF6E7 /* FirestoreWrapper.swift */,
+			);
+			path = FirestoreWrapper;
+			sourceTree = "<group>";
+		};
+		FA0CDC332A0F23EA007AF6E7 /* Publishers */ = {
+			isa = PBXGroup;
+			children = (
+				FA0CDC342A0F23FD007AF6E7 /* DocumentSnapshotPublisher.swift */,
+				FA0CDC362A0F241A007AF6E7 /* QuerySnapshotPublisher.swift */,
+			);
+			path = Publishers;
+			sourceTree = "<group>";
+		};
+		FA0CDC3A2A0F2500007AF6E7 /* UserService */ = {
+			isa = PBXGroup;
+			children = (
+				FA0CDC382A0F24E3007AF6E7 /* UserService.swift */,
+				FA0CDC3B2A0F2517007AF6E7 /* UserService_CoreData.swift */,
+				FA0CDC3D2A0F2521007AF6E7 /* UserService_Firestore.swift */,
+			);
+			path = UserService;
+			sourceTree = "<group>";
+		};
+		FA0CDC3F2A0F25C3007AF6E7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FA0CDC402A0F25D4007AF6E7 /* User.swift */,
+				FA0CDC462A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FA0CDC422A0F27DD007AF6E7 /* Wrappers */ = {
+			isa = PBXGroup;
+			children = (
+				FA0CDC432A0F27F4007AF6E7 /* CoreDataWrapper */,
+				FA0CDC302A0F231B007AF6E7 /* FirestoreWrapper */,
+			);
+			path = Wrappers;
+			sourceTree = "<group>";
+		};
+		FA0CDC432A0F27F4007AF6E7 /* CoreDataWrapper */ = {
+			isa = PBXGroup;
+			children = (
+				FA0CDC442A0F281B007AF6E7 /* CoreDataWrapper.swift */,
+			);
+			path = CoreDataWrapper;
+			sourceTree = "<group>";
+		};
 		FABD79A42A098CA100201145 = {
 			isa = PBXGroup;
 			children = (
@@ -107,6 +179,8 @@
 				FABD79BF2A098CBA00201145 /* LoginSignup */,
 				FAEC5D302A0EFD8700A48F05 /* Main */,
 				FAEC5D202A0EF3CB00A48F05 /* Services */,
+				FA0CDC422A0F27DD007AF6E7 /* Wrappers */,
+				FA0CDC3F2A0F25C3007AF6E7 /* Models */,
 				FAEC5D1D2A0EF36E00A48F05 /* ReuseableView */,
 				FA070DF02A0E0AE7008EF241 /* Extensions */,
 				FABD79B42A098CA300201145 /* Assets.xcassets */,
@@ -164,6 +238,7 @@
 		FAEC5D202A0EF3CB00A48F05 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				FA0CDC3A2A0F2500007AF6E7 /* UserService */,
 				FAEC5D2A2A0EF5D100A48F05 /* Auth */,
 			);
 			path = Services;
@@ -181,7 +256,7 @@
 		FAEC5D302A0EFD8700A48F05 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				FAEC5D312A0EFD9500A48F05 /* MainView.swift */,
+				FAEC5D312A0EFD9500A48F05 /* ClassList.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -266,19 +341,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAEC5D162A0EF21900A48F05 /* SigninSignupViewModel.swift in Sources */,
-				FAEC5D322A0EFD9500A48F05 /* MainView.swift in Sources */,
+				FA0CDC482A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld in Sources */,
+				FAEC5D322A0EFD9500A48F05 /* ClassList.swift in Sources */,
+				FA0CDC392A0F24E3007AF6E7 /* UserService.swift in Sources */,
 				FAEC5D142A0EF1DD00A48F05 /* SigninSignupView.swift in Sources */,
+				FA0CDC3C2A0F2517007AF6E7 /* UserService_CoreData.swift in Sources */,
+				FA0CDC372A0F241A007AF6E7 /* QuerySnapshotPublisher.swift in Sources */,
 				FAEC5D2C2A0EF5DF00A48F05 /* AuthPublisher.swift in Sources */,
 				FAEC5D1A2A0EF2E800A48F05 /* View.swift in Sources */,
 				FAEC5D222A0EF3D900A48F05 /* AuthService.swift in Sources */,
 				FAEC5D1F2A0EF37900A48F05 /* LoadingView.swift in Sources */,
+				FA0CDC352A0F23FD007AF6E7 /* DocumentSnapshotPublisher.swift in Sources */,
 				FA070DF22A0E0AF5008EF241 /* Colors.swift in Sources */,
+				FA0CDC3E2A0F2521007AF6E7 /* UserService_Firestore.swift in Sources */,
 				FABD79C32A098CEF00201145 /* LandingViewModel.swift in Sources */,
 				FABD79C52A098DD800201145 /* AppState.swift in Sources */,
 				FA070DEF2A0E0A7E008EF241 /* LandingView.swift in Sources */,
 				FABD79B32A098CA100201145 /* ContentView.swift in Sources */,
 				FAEC5D182A0EF27B00A48F05 /* SigninSignupValidation.swift in Sources */,
+				FA0CDC452A0F281B007AF6E7 /* CoreDataWrapper.swift in Sources */,
 				FABD79B12A098CA100201145 /* AiDucatorApp.swift in Sources */,
+				FA0CDC322A0F237D007AF6E7 /* FirestoreWrapper.swift in Sources */,
+				FA0CDC412A0F25D4007AF6E7 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -521,6 +605,19 @@
 			productName = FirebaseFirestoreSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		FA0CDC462A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				FA0CDC472A0F71BC007AF6E7 /* ThinklyModel.xcdatamodel */,
+			);
+			currentVersion = FA0CDC472A0F71BC007AF6E7 /* ThinklyModel.xcdatamodel */;
+			path = ThinklyModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = FABD79A52A098CA100201145 /* Project object */;
 }
