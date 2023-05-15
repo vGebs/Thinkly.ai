@@ -6,26 +6,18 @@
 //
 
 import SwiftUI
-
-
-//I am making the main educator view right now.
-//I'll need to fetch for all of the classes that teacher is teaching
-// The class will simply have a Class ID that students can use to login to the class
-
-import SwiftUI
 import Combine
 
-struct Class {
-    let title: String
-    let sfSymbol: String
-    let description: String
-    let startDate: Date
-    let endDate: Date
-}
+
+//ok so we need to make this view such that it can be used by both students and the teachers
+// They will see the same view but will have different options
+// The student can add a class based on the classID
+// The teacher can create a class and can fetch the access code for their students
+// Once the student enters the class, the teacher has the accept the student before joining
 
 class ClassListViewModel: ObservableObject {
     
-    @Published var user: User?
+    @Published var cls: Class?
     
     var cancellables: [AnyCancellable] = []
     
@@ -33,89 +25,94 @@ class ClassListViewModel: ObservableObject {
         AuthService.shared.logout()
     }
     
-    func addUser() {
-        UserService.shared.createUser(User(name: "Vaughn", role: "Student", uid: AuthService.shared.user!.uid, birthdate: Date()))
+    func addClass() {
+        let cls = Class(title: "Physics", sfSymbol: "test", description: "Phsyics class", startDate: Date(), endDate: Date(), teacherUID: "123")
+        ClassService_Firestore.shared.addClass(cls)
             .sink { completion in
                 switch completion {
-                case .failure(let e):
-                    print("Failed to push user")
+                    case .failure(let e):
+                    print("Failed to add class")
                     print("\(e)")
                 case .finished:
-                    print("pushed user")
+                    print("Finished adding class")
                 }
-            } receiveValue: { _ in }
-            .store(in: &cancellables)
+            } receiveValue: { _ in
+                
+            }.store(in: &cancellables)
 
-//        UserService_CoreData.shared.createUser(User(name: "Vaughn", role: "Student", uid: "123", birthdate: Date()))
     }
     
-    func updateName() {
-        if user != nil {
-            user!.name = "VVV"
-            UserService.shared.updateName(user!, docID: user!.documentID!)
+    func updateClass() {
+        if let c = self.cls {
+            self.cls!.sfSymbol = "srgsergsergser"
+            ClassService_Firestore.shared.updateClass(cls: cls!)
                 .sink { completion in
                     switch completion {
-                    case .failure(let e):
-                        print("Failed to update user")
+                        case .failure(let e):
+                        print("Failed to update class")
                         print("\(e)")
                     case .finished:
-                        print("updated user")
+                        print("Finished updating class")
                     }
-                } receiveValue: { _ in }
-                .store(in: &cancellables)
+                } receiveValue: { _ in
+                    
+                }.store(in: &cancellables)
         } else {
-            print("ahwbdajhw")
+            print("nil nil fammm")
         }
-        
-//        UserService_CoreData.shared.updateName(name: "VVV", uid: "123")
     }
     
-    func fetchUser() {
-        UserService.shared.fetchUser(with: AuthService.shared.user!.uid)
+    func fetchClass() {
+        if let c = self.cls, c.documentID != nil {
+            ClassService_Firestore.shared.getClass(with: c.documentID!)
+                .sink { completion in
+                    switch completion {
+                        case .failure(let e):
+                        print("failed to fetch class")
+                        print("\(e)")
+                    case .finished:
+                        print("Finished fetching class")
+                    }
+                } receiveValue: { [weak self] cls in
+                    self?.cls = cls
+                }.store(in: &cancellables)
+        } else {
+            print("we need docID to fetch document")
+        }
+    }
+    
+    func fetchClasses() {
+        ClassService_Firestore.shared.getClasses(for: "123")
             .sink { completion in
                 switch completion {
-                case .failure(let e):
-                    print("Failed to fetch user")
+                    case .failure(let e):
+                    print("Failed to fetch classes")
                     print("\(e)")
                 case .finished:
-                    print("fetched user")
+                    print("Finished fetching classes")
                 }
-            } receiveValue: { [weak self] user in
-                print("got it")
-                if let u = user {
-                    self?.user = user
-                } else {
-                    print("nil nil fam")
+            } receiveValue: { [weak self] classes in
+                for cls in classes {
+                    self?.cls = cls
                 }
-            }
-            .store(in: &cancellables)
-        
-        //self.user = UserService_CoreData.shared.fetchUser(uid: "123")
+            }.store(in: &cancellables)
     }
     
-    func deleteUser() {
-        if user != nil {
-            UserService.shared.deleteUser(user: user!)
+    func deleteClass() {
+        if let c = cls, c.documentID != nil {
+            ClassService_Firestore.shared.deleteClass(docID: c.documentID!)
                 .sink { completion in
                     switch completion {
-                    case .failure(let e):
-                        print("Failed to delete user")
+                        case .failure(let e):
+                        print("Failed to delete class")
                         print("\(e)")
                     case .finished:
-                        print("deleted user")
+                        print("Finished deleting class")
                     }
                 } receiveValue: { [weak self] _ in
-                    self?.user = nil
-                }
-                .store(in: &cancellables)
+                    self?.cls = nil
+                }.store(in: &cancellables)
         }
-        
-//        if let u = user {
-//            UserService_CoreData.shared.deleteUser(uid: u.uid)
-//        } else {
-//            print("nanana")
-//        }
-        
     }
 }
 
@@ -179,36 +176,46 @@ struct ClassList: View {
                 
                 Spacer()
                 
-                if viewModel.user != nil {
-                    Text("\(viewModel.user!.name)")
-                    Text("\(viewModel.user!.role)")
-                    Text("\(viewModel.user!.uid)")
-                    Text("\(viewModel.user!.birthdate)")
-                    Text("\(viewModel.user!.documentID ?? "nil")")
+                if viewModel.cls != nil {
+                    Text("\(viewModel.cls!.title)")
+                    Text("\(viewModel.cls!.description)")
+                    Text("\(viewModel.cls!.sfSymbol)")
+                    Text("\(viewModel.cls!.teacherUID)")
+                    Text("\(viewModel.cls!.startDate)")
+                    Text("\(viewModel.cls!.endDate)")
+                    Text("\(viewModel.cls!.documentID ?? "nil")")
                 }
                 
                 Spacer()
                 
                 Button(action: {
-                    viewModel.addUser()
+                    viewModel.addClass()
                 }) {
-                    Text("Add user")
-                }.padding()
-                Button(action: {
-                    viewModel.fetchUser()
-                }) {
-                    Text("Fetch User")
-                }.padding()
-                Button(action: {
-                    viewModel.updateName()
-                }) {
-                    Text("Change name")
+                    Text("Add Class")
                 }.padding()
                 
                 Button(action: {
-                    viewModel.deleteUser()
+                    viewModel.fetchClass()
                 }) {
-                    Text("Delete user")
+                    Text("Fetch class")
+                }.padding()
+                
+                Button(action: {
+                    viewModel.fetchClasses()
+                }) {
+                    Text("fetch classes")
+                }.padding()
+                
+                Button(action: {
+                    viewModel.updateClass()
+                }) {
+                    Text("Update class")
+                }.padding()
+                
+                Button(action: {
+                    viewModel.deleteClass()
+                }) {
+                    Text("Delete class")
                 }.padding()
             } else {
                 List {

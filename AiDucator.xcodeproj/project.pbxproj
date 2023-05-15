@@ -19,6 +19,10 @@
 		FA0CDC452A0F281B007AF6E7 /* CoreDataWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC442A0F281B007AF6E7 /* CoreDataWrapper.swift */; };
 		FA0CDC482A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC462A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld */; };
 		FA9CFA832A0FAB43000BDE95 /* Notepad.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA822A0FAB43000BDE95 /* Notepad.swift */; };
+		FA9CFA852A1050B1000BDE95 /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA842A1050B1000BDE95 /* Class.swift */; };
+		FA9CFA882A107893000BDE95 /* ClassService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA872A107893000BDE95 /* ClassService.swift */; };
+		FA9CFA8A2A10789C000BDE95 /* ClassService_CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA892A10789C000BDE95 /* ClassService_CoreData.swift */; };
+		FA9CFA8C2A10789F000BDE95 /* ClassService_Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA8B2A10789F000BDE95 /* ClassService_Firestore.swift */; };
 		FABD79B12A098CA100201145 /* AiDucatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79B02A098CA100201145 /* AiDucatorApp.swift */; };
 		FABD79B32A098CA100201145 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79B22A098CA100201145 /* ContentView.swift */; };
 		FABD79B52A098CA300201145 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FABD79B42A098CA300201145 /* Assets.xcassets */; };
@@ -52,6 +56,10 @@
 		FA0CDC442A0F281B007AF6E7 /* CoreDataWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataWrapper.swift; sourceTree = "<group>"; };
 		FA0CDC472A0F71BC007AF6E7 /* ThinklyModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ThinklyModel.xcdatamodel; sourceTree = "<group>"; };
 		FA9CFA822A0FAB43000BDE95 /* Notepad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notepad.swift; sourceTree = "<group>"; };
+		FA9CFA842A1050B1000BDE95 /* Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
+		FA9CFA872A107893000BDE95 /* ClassService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassService.swift; sourceTree = "<group>"; };
+		FA9CFA892A10789C000BDE95 /* ClassService_CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassService_CoreData.swift; sourceTree = "<group>"; };
+		FA9CFA8B2A10789F000BDE95 /* ClassService_Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassService_Firestore.swift; sourceTree = "<group>"; };
 		FABD79AD2A098CA100201145 /* AiDucator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiDucator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FABD79B02A098CA100201145 /* AiDucatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiDucatorApp.swift; sourceTree = "<group>"; };
 		FABD79B22A098CA100201145 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -137,6 +145,7 @@
 			children = (
 				FA0CDC402A0F25D4007AF6E7 /* User.swift */,
 				FA0CDC462A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld */,
+				FA9CFA842A1050B1000BDE95 /* Class.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -156,6 +165,16 @@
 				FA0CDC442A0F281B007AF6E7 /* CoreDataWrapper.swift */,
 			);
 			path = CoreDataWrapper;
+			sourceTree = "<group>";
+		};
+		FA9CFA862A107888000BDE95 /* ClassService */ = {
+			isa = PBXGroup;
+			children = (
+				FA9CFA872A107893000BDE95 /* ClassService.swift */,
+				FA9CFA892A10789C000BDE95 /* ClassService_CoreData.swift */,
+				FA9CFA8B2A10789F000BDE95 /* ClassService_Firestore.swift */,
+			);
+			path = ClassService;
 			sourceTree = "<group>";
 		};
 		FABD79A42A098CA100201145 = {
@@ -240,6 +259,7 @@
 		FAEC5D202A0EF3CB00A48F05 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				FA9CFA862A107888000BDE95 /* ClassService */,
 				FA0CDC3A2A0F2500007AF6E7 /* UserService */,
 				FAEC5D2A2A0EF5D100A48F05 /* Auth */,
 			);
@@ -347,10 +367,13 @@
 				FA0CDC482A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld in Sources */,
 				FAEC5D322A0EFD9500A48F05 /* ClassList.swift in Sources */,
 				FA0CDC392A0F24E3007AF6E7 /* UserService.swift in Sources */,
+				FA9CFA882A107893000BDE95 /* ClassService.swift in Sources */,
 				FAEC5D142A0EF1DD00A48F05 /* SigninSignupView.swift in Sources */,
 				FA0CDC3C2A0F2517007AF6E7 /* UserService_CoreData.swift in Sources */,
 				FA0CDC372A0F241A007AF6E7 /* QuerySnapshotPublisher.swift in Sources */,
 				FAEC5D2C2A0EF5DF00A48F05 /* AuthPublisher.swift in Sources */,
+				FA9CFA8C2A10789F000BDE95 /* ClassService_Firestore.swift in Sources */,
+				FA9CFA852A1050B1000BDE95 /* Class.swift in Sources */,
 				FAEC5D1A2A0EF2E800A48F05 /* View.swift in Sources */,
 				FAEC5D222A0EF3D900A48F05 /* AuthService.swift in Sources */,
 				FAEC5D1F2A0EF37900A48F05 /* LoadingView.swift in Sources */,
@@ -358,6 +381,7 @@
 				FA070DF22A0E0AF5008EF241 /* Colors.swift in Sources */,
 				FA0CDC3E2A0F2521007AF6E7 /* UserService_Firestore.swift in Sources */,
 				FABD79C32A098CEF00201145 /* LandingViewModel.swift in Sources */,
+				FA9CFA8A2A10789C000BDE95 /* ClassService_CoreData.swift in Sources */,
 				FABD79C52A098DD800201145 /* AppState.swift in Sources */,
 				FA070DEF2A0E0A7E008EF241 /* LandingView.swift in Sources */,
 				FABD79B32A098CA100201145 /* ContentView.swift in Sources */,
