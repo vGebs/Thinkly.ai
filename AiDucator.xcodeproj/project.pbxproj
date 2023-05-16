@@ -23,6 +23,7 @@
 		FA9CFA882A107893000BDE95 /* ClassService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA872A107893000BDE95 /* ClassService.swift */; };
 		FA9CFA8A2A10789C000BDE95 /* ClassService_CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA892A10789C000BDE95 /* ClassService_CoreData.swift */; };
 		FA9CFA8C2A10789F000BDE95 /* ClassService_Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA8B2A10789F000BDE95 /* ClassService_Firestore.swift */; };
+		FA9CFA8E2A11CF8E000BDE95 /* ThinklyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA8D2A11CF8E000BDE95 /* ThinklyModel.swift */; };
 		FABD79B12A098CA100201145 /* AiDucatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79B02A098CA100201145 /* AiDucatorApp.swift */; };
 		FABD79B32A098CA100201145 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79B22A098CA100201145 /* ContentView.swift */; };
 		FABD79B52A098CA300201145 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FABD79B42A098CA300201145 /* Assets.xcassets */; };
@@ -60,6 +61,7 @@
 		FA9CFA872A107893000BDE95 /* ClassService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassService.swift; sourceTree = "<group>"; };
 		FA9CFA892A10789C000BDE95 /* ClassService_CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassService_CoreData.swift; sourceTree = "<group>"; };
 		FA9CFA8B2A10789F000BDE95 /* ClassService_Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassService_Firestore.swift; sourceTree = "<group>"; };
+		FA9CFA8D2A11CF8E000BDE95 /* ThinklyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinklyModel.swift; sourceTree = "<group>"; };
 		FABD79AD2A098CA100201145 /* AiDucator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiDucator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FABD79B02A098CA100201145 /* AiDucatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiDucatorApp.swift; sourceTree = "<group>"; };
 		FABD79B22A098CA100201145 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 				FA9CFA862A107888000BDE95 /* ClassService */,
 				FA0CDC3A2A0F2500007AF6E7 /* UserService */,
 				FAEC5D2A2A0EF5D100A48F05 /* Auth */,
+				FA9CFA8D2A11CF8E000BDE95 /* ThinklyModel.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -380,6 +383,7 @@
 				FA0CDC352A0F23FD007AF6E7 /* DocumentSnapshotPublisher.swift in Sources */,
 				FA070DF22A0E0AF5008EF241 /* Colors.swift in Sources */,
 				FA0CDC3E2A0F2521007AF6E7 /* UserService_Firestore.swift in Sources */,
+				FA9CFA8E2A11CF8E000BDE95 /* ThinklyModel.swift in Sources */,
 				FABD79C32A098CEF00201145 /* LandingViewModel.swift in Sources */,
 				FA9CFA8A2A10789C000BDE95 /* ClassService_CoreData.swift in Sources */,
 				FABD79C52A098DD800201145 /* AppState.swift in Sources */,

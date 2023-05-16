@@ -13,7 +13,7 @@ class UserService {
     static let shared = UserService()
     
     let firestore = UserService_Firestore.shared
-    let cache = UserService_CoreData.shared
+    let cache = ThinklyModel.shared.userService
     
     private var cancellables: [AnyCancellable] = []
     

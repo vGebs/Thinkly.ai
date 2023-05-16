@@ -12,13 +12,8 @@ class UserService_CoreData {
     
     private let coreData: CoreDataWrapper
     
-    static let shared = UserService_CoreData()
-    
-    private init() {
-        let storeURL = try! FileManager.default
-            .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            .appendingPathComponent("ThinklyModel.sqlite")
-        coreData = CoreDataWrapper(modelName: "ThinklyModel", storeURL: storeURL)
+    init(model: CoreDataWrapper) {
+        self.coreData = model
     }
     
     func createUser(_ user: User) {

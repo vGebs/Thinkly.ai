@@ -26,37 +26,40 @@ class ClassListViewModel: ObservableObject {
     }
     
     func addClass() {
-        let cls = Class(title: "Physics", sfSymbol: "test", description: "Phsyics class", startDate: Date(), endDate: Date(), teacherUID: "123")
-        ClassService_Firestore.shared.addClass(cls)
-            .sink { completion in
-                switch completion {
-                    case .failure(let e):
-                    print("Failed to add class")
-                    print("\(e)")
-                case .finished:
-                    print("Finished adding class")
-                }
-            } receiveValue: { _ in
-                
-            }.store(in: &cancellables)
+        let cls = Class(documentID: "321", title: "Physics", sfSymbol: "test", description: "Phsyics class", startDate: Date(), endDate: Date(), teacherID: "123")
+//        ClassService_Firestore.shared.addClass(cls)
+//            .sink { completion in
+//                switch completion {
+//                    case .failure(let e):
+//                    print("Failed to add class")
+//                    print("\(e)")
+//                case .finished:
+//                    print("Finished adding class")
+//                }
+//            } receiveValue: { _ in
+//
+//            }.store(in: &cancellables)
 
+        ThinklyModel.shared.classService.addClass(cls: cls)
     }
     
     func updateClass() {
-        if let c = self.cls {
+        if let _ = self.cls {
             self.cls!.sfSymbol = "srgsergsergser"
-            ClassService_Firestore.shared.updateClass(cls: cls!)
-                .sink { completion in
-                    switch completion {
-                        case .failure(let e):
-                        print("Failed to update class")
-                        print("\(e)")
-                    case .finished:
-                        print("Finished updating class")
-                    }
-                } receiveValue: { _ in
-                    
-                }.store(in: &cancellables)
+//            ClassService_Firestore.shared.updateClass(cls: cls!)
+//                .sink { completion in
+//                    switch completion {
+//                        case .failure(let e):
+//                        print("Failed to update class")
+//                        print("\(e)")
+//                    case .finished:
+//                        print("Finished updating class")
+//                    }
+//                } receiveValue: { _ in
+//
+//                }.store(in: &cancellables)
+            
+            ThinklyModel.shared.classService.updateClass(cls: self.cls!)
         } else {
             print("nil nil fammm")
         }
@@ -64,54 +67,64 @@ class ClassListViewModel: ObservableObject {
     
     func fetchClass() {
         if let c = self.cls, c.documentID != nil {
-            ClassService_Firestore.shared.getClass(with: c.documentID!)
-                .sink { completion in
-                    switch completion {
-                        case .failure(let e):
-                        print("failed to fetch class")
-                        print("\(e)")
-                    case .finished:
-                        print("Finished fetching class")
-                    }
-                } receiveValue: { [weak self] cls in
-                    self?.cls = cls
-                }.store(in: &cancellables)
+//            ClassService_Firestore.shared.getClass(with: c.documentID!)
+//                .sink { completion in
+//                    switch completion {
+//                        case .failure(let e):
+//                        print("failed to fetch class")
+//                        print("\(e)")
+//                    case .finished:
+//                        print("Finished fetching class")
+//                    }
+//                } receiveValue: { [weak self] cls in
+//                    self?.cls = cls
+//                }.store(in: &cancellables)
+            
+            self.cls = ThinklyModel.shared.classService.fetchClass(with: c.documentID!)
         } else {
             print("we need docID to fetch document")
         }
     }
     
     func fetchClasses() {
-        ClassService_Firestore.shared.getClasses(for: "123")
-            .sink { completion in
-                switch completion {
-                    case .failure(let e):
-                    print("Failed to fetch classes")
-                    print("\(e)")
-                case .finished:
-                    print("Finished fetching classes")
-                }
-            } receiveValue: { [weak self] classes in
-                for cls in classes {
-                    self?.cls = cls
-                }
-            }.store(in: &cancellables)
+//        ClassService_Firestore.shared.getClasses(for: "123")
+//            .sink { completion in
+//                switch completion {
+//                    case .failure(let e):
+//                    print("Failed to fetch classes")
+//                    print("\(e)")
+//                case .finished:
+//                    print("Finished fetching classes")
+//                }
+//            } receiveValue: { [weak self] classes in
+//                for cls in classes {
+//                    self?.cls = cls
+//                }
+//            }.store(in: &cancellables)
+        
+        let classes = ThinklyModel.shared.classService.fetchClasses(for: "123")
+        if let c = classes {
+            print(c)
+            self.cls = c[0]
+        }
     }
     
     func deleteClass() {
         if let c = cls, c.documentID != nil {
-            ClassService_Firestore.shared.deleteClass(docID: c.documentID!)
-                .sink { completion in
-                    switch completion {
-                        case .failure(let e):
-                        print("Failed to delete class")
-                        print("\(e)")
-                    case .finished:
-                        print("Finished deleting class")
-                    }
-                } receiveValue: { [weak self] _ in
-                    self?.cls = nil
-                }.store(in: &cancellables)
+//            ClassService_Firestore.shared.deleteClass(docID: c.documentID!)
+//                .sink { completion in
+//                    switch completion {
+//                        case .failure(let e):
+//                        print("Failed to delete class")
+//                        print("\(e)")
+//                    case .finished:
+//                        print("Finished deleting class")
+//                    }
+//                } receiveValue: { [weak self] _ in
+//                    self?.cls = nil
+//                }.store(in: &cancellables)
+            
+            ThinklyModel.shared.classService.deleteClass(with: c.documentID!)
         }
     }
 }
@@ -180,7 +193,7 @@ struct ClassList: View {
                     Text("\(viewModel.cls!.title)")
                     Text("\(viewModel.cls!.description)")
                     Text("\(viewModel.cls!.sfSymbol)")
-                    Text("\(viewModel.cls!.teacherUID)")
+                    Text("\(viewModel.cls!.teacherID)")
                     Text("\(viewModel.cls!.startDate)")
                     Text("\(viewModel.cls!.endDate)")
                     Text("\(viewModel.cls!.documentID ?? "nil")")

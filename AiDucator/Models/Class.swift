@@ -16,5 +16,5 @@ struct Class: FirestoreProtocol {
     var startDate: Date
     var endDate: Date
     
-    var teacherUID: String
+    var teacherID: String
 }

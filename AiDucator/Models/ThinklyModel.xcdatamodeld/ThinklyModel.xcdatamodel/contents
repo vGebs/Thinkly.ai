@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22E261" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ClassEntity" representedClassName="ClassEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="courseDescription" attributeType="String"/>
+        <attribute name="documentID" optional="YES" attributeType="String"/>
+        <attribute name="endDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="sfSymbol" attributeType="String"/>
+        <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="teacherID" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
+    </entity>
     <entity name="UserEntity" representedClassName="UserEntity" syncable="YES" codeGenerationType="class">
         <attribute name="birthdate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="docID" optional="YES" attributeType="String"/>
