@@ -17,8 +17,8 @@ class ClassService_CoreData {
         self.coreData = model
     }
     
-    func addClass(cls: Class) {
-        var newCls = coreData.create(objectType: ClassEntity.self)
+    func addClass(cls: Class, docID: String?) {
+        let newCls = coreData.create(objectType: ClassEntity.self)
         
         newCls.title = cls.title
         newCls.courseDescription = cls.description
@@ -26,7 +26,7 @@ class ClassService_CoreData {
         newCls.endDate = cls.endDate
         newCls.sfSymbol = cls.sfSymbol
         newCls.teacherID = cls.teacherID
-        newCls.documentID = cls.documentID
+        newCls.documentID = docID
         
         save()
     }

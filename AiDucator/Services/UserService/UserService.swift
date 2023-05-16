@@ -32,8 +32,8 @@ class UserService {
                     case .finished:
                         print("UserService: Successfully created user")
                     }
-                } receiveValue: { [weak self] _ in
-                    self?.cache.createUser(user)
+                } receiveValue: { [weak self] docID in
+                    self?.cache.createUser(user, docID: docID)
                     promise(.success(()))
                 }.store(in: &self!.cancellables)
             

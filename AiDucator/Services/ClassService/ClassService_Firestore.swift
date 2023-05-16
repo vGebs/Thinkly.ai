@@ -21,7 +21,7 @@ class ClassService_Firestore {
     
     private init() {  }
     
-    func addClass(_ cls: Class) -> AnyPublisher<Void, Error> {
+    func addClass(_ cls: Class) -> AnyPublisher<String, Error> {
         return firestore.create(collection: collection, data: cls)
     }
     

@@ -31,8 +31,8 @@ class ClassService {
                     case .finished:
                         print("ClassService: Successfully added class")
                     }
-                } receiveValue: { [weak self] _ in
-                    self?.cache.addClass(cls: cls)
+                } receiveValue: { [weak self] docID in
+                    self?.cache.addClass(cls: cls, docID: docID)
                     promise(.success(()))
                 }.store(in: &self!.cancellables)
         }.eraseToAnyPublisher()
@@ -74,6 +74,7 @@ class ClassService {
                 }
                 
                 if hasAllDocIds {
+                    print("we fetched from cache")
                     promise(.success(clsArray))
                 } else {
                     self?.firestore.getClasses(for: teacherID)
@@ -89,7 +90,6 @@ class ClassService {
                         } receiveValue: { clsArray in
                             if !clsArray.isEmpty {
                                 for cls in clsArray {
-                                    print("docID: \(cls.documentID!)")
                                     self?.cache.updateClass(cls: cls)
                                 }
                             }

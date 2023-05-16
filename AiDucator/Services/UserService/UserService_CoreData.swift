@@ -16,13 +16,13 @@ class UserService_CoreData {
         self.coreData = model
     }
     
-    func createUser(_ user: User) {
+    func createUser(_ user: User, docID: String?) {
         let userCheck = fetchUser_(uid: user.uid)
         
         if userCheck == nil {
             let newUser = coreData.create(objectType: UserEntity.self)
             
-            newUser.docID = user.documentID
+            newUser.docID = docID
             newUser.name = user.name
             newUser.role = user.role
             newUser.uid = user.uid

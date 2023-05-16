@@ -21,11 +21,11 @@ public class FirestoreWrapper {
     
     private init() {}
     
-    public func create<T: Encodable>(collection: String, data: T) -> AnyPublisher<Void, Error> {
-        return Future<Void, Error> { [weak self] promise in
+    public func create<T: Encodable>(collection: String, data: T) -> AnyPublisher<String, Error> {
+        return Future<String, Error> { [weak self] promise in
             do {
-                let _ = try self?.db.collection(collection).addDocument(from: data)
-                promise(.success(()))
+                let docRef = try self?.db.collection(collection).addDocument(from: data)
+                promise(.success(docRef!.documentID))
             } catch let error {
                 promise(.failure(error))
             }

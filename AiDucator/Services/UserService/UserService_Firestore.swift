@@ -20,7 +20,7 @@ class UserService_Firestore {
     
     private init() {}
     
-    func createUser(_ user: User) -> AnyPublisher<Void, Error> {
+    func createUser(_ user: User) -> AnyPublisher<String, Error> {
         firestore.create(collection: collection, data: user)
     }
     
