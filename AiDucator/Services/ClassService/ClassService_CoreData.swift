@@ -96,6 +96,15 @@ class ClassService_CoreData {
             print("ClassService_CoreData: No class with that ID")
         }
     }
+    
+    func clearCache() {
+        do {
+            try coreData.clearCache()
+        } catch {
+            print("ClassService_CoreData: Failed to clear cache")
+            print("ClassService_CoreData: \(error)")
+        }
+    }
 }
 
 extension ClassService_CoreData {

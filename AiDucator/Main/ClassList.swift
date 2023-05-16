@@ -26,7 +26,7 @@ class ClassListViewModel: ObservableObject {
     }
     
     func addClass() {
-        let cls = Class(documentID: "321", title: "Physics", sfSymbol: "test", description: "Phsyics class", startDate: Date(), endDate: Date(), teacherID: "123")
+        let cls = Class(title: "Physics", sfSymbol: "test", description: "Phsyics class", startDate: Date(), endDate: Date(), teacherID: AuthService.shared.user!.uid)
 //        ClassService_Firestore.shared.addClass(cls)
 //            .sink { completion in
 //                switch completion {
@@ -40,7 +40,20 @@ class ClassListViewModel: ObservableObject {
 //
 //            }.store(in: &cancellables)
 
-        ThinklyModel.shared.classService.addClass(cls: cls)
+//        ThinklyModel.shared.classService.addClass(cls: cls)
+        
+        ClassService.shared.addClass(cls)
+            .sink { completion in
+                switch completion {
+                case .failure(let e):
+                    print("Failed to add class")
+                    print("\(e)")
+                case .finished:
+                    print("Finished adding class")
+                }
+            } receiveValue: { _ in
+                
+            }.store(in: &cancellables)
     }
     
     func updateClass() {
@@ -59,7 +72,21 @@ class ClassListViewModel: ObservableObject {
 //
 //                }.store(in: &cancellables)
             
-            ThinklyModel.shared.classService.updateClass(cls: self.cls!)
+//            ThinklyModel.shared.classService.updateClass(cls: self.cls!)
+            
+            ClassService.shared.updateClass(self.cls!)
+                .sink { completion in
+                    switch completion {
+                    case .failure(let e):
+                        print("Failed to update class")
+                        print("\(e)")
+                    case .finished:
+                        print("Finished updating class")
+                    }
+                } receiveValue: { _ in
+                    
+                }.store(in: &cancellables)
+            
         } else {
             print("nil nil fammm")
         }
@@ -80,7 +107,20 @@ class ClassListViewModel: ObservableObject {
 //                    self?.cls = cls
 //                }.store(in: &cancellables)
             
-            self.cls = ThinklyModel.shared.classService.fetchClass(with: c.documentID!)
+            //self.cls = ThinklyModel.shared.classService.fetchClass(with: c.documentID!)
+            
+            ClassService.shared.fetchClass(with: c.documentID!)
+                .sink { completion in
+                    switch completion {
+                    case .failure(let e):
+                        print("failed to fetch class")
+                        print("\(e)")
+                    case .finished:
+                        print("Finished fetching class")
+                    }
+                } receiveValue: { [weak self] cls in
+                    self?.cls = cls
+                }.store(in: &cancellables)
         } else {
             print("we need docID to fetch document")
         }
@@ -102,11 +142,28 @@ class ClassListViewModel: ObservableObject {
 //                }
 //            }.store(in: &cancellables)
         
-        let classes = ThinklyModel.shared.classService.fetchClasses(for: "123")
-        if let c = classes {
-            print(c)
-            self.cls = c[0]
-        }
+//        let classes = ThinklyModel.shared.classService.fetchClasses(for: "123")
+//        if let c = classes {
+//            print(c)
+//            self.cls = c[0]
+//        }
+        
+        ClassService.shared.fetchClasses(for: AuthService.shared.user!.uid)
+            .sink { completion in
+                switch completion {
+                case .failure(let e):
+                    print("Failed to fetch classes")
+                    print("\(e)")
+                case .finished:
+                    print("Finished fetching classes")
+                }
+            } receiveValue: { [weak self] classes in
+                if let classes = classes {
+                    for cls in classes {
+                        self?.cls = cls
+                    }
+                }
+            }.store(in: &cancellables)
     }
     
     func deleteClass() {
@@ -124,8 +181,25 @@ class ClassListViewModel: ObservableObject {
 //                    self?.cls = nil
 //                }.store(in: &cancellables)
             
-            ThinklyModel.shared.classService.deleteClass(with: c.documentID!)
+            //ThinklyModel.shared.classService.deleteClass(with: c.documentID!)
+            
+            ClassService.shared.deleteClass(docID: c.documentID!)
+                .sink { completion in
+                    switch completion {
+                    case .failure(let e):
+                        print("Failed to delete class")
+                        print("\(e)")
+                    case .finished:
+                        print("Finished deleting class")
+                    }
+                } receiveValue: { [weak self] _ in
+                    self?.cls = nil
+                }.store(in: &cancellables)
         }
+    }
+    
+    func clearCache() {
+        ThinklyModel.shared.classService.clearCache()
     }
 }
 
@@ -200,36 +274,44 @@ struct ClassList: View {
                 }
                 
                 Spacer()
+                VStack {
+                    Button(action: {
+                        viewModel.addClass()
+                    }) {
+                        Text("Add Class")
+                    }.padding()
+                    
+                    Button(action: {
+                        viewModel.fetchClass()
+                    }) {
+                        Text("Fetch class")
+                    }.padding()
+                    
+                    Button(action: {
+                        viewModel.fetchClasses()
+                    }) {
+                        Text("fetch classes")
+                    }.padding()
+                    
+                    Button(action: {
+                        viewModel.updateClass()
+                    }) {
+                        Text("Update class")
+                    }.padding()
+                    
+                    Button(action: {
+                        viewModel.deleteClass()
+                    }) {
+                        Text("Delete class")
+                    }.padding()
+                    
+                    Button(action: {
+                        viewModel.clearCache()
+                    }) {
+                        Text("Clear cache")
+                    }
+                }
                 
-                Button(action: {
-                    viewModel.addClass()
-                }) {
-                    Text("Add Class")
-                }.padding()
-                
-                Button(action: {
-                    viewModel.fetchClass()
-                }) {
-                    Text("Fetch class")
-                }.padding()
-                
-                Button(action: {
-                    viewModel.fetchClasses()
-                }) {
-                    Text("fetch classes")
-                }.padding()
-                
-                Button(action: {
-                    viewModel.updateClass()
-                }) {
-                    Text("Update class")
-                }.padding()
-                
-                Button(action: {
-                    viewModel.deleteClass()
-                }) {
-                    Text("Delete class")
-                }.padding()
             } else {
                 List {
                     ForEach(classes, id: \.title) { item in

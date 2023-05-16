@@ -63,4 +63,18 @@ public class CoreDataWrapper {
         managedObjectContext.delete(object)
         try saveContext()
     }
+    
+    public func clearCache() throws {
+        for entityName in managedObjectModel.entities.compactMap({ $0.name }) {
+            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: entityName)
+            let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+            
+            do {
+                try persistentStoreCoordinator.execute(deleteRequest, with: managedObjectContext)
+            } catch {
+                throw error
+            }
+        }
+        try saveContext()
+    }
 }

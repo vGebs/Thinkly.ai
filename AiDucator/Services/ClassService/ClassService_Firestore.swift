@@ -29,9 +29,9 @@ class ClassService_Firestore {
         return firestore.read(collection: collection, documentId: docID)
     }
     
-    func getClasses(for teacherUID: String) -> AnyPublisher<[Class], Error> {
+    func getClasses(for teacherID: String) -> AnyPublisher<[Class], Error> {
         
-        let query: Query = db.collection(collection).whereField("teacherUID", isEqualTo: teacherUID)
+        let query: Query = db.collection(collection).whereField("teacherID", isEqualTo: teacherID)
         
         return firestore.read(query: query)
     }
