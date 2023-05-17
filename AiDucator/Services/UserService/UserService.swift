@@ -19,7 +19,7 @@ class UserService {
     
     private init() {  }
     
-    func createUser(_ user: User) -> AnyPublisher<Void, Error> {
+    func createUser(_ user: UserFirestore) -> AnyPublisher<Void, Error> {
         //we need to push to the database, if success, push to cache
         return Future<Void, Error> { [weak self] promise in
             self?.firestore.createUser(user)
@@ -40,10 +40,10 @@ class UserService {
         }.eraseToAnyPublisher()
     }
     
-    func fetchUser(with uid: String) -> AnyPublisher<User?, Error> {
+    func fetchUser(with uid: String) -> AnyPublisher<UserFirestore?, Error> {
         //we need to check the cache, if its there and it has a docID, return it, otherwise fetch db
         //
-        return Future<User?, Error> { [weak self] promise in
+        return Future<UserFirestore?, Error> { [weak self] promise in
             if let user = self!.cache.fetchUser(uid: uid), user.documentID != nil{
                 promise(.success(user))
             } else {
@@ -67,7 +67,7 @@ class UserService {
         }.eraseToAnyPublisher()
     }
     
-    func updateName(_ user: User, docID: String) -> AnyPublisher<Void, Error> {
+    func updateName(_ user: UserFirestore, docID: String) -> AnyPublisher<Void, Error> {
         //we need to push to db first, if success, we push to cache
         return Future<Void, Error> { [weak self] promise in
             self?.firestore.updateName(user, docID: docID)
@@ -87,7 +87,7 @@ class UserService {
         }.eraseToAnyPublisher()
     }
     
-    func deleteUser(user: User) -> AnyPublisher<Void, Error> {
+    func deleteUser(user: UserFirestore) -> AnyPublisher<Void, Error> {
         //we want to remove the user from the db then from the cache
         return Future<Void, Error> { [weak self] promise in
             if let docID = user.documentID {

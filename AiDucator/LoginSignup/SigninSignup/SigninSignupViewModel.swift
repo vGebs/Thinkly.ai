@@ -263,7 +263,7 @@ final class SigninSignupViewModel: ObservableObject{
                     role = "student"
                 }
                 
-                let user = User(name: self!.nameText, role: role, uid: AuthService.shared.user!.uid, birthdate: self!.age)
+                let user = UserFirestore(name: self!.nameText, role: role, uid: AuthService.shared.user!.uid, birthdate: self!.age)
                 
                 return UserService.shared.createUser(user)
             }

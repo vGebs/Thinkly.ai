@@ -8,6 +8,11 @@
         <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="teacherID" attributeType="String"/>
         <attribute name="title" attributeType="String"/>
+        <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="classes" inverseEntity="UserEntity"/>
+    </entity>
+    <entity name="UserClassEntity" representedClassName="UserClassEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="classID" attributeType="String"/>
+        <attribute name="uid" attributeType="String"/>
     </entity>
     <entity name="UserEntity" representedClassName="UserEntity" syncable="YES" codeGenerationType="class">
         <attribute name="birthdate" attributeType="Date" usesScalarValueType="NO"/>
@@ -15,5 +20,6 @@
         <attribute name="name" attributeType="String"/>
         <attribute name="role" attributeType="String"/>
         <attribute name="uid" attributeType="String"/>
+        <relationship name="classes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ClassEntity" inverseName="users" inverseEntity="ClassEntity"/>
     </entity>
 </model>

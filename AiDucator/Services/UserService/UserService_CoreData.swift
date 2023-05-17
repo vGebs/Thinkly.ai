@@ -16,7 +16,7 @@ class UserService_CoreData {
         self.coreData = model
     }
     
-    func createUser(_ user: User, docID: String?) {
+    func createUser(_ user: UserFirestore, docID: String?) {
         let userCheck = fetchUser_(uid: user.uid)
         
         if userCheck == nil {
@@ -34,17 +34,17 @@ class UserService_CoreData {
         }
     }
     
-    func fetchUser(uid: String) -> User? {
+    func fetchUser(uid: String) -> UserFirestore? {
         let userCD = fetchUser_(uid: uid)
         
         if let u = userCD {
-            return User(documentID: u.docID, name: u.name!, role: u.role!, uid: u.uid!, birthdate: u.birthdate!)
+            return UserFirestore(documentID: u.docID, name: u.name!, role: u.role!, uid: u.uid!, birthdate: u.birthdate!)
         } else {
             return nil
         }
     }
     
-    func updateUser(user: User) {
+    func updateUser(user: UserFirestore) {
         let userCD = fetchUser_(uid: user.uid)
         
         guard userCD != nil else {

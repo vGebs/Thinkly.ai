@@ -20,20 +20,20 @@ class UserService_Firestore {
     
     private init() {}
     
-    func createUser(_ user: User) -> AnyPublisher<String, Error> {
+    func createUser(_ user: UserFirestore) -> AnyPublisher<String, Error> {
         firestore.create(collection: collection, data: user)
     }
     
-    func fetchUser(with uid: String) -> AnyPublisher<User?, Error> {
+    func fetchUser(with uid: String) -> AnyPublisher<UserFirestore?, Error> {
         let query: Query = db.collection(collection).whereField("uid", isEqualTo: uid)
         return firestore.read(query: query)
-            .map { users -> User? in
+            .map { users -> UserFirestore? in
                 return users.first
             }
             .eraseToAnyPublisher()
     }
     
-    func updateName(_ user: User, docID: String) -> AnyPublisher<Void, Error> {
+    func updateName(_ user: UserFirestore, docID: String) -> AnyPublisher<Void, Error> {
         firestore.update(collection: collection, documentId: docID, data: user)
     }
     
