@@ -25,6 +25,7 @@ import Combine
 struct CourseList: View {
 
     @StateObject var viewModel = CourseListViewModel()
+    @Binding var currentCourse: Course?
     
     @State var addCoursesPressed = false
     
@@ -90,7 +91,9 @@ struct CourseList: View {
                         List {
                             ForEach(viewModel.courses!, id: \.title) { item in
                                 Button(action: {
-                                    print("Tapped on \(item.title)")
+                                    withAnimation {
+                                        self.currentCourse = item
+                                    }
                                 }) {
                                     HStack {
                                         Image(systemName: item.sfSymbol)
