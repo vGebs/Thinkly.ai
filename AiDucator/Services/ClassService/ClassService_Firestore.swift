@@ -48,4 +48,13 @@ class ClassService_Firestore {
     func deleteClass(docID: String) -> AnyPublisher<Void, Error> {
         return firestore.delete(collection: collection, documentId: docID)
     }
+    
+    func listenOnClass(with docID: String) -> AnyPublisher<(Class, DocumentChangeType), Error> {
+        return firestore.listenByDocument(collection: collection, documentId: docID)
+    }
+    
+    func listenOnClasses(for teacherID: String) -> AnyPublisher<[(Class, DocumentChangeType)], Error> {
+        let query: Query = db.collection(collection).whereField("teacherID", isEqualTo: teacherID)
+        return firestore.listenByQuery(query: query)
+    }
 }

@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseFirestoreSwift
 
-struct ClassUser: FirestoreProtocol {
+struct ClassRegristration: FirestoreProtocol {
     @DocumentID var documentID: String?
     var classID: String
     var userID: String
