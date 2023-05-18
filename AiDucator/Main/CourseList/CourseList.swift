@@ -43,13 +43,13 @@ struct CourseList: View {
                 Spacer()
                 
                 Button(action: {
-                    viewModel.logout()
+                    AppState.shared.logout()
                 }) {
                     Text("Logout")
                 }
             }.padding(.top)
             
-            if viewModel.loading {
+            if AppState.shared.loading {
                 LoadingView()
             } else {
                 Button(action: {
@@ -72,7 +72,7 @@ struct CourseList: View {
                     }
                 }.frame(width: screenWidth * 0.9, height: screenHeight / 20)
                 
-                if viewModel.user!.courses == nil {
+                if viewModel.courses == nil {
                     Spacer()
                     
                     Text("You have no active classes")
@@ -80,11 +80,15 @@ struct CourseList: View {
                     Spacer()
                     
                 } else {
-                    if viewModel.user!.courses!.count == 0 {
+                    if viewModel.courses!.count == 0 {
+                        Spacer()
                         
+                        Text("You have no active classes")
+                        
+                        Spacer()
                     } else {
                         List {
-                            ForEach(viewModel.user!.courses!, id: \.title) { item in
+                            ForEach(viewModel.courses!, id: \.title) { item in
                                 Button(action: {
                                     print("Tapped on \(item.title)")
                                 }) {

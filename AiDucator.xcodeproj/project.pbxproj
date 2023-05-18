@@ -197,13 +197,13 @@
 			path = ClassUserService;
 			sourceTree = "<group>";
 		};
-		FA9CFA962A158312000BDE95 /* ClassList */ = {
+		FA9CFA962A158312000BDE95 /* CourseList */ = {
 			isa = PBXGroup;
 			children = (
 				FAEC5D312A0EFD9500A48F05 /* CourseList.swift */,
 				FA9CFA972A158322000BDE95 /* CourseListViewModel.swift */,
 			);
-			path = ClassList;
+			path = CourseList;
 			sourceTree = "<group>";
 		};
 		FABD79A42A098CA100201145 = {
@@ -309,7 +309,7 @@
 		FAEC5D302A0EFD8700A48F05 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				FA9CFA962A158312000BDE95 /* ClassList */,
+				FA9CFA962A158312000BDE95 /* CourseList */,
 				FA9CFA822A0FAB43000BDE95 /* Notepad.swift */,
 			);
 			path = Main;
