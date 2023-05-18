@@ -32,5 +32,5 @@ struct User {
     var uid: String
     var birthdate: Date
     
-    var classes: [Class]?
+    var courses: [Course]?
 }

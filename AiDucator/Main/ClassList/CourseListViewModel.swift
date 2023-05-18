@@ -8,10 +8,10 @@
 import Foundation
 import Combine
 
-class ClassListViewModel: ObservableObject {
+class CourseListViewModel: ObservableObject {
     
     @Published var user: User?
-    @Published var newCls: Class?
+    @Published var newCls: Course?
     
     private var cancellables: [AnyCancellable] = []
     
@@ -21,11 +21,11 @@ class ClassListViewModel: ObservableObject {
         self.fetchClasses(for: AuthService.shared.user!.uid)
     }
     
-    func addClass(title: String, sfSymbol: String, description: String, startDate: Date, endDate: Date) {
+    func addCourse(title: String, sfSymbol: String, description: String, startDate: Date, endDate: Date) {
         
-        let cls = Class(title: title, sfSymbol: sfSymbol, description: description, startDate: startDate, endDate: endDate, teacherID: AuthService.shared.user!.uid)
+        let course = Course(title: title, sfSymbol: sfSymbol, description: description, startDate: startDate, endDate: endDate, teacherID: AuthService.shared.user!.uid)
         
-        ClassService_Firestore.shared.addClass(cls)
+        CourseService_Firestore.shared.addCourse(course)
             .sink { completion in
                 switch completion {
                 case .failure(let e):
@@ -45,7 +45,7 @@ class ClassListViewModel: ObservableObject {
     }
 }
 
-extension ClassListViewModel {
+extension CourseListViewModel {
     private func fetchClasses(for uid: String) {
         // 1. Fetch user
         UserService_Firestore.shared.fetchUser(with: uid)
@@ -75,7 +75,7 @@ extension ClassListViewModel {
     }
     
     private func observeClasses(for teacherID: String) {
-        ClassService_Firestore.shared.listenOnClasses(for: teacherID)
+        CourseService_Firestore.shared.listenOnCourses(for: teacherID)
             .sink { completion in
                 switch completion {
                 case .failure(let e):
@@ -90,31 +90,31 @@ extension ClassListViewModel {
                     case .added:
                         //add to classes
                         if let _ = self?.user {
-                            if let _ = self!.user!.classes {
-                                self!.user!.classes?.append(cls.0)
+                            if let _ = self!.user!.courses {
+                                self!.user!.courses?.append(cls.0)
                             } else {
-                                self!.user?.classes = [cls.0]
+                                self!.user?.courses = [cls.0]
                             }
                         }
                     case .modified:
                         if let _ = self?.user {
-                            if let _ = self!.user!.classes {
-                                for i in 0..<self!.user!.classes!.count {
-                                    if cls.0.documentID == self!.user!.classes![i].documentID {
-                                        self!.user!.classes![i] = cls.0
+                            if let _ = self!.user!.courses {
+                                for i in 0..<self!.user!.courses!.count {
+                                    if cls.0.documentID == self!.user!.courses![i].documentID {
+                                        self!.user!.courses![i] = cls.0
                                         break
                                     }
                                 }
                             } else {
-                                self!.user?.classes = [cls.0]
+                                self!.user?.courses = [cls.0]
                             }
                         }
                     case .removed:
                         if let _ = self?.user {
-                            if let _ = self!.user!.classes {
-                                for i in 0..<self!.user!.classes!.count {
-                                    if cls.0.documentID == self!.user!.classes![i].documentID {
-                                        self!.user!.classes!.remove(at: i)
+                            if let _ = self!.user!.courses {
+                                for i in 0..<self!.user!.courses!.count {
+                                    if cls.0.documentID == self!.user!.courses![i].documentID {
+                                        self!.user!.courses!.remove(at: i)
                                         break
                                     }
                                 }
@@ -128,7 +128,7 @@ extension ClassListViewModel {
     
     //classID == docID
     private func observeClass(classID: String) {
-        ClassService_Firestore.shared.listenOnClass(with: classID)
+        CourseService_Firestore.shared.listenOnCourse(with: classID)
             .sink { completion in
                 switch completion {
                 case .failure(let e):
@@ -143,31 +143,31 @@ extension ClassListViewModel {
                 case .added:
                     //add to classes
                     if let _ = self?.user {
-                        if let _ = self!.user!.classes {
-                            self!.user!.classes?.append(cls.0)
+                        if let _ = self!.user!.courses {
+                            self!.user!.courses?.append(cls.0)
                         } else {
-                            self!.user?.classes = [cls.0]
+                            self!.user?.courses = [cls.0]
                         }
                     }
                 case .modified:
                     if let _ = self?.user {
-                        if let _ = self!.user!.classes {
-                            for i in 0..<self!.user!.classes!.count {
-                                if cls.0.documentID == self!.user!.classes![i].documentID {
-                                    self!.user!.classes![i] = cls.0
+                        if let _ = self!.user!.courses {
+                            for i in 0..<self!.user!.courses!.count {
+                                if cls.0.documentID == self!.user!.courses![i].documentID {
+                                    self!.user!.courses![i] = cls.0
                                     break
                                 }
                             }
                         } else {
-                            self!.user?.classes = [cls.0]
+                            self!.user?.courses = [cls.0]
                         }
                     }
                 case .removed:
                     if let _ = self?.user {
-                        if let _ = self!.user!.classes {
-                            for i in 0..<self!.user!.classes!.count {
-                                if cls.0.documentID == self!.user!.classes![i].documentID {
-                                    self!.user!.classes!.remove(at: i)
+                        if let _ = self!.user!.courses {
+                            for i in 0..<self!.user!.courses!.count {
+                                if cls.0.documentID == self!.user!.courses![i].documentID {
+                                    self!.user!.courses!.remove(at: i)
                                     break
                                 }
                             }
@@ -179,7 +179,7 @@ extension ClassListViewModel {
     }
     
     private func observeClassesForStudent(uid: String) {
-        ClassRegistrationService_Firestore.shared.listenOnRegristrations(for: uid)
+        CourseRegistrationService_Firestore.shared.listenOnRegristrations(for: uid)
             .sink { completion in
                 switch completion {
                 case .failure(let e):
@@ -198,10 +198,10 @@ extension ClassListViewModel {
                     case .removed:
                         //remove the class from the user classes
                         if let _ = self?.user {
-                            if let _ = self!.user!.classes {
-                                for i in 0..<self!.user!.classes!.count {
-                                    if cls.0.classID == self!.user!.classes![i].documentID! {
-                                        self!.user!.classes?.remove(at: i)
+                            if let _ = self!.user!.courses {
+                                for i in 0..<self!.user!.courses!.count {
+                                    if cls.0.courseID == self!.user!.courses![i].documentID! {
+                                        self!.user!.courses?.remove(at: i)
                                         break
                                     }
                                 }
@@ -213,9 +213,9 @@ extension ClassListViewModel {
     }
 }
 
-extension ClassListViewModel {
+extension CourseListViewModel {
     func clearCache() {
-        ThinklyModel.shared.classService.clearCache()
+        ThinklyModel.shared.courseService.clearCache()
     }
     
     func logout() {

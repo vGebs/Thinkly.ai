@@ -68,6 +68,7 @@ class AppState: ObservableObject {
             .sink { [weak self] user in
                 if let _ = user {
                     self?.onMainView = true
+                    
                 }
             }.store(in: &cancellables)
     }

@@ -9,31 +9,31 @@ import Foundation
 import Combine
 import FirebaseFirestore
 
-class ClassRegistrationService_Firestore {
+class CourseRegistrationService_Firestore {
     
     private let firestore = FirestoreWrapper.shared
     
-    private let collection = "ClassRegistration"
+    private let collection = "CourseRegistration"
     private let db = Firestore.firestore()
     
-    static let shared = ClassRegistrationService_Firestore()
+    static let shared = CourseRegistrationService_Firestore()
     
     private init() {  }
     
-    func joinClass(classUser: ClassRegristration) -> AnyPublisher<String, Error> {
-        return firestore.create(collection: collection, data: classUser)
+    func joinCourse(courseReg: CourseRegristration) -> AnyPublisher<String, Error> {
+        return firestore.create(collection: collection, data: courseReg)
     }
     
-    func getRegristrations(for uid: String) -> AnyPublisher<[ClassRegristration], Error> {
+    func getRegristrations(for uid: String) -> AnyPublisher<[CourseRegristration], Error> {
         let query: Query = db.collection(collection).whereField("userID", isEqualTo: uid)
         return firestore.read(query: query)
     }
     
-    func dropClass(docID: String) -> AnyPublisher<Void, Error> {
+    func dropCourse(docID: String) -> AnyPublisher<Void, Error> {
         return firestore.delete(collection: collection, documentId: docID)
     }
     
-    func listenOnRegristrations(for uid: String) -> AnyPublisher<[(ClassRegristration, DocumentChangeType)], Error> {
+    func listenOnRegristrations(for uid: String) -> AnyPublisher<[(CourseRegristration, DocumentChangeType)], Error> {
         let query: Query = db.collection(collection).whereField("userID", isEqualTo: uid)
         return firestore.listenByQuery(query: query)
     }

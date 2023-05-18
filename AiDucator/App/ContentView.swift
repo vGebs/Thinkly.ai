@@ -41,7 +41,7 @@ struct ContentView: View {
                         .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .trailing)))
                 }
             } else if appState.onMainView {
-                ClassList()
+                CourseList()
             }
         }
     }

@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseFirestoreSwift
 
-struct Class: FirestoreProtocol {
+struct Course: FirestoreProtocol {
     @DocumentID var documentID: String?
     var title: String
     var sfSymbol: String

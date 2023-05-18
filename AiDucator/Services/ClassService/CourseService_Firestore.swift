@@ -9,51 +9,51 @@ import Foundation
 import Combine
 import FirebaseFirestore
 
-class ClassService_Firestore {
+class CourseService_Firestore {
     
-    static let shared = ClassService_Firestore()
+    static let shared = CourseService_Firestore()
     
     private var firestore = FirestoreWrapper.shared
     
-    private let collection = "Classes"
+    private let collection = "Courses"
     
     private let db = Firestore.firestore()
     
     private init() {  }
     
-    func addClass(_ cls: Class) -> AnyPublisher<String, Error> {
+    func addCourse(_ cls: Course) -> AnyPublisher<String, Error> {
         return firestore.create(collection: collection, data: cls)
     }
     
-    func getClass(with docID: String) -> AnyPublisher<Class, Error> {
+    func getCourse(with docID: String) -> AnyPublisher<Course, Error> {
         return firestore.read(collection: collection, documentId: docID)
     }
     
-    func getClasses(for teacherID: String) -> AnyPublisher<[Class], Error> {
+    func getCourses(for teacherID: String) -> AnyPublisher<[Course], Error> {
         
         let query: Query = db.collection(collection).whereField("teacherID", isEqualTo: teacherID)
         
         return firestore.read(query: query)
     }
     
-    func updateClass(cls: Class) -> AnyPublisher<Void, Error> {
-        if let docID = cls.documentID {
-            return firestore.update(collection: collection, documentId: docID, data: cls)
+    func updateCourse(course: Course) -> AnyPublisher<Void, Error> {
+        if let docID = course.documentID {
+            return firestore.update(collection: collection, documentId: docID, data: course)
         } else {
             return Fail<Void, Error>(error: NSError(domain: "No document ID found", code: 0))
                 .eraseToAnyPublisher()
         }
     }
     
-    func deleteClass(docID: String) -> AnyPublisher<Void, Error> {
+    func deleteCourse(docID: String) -> AnyPublisher<Void, Error> {
         return firestore.delete(collection: collection, documentId: docID)
     }
     
-    func listenOnClass(with docID: String) -> AnyPublisher<(Class, DocumentChangeType), Error> {
+    func listenOnCourse(with docID: String) -> AnyPublisher<(Course, DocumentChangeType), Error> {
         return firestore.listenByDocument(collection: collection, documentId: docID)
     }
     
-    func listenOnClasses(for teacherID: String) -> AnyPublisher<[(Class, DocumentChangeType)], Error> {
+    func listenOnCourses(for teacherID: String) -> AnyPublisher<[(Course, DocumentChangeType)], Error> {
         let query: Query = db.collection(collection).whereField("teacherID", isEqualTo: teacherID)
         return firestore.listenByQuery(query: query)
     }

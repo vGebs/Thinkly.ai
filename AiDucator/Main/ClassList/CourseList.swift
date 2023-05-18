@@ -22,11 +22,11 @@ import Combine
 // The class will then be listed on the teachers courses
 
 
-struct ClassList: View {
+struct CourseList: View {
 
-    @StateObject var viewModel = ClassListViewModel()
+    @StateObject var viewModel = CourseListViewModel()
     
-    @State var addClassPressed = false
+    @State var addCoursesPressed = false
     
     var body: some View {
         VStack {
@@ -53,7 +53,7 @@ struct ClassList: View {
                 LoadingView()
             } else {
                 Button(action: {
-                    addClassPressed = true
+                    addCoursesPressed = true
                 }) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
@@ -72,7 +72,7 @@ struct ClassList: View {
                     }
                 }.frame(width: screenWidth * 0.9, height: screenHeight / 20)
                 
-                if viewModel.user!.classes == nil {
+                if viewModel.user!.courses == nil {
                     Spacer()
                     
                     Text("You have no active classes")
@@ -80,11 +80,11 @@ struct ClassList: View {
                     Spacer()
                     
                 } else {
-                    if viewModel.user!.classes!.count == 0 {
+                    if viewModel.user!.courses!.count == 0 {
                         
                     } else {
                         List {
-                            ForEach(viewModel.user!.classes!, id: \.title) { item in
+                            ForEach(viewModel.user!.courses!, id: \.title) { item in
                                 Button(action: {
                                     print("Tapped on \(item.title)")
                                 }) {
@@ -112,8 +112,8 @@ struct ClassList: View {
                     }
                 }
             }
-        }.sheet(isPresented: $addClassPressed) {
-            AddClassForm(classListViewModel: viewModel, addClassPressed: $addClassPressed)
+        }.sheet(isPresented: $addCoursesPressed) {
+            AddClassForm(classListViewModel: viewModel, addClassPressed: $addCoursesPressed)
         }
     }
 }
@@ -145,7 +145,7 @@ let classTypes: [ClassType] = [
 ]
 
 struct AddClassForm: View {
-    @ObservedObject var classListViewModel: ClassListViewModel
+    @ObservedObject var classListViewModel: CourseListViewModel
     @Binding var addClassPressed: Bool
     @State private var className: String = ""
     @State private var classDescription: String = ""
@@ -213,7 +213,7 @@ struct AddClassForm: View {
             .padding(.vertical)
 
             Button("Add Class") {
-                classListViewModel.addClass(title: className, sfSymbol: selectedClassType.sfSymbol, description: classDescription, startDate: durationFrom, endDate: durationTo)
+                classListViewModel.addCourse(title: className, sfSymbol: selectedClassType.sfSymbol, description: classDescription, startDate: durationFrom, endDate: durationTo)
                 
                 addClassPressed = false
             }

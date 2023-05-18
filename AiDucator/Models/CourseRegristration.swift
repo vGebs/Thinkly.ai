@@ -8,8 +8,8 @@
 import Foundation
 import FirebaseFirestoreSwift
 
-struct ClassRegristration: FirestoreProtocol {
+struct CourseRegristration: FirestoreProtocol {
     @DocumentID var documentID: String?
-    var classID: String
+    var courseID: String
     var userID: String
 }
