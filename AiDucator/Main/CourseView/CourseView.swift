@@ -11,7 +11,7 @@ import SwiftUI
 struct CourseView: View {
     @Binding var course: Course?
 
-    @State var offset: CGFloat = screenWidth
+    @State var offset: CGFloat = screenWidth * 2
     
     var body: some View {
         ZStack {

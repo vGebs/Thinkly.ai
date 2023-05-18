@@ -29,99 +29,262 @@ struct CourseList: View {
     
     @State var addCoursesPressed = false
     
-    var body: some View {
-        VStack {
-            HStack {
-                Image(systemName: "newspaper")
-                    .resizable()
-                    .frame(width: 25, height: 25)
-                    .foregroundColor(.buttonPrimary)
-                    .padding(.leading)
-                Text("Classes")
-                    .foregroundColor(.primary)
-                    .font(.largeTitle)
-                    
+    @State private var phase = AnimatableData(phase: 0)
+    @State private var phase1 = AnimatableData(phase: 45)
+    @State private var phase2 = AnimatableData(phase: 90)
+
+    var wave: some View {
+        ZStack {
+            VStack {
                 Spacer()
-                
-                Button(action: {
-                    AppState.shared.logout()
-                }) {
-                    Text("Logout")
-                }
-            }.padding(.top)
-            
-            if AppState.shared.loading {
-                LoadingView()
-            } else {
-                Button(action: {
-                    addCoursesPressed = true
-                }) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(lineWidth: 2)
-                            .foregroundColor(.accent)
-                        HStack{
-                            Image(systemName: "plus.app")
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(.buttonPrimary)
-                                .padding(.leading)
-                            Text("Add Class")
-                                .font(.title2)
-                                .foregroundColor(.primary)
-                            Spacer()
+                SineWave(frequency: 0.3, amplitude: 0.035, phase: phase)
+                    .fill(Color.accent)
+                    .edgesIgnoringSafeArea(.all)
+                    .onAppear {
+                        withAnimation(.linear(duration: 5).repeatForever(autoreverses: false)) {
+                            phase.phase += 1
                         }
                     }
-                }.frame(width: screenWidth * 0.9, height: screenHeight / 20)
+            }
+            
+            VStack {
+                Spacer()
+                SineWave(frequency: 0.5, amplitude: 0.03, phase: phase1)
+                    .fill(Color.buttonPrimary)
+                    .edgesIgnoringSafeArea(.all)
+                    .onAppear {
+                        withAnimation(.linear(duration: 5).repeatForever(autoreverses: false)) {
+                            phase1.phase += 1
+                        }
+                    }
+            }.offset(y: 130)
+            
+            ZStack {
+                VStack {
+                    Spacer()
+                    SineWave(frequency: 0.5, amplitude: 0.025, phase: phase2)
+                        .fill(Color.primary)
+                        .edgesIgnoringSafeArea(.all)
+                        .onAppear {
+                            withAnimation(.linear(duration: 5).repeatForever(autoreverses: false)) {
+                                phase2.phase += 1
+                            }
+                        }
+                }.offset(y: 200)
                 
-                if viewModel.courses == nil {
+                VStack {
                     Spacer()
                     
-                    Text("You have no active classes")
-                    
+                    Text("Thinkly.ai")
+                        .font(.system(size: 20, weight: .black, design: .rounded))
+                        .frame(width: 110, height: 40)
+                        .foregroundColor(Color.buttonPrimary)
+                }
+            }
+        }
+    }
+    
+    var body: some View {
+        ZStack {
+            Color.black.edgesIgnoringSafeArea(.all)
+            
+            wave
+            
+            VStack {
+                header
+                    .frame(width: screenWidth, height: screenHeight * 0.07)
+                
+                if AppState.shared.loading {
                     Spacer()
-                    
+                    LoadingView()
+                    Spacer()
                 } else {
-                    if viewModel.courses!.count == 0 {
+                    if viewModel.courses == nil {
                         Spacer()
                         
-                        Text("You have no active classes")
+                        noCourses
                         
                         Spacer()
+                        
                     } else {
-                        List {
-                            ForEach(viewModel.courses!, id: \.title) { item in
-                                Button(action: {
-                                    withAnimation {
-                                        self.currentCourse = item
-                                    }
-                                }) {
-                                    HStack {
-                                        Image(systemName: item.sfSymbol)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .foregroundColor(.buttonPrimary)
-                                            .frame(width: 20, height: 20)
-                                        
-                                        VStack(alignment: .leading) {
-                                            Text(item.title)
-                                                .font(.title2)
-                                                .foregroundColor(.primary)
-                                            
-                                            Text(item.description)
-                                                .foregroundColor(.secondary)
-                                                .font(.subheadline)
+                        if viewModel.courses!.count == 0 {
+                            Spacer()
+                            
+                            noCourses
+                            
+                            Spacer()
+                        } else {
+                            ScrollView(showsIndicators: false) {
+                                ForEach(viewModel.courses!, id: \.title) { course in
+                                    Button(action: {
+                                        withAnimation {
+                                            self.currentCourse = course
                                         }
+                                    }) {
+                                        CourseButton(course: course)
+                                            .padding(.vertical, 3)
                                     }
+                                    .frame(width: screenWidth, height: screenHeight * 0.085)
                                 }
-                                .buttonStyle(PlainButtonStyle())
+                                .padding(.top, 10)
                             }
                         }
                     }
                 }
+            }.sheet(isPresented: $addCoursesPressed) {
+                AddClassForm(classListViewModel: viewModel, addClassPressed: $addCoursesPressed)
             }
-        }.sheet(isPresented: $addCoursesPressed) {
-            AddClassForm(classListViewModel: viewModel, addClassPressed: $addCoursesPressed)
         }
+    }
+    
+    var addClassButton_big: some View {
+        Button(action: {
+            addCoursesPressed = true
+        }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(lineWidth: 2)
+                    .foregroundColor(.accent)
+                HStack{
+                    Image(systemName: "plus.app")
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(.buttonPrimary)
+                        .padding(.leading)
+                    Text("Add Class")
+                        .font(.title2)
+                        .foregroundColor(.primary)
+                    Spacer()
+                }
+            }
+        }.frame(width: screenWidth * 0.9, height: screenHeight / 20)
+    }
+    
+    var noCourses: some View {
+        VStack {
+            HStack {
+                
+                Image(systemName: "exclamationmark.triangle")
+                    .foregroundColor(.accent)
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                
+                Text("You have no active courses")
+                    .foregroundColor(.primary)
+                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                
+                Image(systemName: "exclamationmark.triangle")
+                    .foregroundColor(.accent)
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                
+            }
+            
+            addClassButton_big
+        }
+    }
+    
+    var header: some View {
+        HStack {
+            Image(systemName: "newspaper")
+                .resizable()
+                .frame(width: 25, height: 25)
+                .foregroundColor(.accent)
+                .padding(.leading)
+            
+            Text("Courses")
+                .foregroundColor(.primary)
+                .font(.system(size: 30, weight: .bold, design: .rounded))
+                
+            Spacer()
+            
+            if viewModel.courses != nil {
+                if viewModel.courses!.count != 0 {
+                    Button(action: {
+                        addCoursesPressed = true
+                    }) {
+                        Image(systemName: "plus.app")
+                            .font(.system(size: 22, weight: .regular, design: .rounded))
+                            .foregroundColor(.buttonPrimary)
+                    }.padding(.trailing)
+                }
+            }
+            
+            Menu {
+                Button("Settings", action: settingsTapped)
+                Button("Logout", action: logoutPressed)
+            } label: {
+                Image(systemName: "gear")
+                    .font(.system(size: 22, weight: .regular, design: .rounded))
+                    .foregroundColor(.buttonPrimary)
+            }
+        }
+        .padding(.horizontal, 5)
+        .padding(.top)
+    }
+    
+    func settingsTapped() {
+        print("Settings tapped")
+    }
+    
+    func logoutPressed() {
+        AppState.shared.logout()
+    }
+}
+
+struct CourseButton: View {
+    
+    var course: Course
+    
+    var body: some View {
+        ZStack {
+            
+            RoundedRectangle(cornerRadius: 20)
+                .foregroundColor(.black)
+            
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(lineWidth: 3)
+                .foregroundColor(.buttonPrimary)
+            
+            HStack {
+                ZStack {
+                    VStack {
+                        Spacer()
+                        
+                        HStack {
+                            Spacer()
+                            Image(systemName: course.sfSymbol)
+                                .foregroundColor(.accent)
+                                .font(.system(size: 30, weight: .bold, design: .rounded))
+                                .padding(.leading)
+                                .padding(.vertical)
+                            Spacer()
+                        }
+                        
+                        Spacer()
+                    }
+                }
+                .padding(.leading, 9)
+                .padding(.trailing, 3)
+                .frame(width: screenHeight / 22, height: screenHeight / 22)
+                
+                VStack {
+                    HStack {
+                        Text(course.title)
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .foregroundColor(.primary)
+                        
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        Text(course.description)
+                            .font(.system(size: 16, weight: .light, design: .rounded))
+                            .foregroundColor(.primary)
+                        
+                        Spacer()
+                    }
+                }.padding(.leading)
+            }
+        }
+        .padding(.horizontal)
     }
 }
 
@@ -180,7 +343,7 @@ struct AddClassForm: View {
             Spacer()
             
             Text("Add Class")
-                .font(.largeTitle)
+                .font(.system(size: 22, weight: .semibold, design: .rounded))
                 .padding()
 
             TextField("Class Name", text: $className)

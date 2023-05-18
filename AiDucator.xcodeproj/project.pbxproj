@@ -37,6 +37,7 @@
 		FA9CFAA82A16B355000BDE95 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAA72A16B355000BDE95 /* FeedView.swift */; };
 		FA9CFAAA2A16B37C000BDE95 /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAA92A16B37C000BDE95 /* QuizView.swift */; };
 		FA9CFAAC2A16B390000BDE95 /* GradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAAB2A16B390000BDE95 /* GradesView.swift */; };
+		FA9CFAAE2A16D709000BDE95 /* SineWave.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAAD2A16D709000BDE95 /* SineWave.swift */; };
 		FABD79B12A098CA100201145 /* AiDucatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79B02A098CA100201145 /* AiDucatorApp.swift */; };
 		FABD79B32A098CA100201145 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79B22A098CA100201145 /* ContentView.swift */; };
 		FABD79B52A098CA300201145 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FABD79B42A098CA300201145 /* Assets.xcassets */; };
@@ -88,6 +89,7 @@
 		FA9CFAA72A16B355000BDE95 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 		FA9CFAA92A16B37C000BDE95 /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
 		FA9CFAAB2A16B390000BDE95 /* GradesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradesView.swift; sourceTree = "<group>"; };
+		FA9CFAAD2A16D709000BDE95 /* SineWave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SineWave.swift; sourceTree = "<group>"; };
 		FABD79AD2A098CA100201145 /* AiDucator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiDucator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FABD79B02A098CA100201145 /* AiDucatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiDucatorApp.swift; sourceTree = "<group>"; };
 		FABD79B22A098CA100201145 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -227,8 +229,8 @@
 		FA9CFA9B2A15E2D2000BDE95 /* CourseView */ = {
 			isa = PBXGroup;
 			children = (
-				FA9CFAA22A16B312000BDE95 /* SubViews */,
 				FA9CFA9C2A15E2EB000BDE95 /* CourseView.swift */,
+				FA9CFAA22A16B312000BDE95 /* SubViews */,
 				FA9CFA9E2A16AD36000BDE95 /* NavBar.swift */,
 			);
 			path = CourseView;
@@ -322,6 +324,7 @@
 			children = (
 				FAEC5D1E2A0EF37900A48F05 /* LoadingView.swift */,
 				FA9CFAA02A16AFD0000BDE95 /* Pager.swift */,
+				FA9CFAAD2A16D709000BDE95 /* SineWave.swift */,
 			);
 			path = ReuseableView;
 			sourceTree = "<group>";
@@ -477,6 +480,7 @@
 				FABD79B12A098CA100201145 /* AiDucatorApp.swift in Sources */,
 				FA9CFA932A157D44000BDE95 /* CourseRegistrationService.swift in Sources */,
 				FA0CDC322A0F237D007AF6E7 /* FirestoreWrapper.swift in Sources */,
+				FA9CFAAE2A16D709000BDE95 /* SineWave.swift in Sources */,
 				FA0CDC412A0F25D4007AF6E7 /* User.swift in Sources */,
 				FA9CFA902A157C42000BDE95 /* CourseRegristration.swift in Sources */,
 			);

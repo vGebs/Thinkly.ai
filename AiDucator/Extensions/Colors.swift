@@ -7,10 +7,13 @@
 
 import SwiftUI
 
+//Primary (Text): #ADD8E6, Button: #3CB371, Accent: #4169E1
+//Primary (Text): #FAFAFA, Button: #FF1493, Accent: #7FFF00
+
 extension Color {
-    static let primary = Color(hex: "EFFFC8")//ColorScheme 1: Color(hex: "F40B73")
-    static let accent = Color(hex: "052F5F")//ColorScheme 1: Color(hex: "F4170B")
-    static let buttonPrimary = Color(hex: "85CB33")//ColorScheme 1: Color(hex: "F40BE8")
+    static let primary = Color(hex: "FAFAFA")//EFFFC8
+    static let buttonPrimary = Color(hex: "FF1493")//85CB33
+    static let accent = Color(hex: "7FFF00")//052F5F
 }
 
 extension Color {
