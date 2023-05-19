@@ -11,7 +11,7 @@ import SwiftUI
 struct CourseView: View {
     @Binding var course: Course?
 
-    @State var offset: CGFloat = screenWidth * 2
+    @ObservedObject var offsetManager = OffsetManager.shared
     
     var body: some View {
         ZStack {
@@ -26,79 +26,29 @@ struct CourseView: View {
                     .foregroundColor(.primary)
                 
                 Spacer()
+                
+                if course != nil {
+                    HStack {
+                        
+                        Image(systemName: course!.sfSymbol)
+                            .font(.system(size: 14, weight: .black, design: .rounded))
+                            .foregroundColor(.black)
+                            
+                        Text(course!.title)
+                            .font(.system(size: 16, weight: .black, design: .rounded))
+                            .foregroundColor(Color.buttonPrimary)
+                    }
+                    .frame(width: screenWidth, height: 40)
+                    .padding(.bottom, screenHeight * 0.07)
+                }
             }
         }
     }
     
     var header: some View {
         HStack {
-            ZStack {
-                HStack {
-                    Image(systemName: "note.text")
-                        .font(.system(size: 25, weight: .bold, design: .rounded))
-                        .foregroundColor(.accent)
-                        .padding(.leading)
-                    
-                    Text("Notes")
-                        .foregroundColor(.primary)
-                        .font(.system(size: 30, weight: .bold, design: .rounded))
-                    Spacer()
-                }
-                .opacity(self.offset >= 0 && self.offset < (screenWidth - screenWidth * 0.5) ? 1 : 0)
-                
-                HStack {
-                    Image(systemName: "tray")
-                        .font(.system(size: 25, weight: .bold, design: .rounded))
-                        .foregroundColor(.accent)
-                        .padding(.leading)
-                    
-                    Text("Assignments")
-                        .foregroundColor(.primary)
-                        .font(.system(size: 30, weight: .bold, design: .rounded))
-                    Spacer()
-                }
-                .opacity(self.offset >= screenWidth * 0.5 && self.offset < ((screenWidth * 2) - screenWidth * 0.5) ? 1 : 0)
-                
-                HStack {
-                    Image(systemName: "list.bullet.rectangle")
-                        .font(.system(size: 25, weight: .bold, design: .rounded))
-                        .foregroundColor(.accent)
-                        .padding(.leading)
-                    
-                    Text("Feed")
-                        .foregroundColor(.primary)
-                        .font(.system(size: 30, weight: .bold, design: .rounded))
-                    Spacer()
-                }
-                .opacity(self.offset >= ((screenWidth * 2) - screenWidth * 0.5) && self.offset < ((screenWidth * 3) - screenWidth * 0.5) ? 1 : 0)
-                
-                HStack {
-                    Image(systemName: "list.bullet.clipboard")
-                        .font(.system(size: 25, weight: .bold, design: .rounded))
-                        .foregroundColor(.accent)
-                        .padding(.leading)
-                    
-                    Text("Quizes")
-                        .foregroundColor(.primary)
-                        .font(.system(size: 30, weight: .bold, design: .rounded))
-                    Spacer()
-                }
-                .opacity(self.offset >= ((screenWidth * 3) - screenWidth * 0.5) && self.offset < ((screenWidth * 4) - screenWidth * 0.5) ? 1 : 0)
-                
-                HStack {
-                    Image(systemName: "chart.dots.scatter")
-                        .font(.system(size: 25, weight: .bold, design: .rounded))
-                        .foregroundColor(.accent)
-                        .padding(.leading)
-                    
-                    Text("Grades")
-                        .foregroundColor(.primary)
-                        .font(.system(size: 30, weight: .bold, design: .rounded))
-                    Spacer()
-                }
-                .opacity(self.offset >= ((screenWidth * 4) - screenWidth * 0.5) && self.offset < ((screenWidth * 5) - screenWidth * 0.5) ? 1 : 0)
-            }
             
+            title
                 
             Spacer()
             
@@ -106,6 +56,9 @@ struct CourseView: View {
             Button(action: {
                 withAnimation {
                     course = nil
+                    DispatchQueue.main.async { 
+                        self.offsetManager.offset = screenWidth * 2
+                    }
                 }
             }) {
                 Image(systemName: "house.fill")
@@ -126,6 +79,75 @@ struct CourseView: View {
         .padding(.top)
     }
     
+    var title: some View {
+        ZStack {
+            HStack {
+                Image(systemName: "note.text")
+                    .font(.system(size: 25, weight: .bold, design: .rounded))
+                    .foregroundColor(.accent)
+                    .padding(.leading)
+                
+                Text("Notes")
+                    .foregroundColor(.primary)
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                Spacer()
+            }
+            .opacity(self.offsetManager.offset >= 0 && self.offsetManager.offset < (screenWidth - screenWidth * 0.5) ? 1 : 0)
+            
+            HStack {
+                Image(systemName: "tray")
+                    .font(.system(size: 25, weight: .bold, design: .rounded))
+                    .foregroundColor(.accent)
+                    .padding(.leading)
+                
+                Text("Assignments")
+                    .foregroundColor(.primary)
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                Spacer()
+            }
+            .opacity(self.offsetManager.offset >= screenWidth * 0.5 && self.offsetManager.offset < ((screenWidth * 2) - screenWidth * 0.5) ? 1 : 0)
+            
+            HStack {
+                Image(systemName: "list.bullet.rectangle")
+                    .font(.system(size: 25, weight: .bold, design: .rounded))
+                    .foregroundColor(.accent)
+                    .padding(.leading)
+                
+                Text("Feed")
+                    .foregroundColor(.primary)
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                Spacer()
+            }
+            .opacity(self.offsetManager.offset >= ((screenWidth * 2) - screenWidth * 0.5) && self.offsetManager.offset < ((screenWidth * 3) - screenWidth * 0.5) ? 1 : 0)
+            
+            HStack {
+                Image(systemName: "list.bullet.clipboard")
+                    .font(.system(size: 25, weight: .bold, design: .rounded))
+                    .foregroundColor(.accent)
+                    .padding(.leading)
+                
+                Text("Quizes")
+                    .foregroundColor(.primary)
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                Spacer()
+            }
+            .opacity(self.offsetManager.offset >= ((screenWidth * 3) - screenWidth * 0.5) && self.offsetManager.offset < ((screenWidth * 4) - screenWidth * 0.5) ? 1 : 0)
+            
+            HStack {
+                Image(systemName: "chart.dots.scatter")
+                    .font(.system(size: 25, weight: .bold, design: .rounded))
+                    .foregroundColor(.accent)
+                    .padding(.leading)
+                
+                Text("Grades")
+                    .foregroundColor(.primary)
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                Spacer()
+            }
+            .opacity(self.offsetManager.offset >= ((screenWidth * 4) - screenWidth * 0.5) && self.offsetManager.offset < ((screenWidth * 5) - screenWidth * 0.5) ? 1 : 0)
+        }
+    }
+    
     func settingsTapped() {
         print("Settings tapped")
     }
@@ -143,7 +165,7 @@ struct CourseView: View {
         GeometryReader { proxy in
             let rect = proxy.frame(in: .global)
             
-            Pager(tabs: tabs, rect: rect, offset: $offset) {
+            Pager(tabs: tabs, rect: rect, offset: $offsetManager.offset) {
                 
                 HStack(spacing: 0){
                     NotesView()
@@ -156,7 +178,7 @@ struct CourseView: View {
         }
         .edgesIgnoringSafeArea(.all)
         .overlay(
-            NavBar(offset: $offset)
+            NavBar(offset: $offsetManager.offset)
                 .padding(.bottom, screenHeight * 0.035),
             alignment: .bottom
         )
@@ -203,16 +225,6 @@ struct CourseView: View {
                             }
                         }
                 }.offset(y: 200)
-                
-                VStack {
-                    Spacer()
-                    
-                    Text("Thinkly.ai")
-                        .font(.system(size: 20, weight: .black, design: .rounded))
-                        .frame(width: 110, height: 40)
-                        .foregroundColor(Color.buttonPrimary)
-                }
-                .padding(.bottom, screenHeight * 0.07)
             }
         }
     }

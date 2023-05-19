@@ -9,6 +9,16 @@ import Foundation
 import SwiftUI
 
 //We are going to create our own view using ViewBuilders
+import SwiftUI
+
+class OffsetManager: ObservableObject {
+    static let shared = OffsetManager()
+
+    @Published var offset: CGFloat = screenWidth * 2
+
+    private init() {}
+}
+
 struct Pager<Content: View>: UIViewRepresentable {
     
     //To store our SwiftUIView
@@ -16,9 +26,6 @@ struct Pager<Content: View>: UIViewRepresentable {
     
     //Getting rect to calculate width and height of scrollview
     var rect: CGRect
-    
-    //Content offset
-    @Binding var offset: CGFloat
     
     //Tabs...
     var tabs: [Any]
@@ -29,7 +36,9 @@ struct Pager<Content: View>: UIViewRepresentable {
     
     init(tabs: [Any], rect: CGRect, offset: Binding<CGFloat>, @ViewBuilder content: ()-> Content) {
         self.content = content()
-        self._offset = offset
+        DispatchQueue.main.async {
+            OffsetManager.shared.offset = offset.wrappedValue
+        }
         self.rect = rect
         self.tabs = tabs
     }
@@ -54,12 +63,14 @@ struct Pager<Content: View>: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: UIScrollView, context: Context) {
-        if uiView.contentOffset.x != offset {
+        if uiView.contentOffset.x != OffsetManager.shared.offset {
             
             uiView.delegate = nil
             
             UIView.animate(withDuration: 0.4) {
-                uiView.contentOffset.x = offset
+                withAnimation {
+                    uiView.contentOffset.x = OffsetManager.shared.offset
+                }
             } completion: { status in
                 if status { uiView.delegate = context.coordinator }
             }
@@ -96,7 +107,10 @@ struct Pager<Content: View>: UIViewRepresentable {
         }
         
         func scrollViewDidScroll(_ scrollView: UIScrollView) {
-            parent.offset = scrollView.contentOffset.x
+            DispatchQueue.main.async {
+                OffsetManager.shared.offset = scrollView.contentOffset.x
+            }
         }
     }
 }
+
