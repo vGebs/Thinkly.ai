@@ -43,6 +43,9 @@ struct CourseList: View {
                 header
                     .frame(width: screenWidth, height: screenHeight * 0.07)
                 
+                Divider()
+                    .foregroundColor(.primary)
+                
                 if AppState.shared.loading {
                     Spacer()
                     LoadingView()
@@ -91,11 +94,49 @@ struct CourseList: View {
                 }
             }
             
-            if addClassPopUpPressed {
-                AddCoursePopUp(classListViewModel: viewModel, addClassPressed: $addClassPopUpPressed)
-                    .transition(.asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .trailing)))
+            AddCoursePopUp(classListViewModel: viewModel, addClassPressed: $addClassPopUpPressed)
+                .opacity(addClassPopUpPressed ? 1 : 0)
+        }
+    }
+    
+    var header: some View {
+        HStack {
+            Image(systemName: "newspaper")
+                .font(.system(size: 25, weight: .bold, design: .rounded))
+                .foregroundColor(.accent)
+                .padding(.leading)
+            
+            Text("Courses")
+                .foregroundColor(.primary)
+                .font(.system(size: 30, weight: .bold, design: .rounded))
+                
+            Spacer()
+            
+            if viewModel.courses != nil {
+                if viewModel.courses!.count != 0 {
+                    Button(action: {
+                        withAnimation {
+                            addClassPopUpPressed = true
+                        }
+                    }) {
+                        Image(systemName: "plus.app")
+                            .font(.system(size: 22, weight: .regular, design: .rounded))
+                            .foregroundColor(.buttonPrimary)
+                    }.padding(.trailing)
+                }
+            }
+            
+            Menu {
+                Button("Settings", action: settingsTapped)
+                Button("Logout", action: logoutPressed)
+            } label: {
+                Image(systemName: "gear")
+                    .font(.system(size: 22, weight: .regular, design: .rounded))
+                    .foregroundColor(.buttonPrimary)
             }
         }
+        .padding(.horizontal, 5)
+        .padding(.top)
     }
     
     var addClassButton_big: some View {
@@ -195,47 +236,6 @@ struct CourseList: View {
         }
     }
     
-    var header: some View {
-        HStack {
-            Image(systemName: "newspaper")
-                .resizable()
-                .frame(width: 25, height: 25)
-                .foregroundColor(.accent)
-                .padding(.leading)
-            
-            Text("Courses")
-                .foregroundColor(.primary)
-                .font(.system(size: 30, weight: .bold, design: .rounded))
-                
-            Spacer()
-            
-            if viewModel.courses != nil {
-                if viewModel.courses!.count != 0 {
-                    Button(action: {
-                        withAnimation {
-                            addClassPopUpPressed = true
-                        }
-                    }) {
-                        Image(systemName: "plus.app")
-                            .font(.system(size: 22, weight: .regular, design: .rounded))
-                            .foregroundColor(.buttonPrimary)
-                    }.padding(.trailing)
-                }
-            }
-            
-            Menu {
-                Button("Settings", action: settingsTapped)
-                Button("Logout", action: logoutPressed)
-            } label: {
-                Image(systemName: "gear")
-                    .font(.system(size: 22, weight: .regular, design: .rounded))
-                    .foregroundColor(.buttonPrimary)
-            }
-        }
-        .padding(.horizontal, 5)
-        .padding(.top)
-    }
-    
     func settingsTapped() {
         print("Settings tapped")
     }
@@ -268,7 +268,7 @@ struct CourseButton: View {
                             Spacer()
                             Image(systemName: course.sfSymbol)
                                 .foregroundColor(.accent)
-                                .font(.system(size: 30, weight: .bold, design: .rounded))
+                                .font(.system(size: 25, weight: .bold, design: .rounded))
                                 .padding(.leading)
                                 .padding(.vertical)
                             Spacer()

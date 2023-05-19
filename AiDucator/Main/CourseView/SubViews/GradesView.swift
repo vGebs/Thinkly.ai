@@ -12,6 +12,8 @@ struct GradesView: View {
     var body: some View {
         ZStack {
             Text("Grades")
+                .font(.system(size: 25, weight: .black, design: .rounded))
+                .foregroundColor(.buttonPrimary)
         }.frame(width: screenWidth, height: screenHeight)
     }
 }

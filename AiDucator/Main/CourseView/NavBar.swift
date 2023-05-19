@@ -19,19 +19,19 @@ struct NavBar: View {
                     .opacity(0.85)
                 
                 RoundedRectangle(cornerRadius: 20)
-                    .stroke()
-                    .foregroundColor(.accent)
+                    .stroke(lineWidth: 4)
+                    .foregroundColor(.buttonPrimary)
                 
                 HStack {
                     //MARK: - Notes
                     HStack {
                         Image(systemName: "note.text")
                             .font(.system(
-                                size: 21,
+                                size: 20,
                                 weight: self.offset >= 0 && self.offset < (screenWidth - screenWidth * 0.5) ? .bold : .light,
                                 design: .rounded
                             ))
-                            .foregroundColor(self.offset >= 0 && self.offset < (screenWidth - screenWidth * 0.5) ? .primary : .white)
+                            .foregroundColor(self.offset >= 0 && self.offset < (screenWidth - screenWidth * 0.5) ? .accent : .primary)
                             .padding(.leading)
                             .onTapGesture {
                                 withAnimation{
@@ -64,11 +64,11 @@ struct NavBar: View {
                         
                         Image(systemName: "tray")
                             .font(.system(
-                                    size: 21,
+                                    size: 20,
                                     weight: self.offset >= screenWidth * 0.5 && self.offset < ((screenWidth * 2) - screenWidth * 0.5) ? .bold : .light,
                                     design: .rounded
                             ))
-                            .foregroundColor(self.offset >= screenWidth * 0.5 && self.offset < ((screenWidth * 2) - screenWidth * 0.5) ? .primary : .white)
+                            .foregroundColor(self.offset >= screenWidth * 0.5 && self.offset < ((screenWidth * 2) - screenWidth * 0.5) ? .accent : .primary)
                             .onTapGesture {
                                 withAnimation{
                                     self.offset = screenWidth
@@ -87,7 +87,6 @@ struct NavBar: View {
                     
                     Spacer()
                     
-                    
                     //MARK: - Feed
                     HStack {
                         Image(systemName: "poweron")
@@ -101,11 +100,11 @@ struct NavBar: View {
                         
                         Image(systemName: "list.bullet.rectangle")
                             .font(.system(
-                                size: 21,
+                                size: 20,
                                 weight: self.offset >= ((screenWidth * 2) - screenWidth * 0.5) && self.offset < ((screenWidth * 3) - screenWidth * 0.5) ? .bold : .light,
                                 design: .rounded
                             ))
-                            .foregroundColor(self.offset >= ((screenWidth * 2) - screenWidth * 0.5) && self.offset < ((screenWidth * 3) - screenWidth * 0.5) ? .primary : .white)
+                            .foregroundColor(self.offset >= ((screenWidth * 2) - screenWidth * 0.5) && self.offset < ((screenWidth * 3) - screenWidth * 0.5) ? .accent : .primary)
                             .onTapGesture {
                                 withAnimation {
                                     self.offset = screenWidth * 2
@@ -135,13 +134,13 @@ struct NavBar: View {
                             .foregroundColor(.white)
                             .opacity(offset == screenWidth * 3 ? 1 : 0)
 
-                        Image(systemName: "list.bullet.clipboard.fill")
+                        Image(systemName: "list.bullet.clipboard")
                             .font(.system(
-                                size: 21,
+                                size: 20,
                                 weight: self.offset >= ((screenWidth * 3) - screenWidth * 0.5) && self.offset < ((screenWidth * 4) - screenWidth * 0.5) ? .bold : .light,
                                 design: .rounded
                             ))
-                            .foregroundColor(self.offset >= ((screenWidth * 3) - screenWidth * 0.5) && self.offset < ((screenWidth * 4) - screenWidth * 0.5) ? .primary : .white)
+                            .foregroundColor(self.offset >= ((screenWidth * 3) - screenWidth * 0.5) && self.offset < ((screenWidth * 4) - screenWidth * 0.5) ? .accent : .primary)
                             .onTapGesture {
                                 withAnimation {
                                     self.offset = screenWidth * 3
@@ -175,11 +174,11 @@ struct NavBar: View {
 
                         Image(systemName: "chart.dots.scatter")
                             .font(.system(
-                                size: 21,
+                                size: 20,
                                 weight: self.offset >= ((screenWidth * 4) - screenWidth * 0.5) && self.offset < ((screenWidth * 5) - screenWidth * 0.5) ? .bold : .light,
                                 design: .rounded
                             ))
-                            .foregroundColor(self.offset >= ((screenWidth * 4) - screenWidth * 0.5) && self.offset < ((screenWidth * 5) - screenWidth * 0.5) ? .primary : .white)
+                            .foregroundColor(self.offset >= ((screenWidth * 4) - screenWidth * 0.5) && self.offset < ((screenWidth * 5) - screenWidth * 0.5) ? .accent : .primary)
                             .padding(.trailing)
                             .onTapGesture {
                                 withAnimation {

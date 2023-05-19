@@ -48,6 +48,8 @@ struct Pager<Content: View>: UIViewRepresentable {
         
         scrollView.delegate = context.coordinator
         
+        scrollView.backgroundColor = UIColor.clear
+        
         return scrollView
     }
     
@@ -79,7 +81,8 @@ struct Pager<Content: View>: UIViewRepresentable {
         //so get the tabs
         let controller = UIHostingController(rootView: content)
         controller.view.frame = CGRect(x: 0, y: 0, width: rect.width * CGFloat(tabs.count), height: rect.height)
-        
+        controller.view.backgroundColor = UIColor.clear
+
         return controller.view!
     }
     
