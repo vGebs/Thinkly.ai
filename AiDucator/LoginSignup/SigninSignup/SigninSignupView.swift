@@ -117,7 +117,7 @@ struct SigninSignupView: View {
     var agePicker: some View {
         HStack{
             Image(systemName: "calendar")
-                .foregroundColor(.primary)
+                .foregroundColor(.accent)
                 .font(.system(size: 12, weight: .semibold, design: .rounded))
                 .padding(.leading)
             
@@ -194,8 +194,6 @@ struct SigninSignupView: View {
     var nameTextField: some View {
         TextFieldView(
             outputText: $viewModel.nameText,
-            editing: $editingName,
-            isGoingToEdit: $editingEmail,
             inputWarning: $viewModel.nameIsValid,
             title: "First Name",
             imageString: "person",
@@ -208,8 +206,6 @@ struct SigninSignupView: View {
     var emailTextField: some View {
         TextFieldView(
             outputText: $viewModel.emailText,
-            editing: $editingEmail,
-            isGoingToEdit: $editingPword,
             inputWarning: viewModel.mode == .signUp ? $viewModel.emailIsValid : $viewModel.loginError,
             title: viewModel.emailPlaceholderText,
             imageString: "network",
@@ -222,8 +218,6 @@ struct SigninSignupView: View {
     var passwordTextField: some View {
         TextFieldView(
             outputText: $viewModel.passwordText,
-            editing: $editingPword,
-            isGoingToEdit: $editingRePword,
             inputWarning: viewModel.mode == .signUp ? $viewModel.passwordIsValid : .constant(true),
             title: viewModel.passwordPlaceholderText,
             imageString: "lock",
@@ -236,8 +230,6 @@ struct SigninSignupView: View {
     var reEnterPasswordTextField: some View {
         TextFieldView(
             outputText: $viewModel.reEnterPasswordText,
-            editing: $editingRePword,
-            isGoingToEdit: $editingCellNum,
             inputWarning: $viewModel.rePasswordIsValid,
             title: viewModel.reEnterPasswordPlaceholderText,
             imageString: "lock.fill",
@@ -302,8 +294,6 @@ struct SigninSignupView: View {
 
 struct TextFieldView: View {
     @Binding var outputText: String
-    @Binding var editing: Bool
-    @Binding var isGoingToEdit: Bool
     @Binding var inputWarning: Bool
 
     var title: String
@@ -321,10 +311,11 @@ struct TextFieldView: View {
         VStack {
             HStack {
                 Image(systemName: imageString)
-                    .foregroundColor(.primary)
+                    .foregroundColor(.accent)
                     .font(.system(size: 14, weight: .semibold, design: .rounded))
 
                 Text(title)
+                    .foregroundColor(.primary)
                     .font(.system(size: 18, weight: .bold, design: .rounded))
                 Spacer()
 

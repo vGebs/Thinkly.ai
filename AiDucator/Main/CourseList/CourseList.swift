@@ -27,12 +27,101 @@ struct CourseList: View {
     @StateObject var viewModel = CourseListViewModel()
     @Binding var currentCourse: Course?
     
-    @State var addCoursesPressed = false
+    @State var addClassPopUpPressed = false
     
     @State private var phase = AnimatableData(phase: 0)
     @State private var phase1 = AnimatableData(phase: 45)
     @State private var phase2 = AnimatableData(phase: 90)
-
+    
+    var body: some View {
+        ZStack {
+            Color.black.edgesIgnoringSafeArea(.all)
+            
+            wave
+            
+            VStack {
+                header
+                    .frame(width: screenWidth, height: screenHeight * 0.07)
+                
+                if AppState.shared.loading {
+                    Spacer()
+                    LoadingView()
+                    Spacer()
+                } else {
+                    if viewModel.courses == nil {
+                        Spacer()
+                        
+                        noCourses
+                        
+                        Spacer()
+                        
+                    } else {
+                        if viewModel.courses!.count == 0 {
+                            Spacer()
+                            
+                            noCourses
+                            
+                            Spacer()
+                        } else {
+                            ScrollView(showsIndicators: false) {
+                                ForEach(viewModel.courses!, id: \.title) { course in
+                                    Button(action: {
+                                        withAnimation {
+                                            self.currentCourse = course
+                                        }
+                                    }) {
+                                        CourseButton(course: course)
+                                            .padding(.vertical, 3)
+                                    }
+                                    .frame(width: screenWidth, height: screenHeight * 0.085)
+                                }
+                                .padding(.top, 10)
+                            }
+                        }
+                    }
+                }
+            }
+            .blur(radius: addClassPopUpPressed ? 10 : 0)
+            .disabled(addClassPopUpPressed)
+            .onTapGesture {
+                if addClassPopUpPressed {
+                    withAnimation {
+                        addClassPopUpPressed = false
+                    }
+                }
+            }
+            
+            if addClassPopUpPressed {
+                AddCoursePopUp(classListViewModel: viewModel, addClassPressed: $addClassPopUpPressed)
+                    .transition(.asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .trailing)))
+            }
+        }
+    }
+    
+    var addClassButton_big: some View {
+        Button(action: {
+            withAnimation {
+                addClassPopUpPressed = true
+            }
+        }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(lineWidth: 2)
+                    .foregroundColor(.accent)
+                HStack{
+                    Image(systemName: "plus.app")
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(.buttonPrimary)
+                        .padding(.leading)
+                    Text("Add Class")
+                        .font(.title2)
+                        .foregroundColor(.primary)
+                    Spacer()
+                }
+            }
+        }.frame(width: screenWidth * 0.9, height: screenHeight / 20)
+    }
+    
     var wave: some View {
         ZStack {
             VStack {
@@ -84,81 +173,6 @@ struct CourseList: View {
         }
     }
     
-    var body: some View {
-        ZStack {
-            Color.black.edgesIgnoringSafeArea(.all)
-            
-            wave
-            
-            VStack {
-                header
-                    .frame(width: screenWidth, height: screenHeight * 0.07)
-                
-                if AppState.shared.loading {
-                    Spacer()
-                    LoadingView()
-                    Spacer()
-                } else {
-                    if viewModel.courses == nil {
-                        Spacer()
-                        
-                        noCourses
-                        
-                        Spacer()
-                        
-                    } else {
-                        if viewModel.courses!.count == 0 {
-                            Spacer()
-                            
-                            noCourses
-                            
-                            Spacer()
-                        } else {
-                            ScrollView(showsIndicators: false) {
-                                ForEach(viewModel.courses!, id: \.title) { course in
-                                    Button(action: {
-                                        withAnimation {
-                                            self.currentCourse = course
-                                        }
-                                    }) {
-                                        CourseButton(course: course)
-                                            .padding(.vertical, 3)
-                                    }
-                                    .frame(width: screenWidth, height: screenHeight * 0.085)
-                                }
-                                .padding(.top, 10)
-                            }
-                        }
-                    }
-                }
-            }.sheet(isPresented: $addCoursesPressed) {
-                AddClassForm(classListViewModel: viewModel, addClassPressed: $addCoursesPressed)
-            }
-        }
-    }
-    
-    var addClassButton_big: some View {
-        Button(action: {
-            addCoursesPressed = true
-        }) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(lineWidth: 2)
-                    .foregroundColor(.accent)
-                HStack{
-                    Image(systemName: "plus.app")
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(.buttonPrimary)
-                        .padding(.leading)
-                    Text("Add Class")
-                        .font(.title2)
-                        .foregroundColor(.primary)
-                    Spacer()
-                }
-            }
-        }.frame(width: screenWidth * 0.9, height: screenHeight / 20)
-    }
-    
     var noCourses: some View {
         VStack {
             HStack {
@@ -198,7 +212,9 @@ struct CourseList: View {
             if viewModel.courses != nil {
                 if viewModel.courses!.count != 0 {
                     Button(action: {
-                        addCoursesPressed = true
+                        withAnimation {
+                            addClassPopUpPressed = true
+                        }
                     }) {
                         Image(systemName: "plus.app")
                             .font(.system(size: 22, weight: .regular, design: .rounded))
@@ -285,118 +301,5 @@ struct CourseButton: View {
             }
         }
         .padding(.horizontal)
-    }
-}
-
-struct ClassType: Identifiable, Hashable {
-    let id: String
-    let sfSymbol: String
-}
-
-let classTypes: [ClassType] = [
-    ClassType(id: "Math", sfSymbol: "function"),
-    ClassType(id: "English", sfSymbol: "book.closed"),
-    ClassType(id: "History", sfSymbol: "clock"),
-    ClassType(id: "Geography", sfSymbol: "map"),
-    ClassType(id: "Art", sfSymbol: "paintpalette"),
-    ClassType(id: "Music", sfSymbol: "music.note"),
-    ClassType(id: "Physical Education", sfSymbol: "figure.walk"),
-    ClassType(id: "Computer Science", sfSymbol: "desktopcomputer"),
-    ClassType(id: "Physics", sfSymbol: "waveform.path.ecg"),
-    ClassType(id: "Biology", sfSymbol: "leaf"),
-    ClassType(id: "Chemistry", sfSymbol: "flask"),
-    ClassType(id: "Economics", sfSymbol: "chart.bar"),
-    ClassType(id: "Astronomy", sfSymbol: "telescope"),
-    ClassType(id: "Psychology", sfSymbol: "brain"),
-    ClassType(id: "Environmental Studies", sfSymbol: "sun.max"),
-    ClassType(id: "Photography", sfSymbol: "camera"),
-    ClassType(id: "Foreign Languages", sfSymbol: "globe"),
-    ClassType(id: "Cooking/Culinary Arts", sfSymbol: "fork.knife"),
-]
-
-struct AddClassForm: View {
-    @ObservedObject var classListViewModel: CourseListViewModel
-    @Binding var addClassPressed: Bool
-    @State private var className: String = ""
-    @State private var classDescription: String = ""
-    @State private var durationFrom = Date()
-    @State private var durationTo = Date()
-    @State private var selectedClassType = ClassType(id: "Math", sfSymbol: "function")
-
-    var body: some View {
-        VStack {
-            HStack {
-                Button(action: {
-                    addClassPressed.toggle()
-                }) {
-                    HStack {
-                        Image(systemName: "chevron.backward")
-                        Text("Back")
-                    }
-                }
-                .padding(.leading)
-                .padding(.top)
-                
-                Spacer()
-            }
-            
-            Spacer()
-            
-            Text("Add Class")
-                .font(.system(size: 22, weight: .semibold, design: .rounded))
-                .padding()
-
-            TextField("Class Name", text: $className)
-                .padding()
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-
-            Picker("Class Type", selection: $selectedClassType) {
-                ForEach(classTypes) { classType in
-                    HStack {
-                        Image(systemName: classType.sfSymbol)
-                        Text(classType.id)
-                    }
-                    .tag(classType)
-                }
-            }
-            .pickerStyle(MenuPickerStyle())
-            .padding()
-            
-            TextField("Class Description", text: $classDescription)
-                .padding()
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-            
-            VStack(alignment: .leading) {
-                Text("Duration")
-                    .font(.headline)
-
-                HStack {
-                    DatePicker("From", selection: $durationFrom, displayedComponents: [.date])
-                        .labelsHidden()
-                        .datePickerStyle(CompactDatePickerStyle())
-
-                    DatePicker("To", selection: $durationTo, displayedComponents: [.date])
-                        .labelsHidden()
-                        .datePickerStyle(CompactDatePickerStyle())
-                }
-            }
-            .padding(.vertical)
-
-            Button("Add Class") {
-                classListViewModel.addCourse(title: className, sfSymbol: selectedClassType.sfSymbol, description: classDescription, startDate: durationFrom, endDate: durationTo)
-                
-                addClassPressed = false
-            }
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(8)
-            
-            Spacer()
-        }
-        .padding()
-        .onTapGesture {
-            hideKeyboard()
-        }
     }
 }

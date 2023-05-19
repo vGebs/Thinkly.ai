@@ -42,7 +42,7 @@ struct LandingView: View {
             VStack{
                 Image(systemName: "brain")
                     .font(.system(size: 90, weight: .thin, design: .rounded))
-                    .foregroundColor(.primary)
+                    .foregroundColor(.accent)
                     
                 Text("Thinkly.ai")
                     .font(.system(size: 30, weight: .black, design: .rounded)) //size 15
@@ -68,7 +68,7 @@ struct LandingView: View {
                             Spacer()
                             Image(systemName: "newspaper")
                                 .font(.system(size: 20, weight: .bold, design: .rounded))
-                                .foregroundColor(Color.primary)
+                                .foregroundColor(.accent)
                             
                             Text("Sign up")
                                 .font(.system(size: 30, weight: .bold, design: .rounded))
@@ -98,7 +98,7 @@ struct LandingView: View {
                             Spacer()
                             Image(systemName: "lock")
                                 .font(.system(size: 25, weight: .bold, design: .rounded))
-                                .foregroundColor(Color.primary)
+                                .foregroundColor(.accent)
                             
                             Text("Log in")
                                 .font(.system(size: 30, weight: .bold, design: .rounded))
