@@ -40,6 +40,7 @@
 		FA9CFAAE2A16D709000BDE95 /* SineWave.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAAD2A16D709000BDE95 /* SineWave.swift */; };
 		FA9CFAB02A171236000BDE95 /* AddCoursePopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAAF2A171236000BDE95 /* AddCoursePopUp.swift */; };
 		FA9CFAB22A171270000BDE95 /* AddCoursePopUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAB12A171270000BDE95 /* AddCoursePopUpViewModel.swift */; };
+		FA9CFAB52A182672000BDE95 /* AddCourseStudentPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAB42A182672000BDE95 /* AddCourseStudentPopup.swift */; };
 		FABD79B12A098CA100201145 /* AiDucatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79B02A098CA100201145 /* AiDucatorApp.swift */; };
 		FABD79B32A098CA100201145 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79B22A098CA100201145 /* ContentView.swift */; };
 		FABD79B52A098CA300201145 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FABD79B42A098CA300201145 /* Assets.xcassets */; };
@@ -94,6 +95,7 @@
 		FA9CFAAD2A16D709000BDE95 /* SineWave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SineWave.swift; sourceTree = "<group>"; };
 		FA9CFAAF2A171236000BDE95 /* AddCoursePopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCoursePopUp.swift; sourceTree = "<group>"; };
 		FA9CFAB12A171270000BDE95 /* AddCoursePopUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCoursePopUpViewModel.swift; sourceTree = "<group>"; };
+		FA9CFAB42A182672000BDE95 /* AddCourseStudentPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCourseStudentPopup.swift; sourceTree = "<group>"; };
 		FABD79AD2A098CA100201145 /* AiDucator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiDucator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FABD79B02A098CA100201145 /* AiDucatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiDucatorApp.swift; sourceTree = "<group>"; };
 		FABD79B22A098CA100201145 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -224,9 +226,9 @@
 		FA9CFA962A158312000BDE95 /* CourseList */ = {
 			isa = PBXGroup;
 			children = (
+				FA9CFAB32A18265C000BDE95 /* PopUps */,
 				FAEC5D312A0EFD9500A48F05 /* CourseList.swift */,
 				FA9CFA972A158322000BDE95 /* CourseListViewModel.swift */,
-				FA9CFAAF2A171236000BDE95 /* AddCoursePopUp.swift */,
 				FA9CFAB12A171270000BDE95 /* AddCoursePopUpViewModel.swift */,
 			);
 			path = CourseList;
@@ -252,6 +254,15 @@
 				FA9CFAAB2A16B390000BDE95 /* GradesView.swift */,
 			);
 			path = SubViews;
+			sourceTree = "<group>";
+		};
+		FA9CFAB32A18265C000BDE95 /* PopUps */ = {
+			isa = PBXGroup;
+			children = (
+				FA9CFAAF2A171236000BDE95 /* AddCoursePopUp.swift */,
+				FA9CFAB42A182672000BDE95 /* AddCourseStudentPopup.swift */,
+			);
+			path = PopUps;
 			sourceTree = "<group>";
 		};
 		FABD79A42A098CA100201145 = {
@@ -449,6 +460,7 @@
 				FA9CFAA82A16B355000BDE95 /* FeedView.swift in Sources */,
 				FA9CFAB02A171236000BDE95 /* AddCoursePopUp.swift in Sources */,
 				FAEC5D162A0EF21900A48F05 /* SigninSignupViewModel.swift in Sources */,
+				FA9CFAB52A182672000BDE95 /* AddCourseStudentPopup.swift in Sources */,
 				FA9CFAAC2A16B390000BDE95 /* GradesView.swift in Sources */,
 				FA0CDC482A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld in Sources */,
 				FAEC5D322A0EFD9500A48F05 /* CourseList.swift in Sources */,

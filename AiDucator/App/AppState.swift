@@ -80,10 +80,10 @@ class AppState: ObservableObject {
             .sink { completion in
                 switch completion {
                 case .failure(let e):
-                    print("AuthService: Failed to logout")
-                    print("AuthService-err: \(e)")
+                    print("AppState: Failed to logout")
+                    print("AppState-err: \(e)")
                 case .finished:
-                    print("AuthService: Logged out")
+                    print("AppState: Logged out")
                 }
             } receiveValue: { [weak self] _ in
                 AppState.shared.onMainView = false
@@ -127,10 +127,10 @@ extension AppState {
             .sink { completion in
                 switch completion {
                 case .failure(let e):
-                    print("ClassListViewModel: Failed to observe classes")
-                    print("ClassListViewModel-err: \(e)")
+                    print("AppState: Failed to observe classes")
+                    print("AppState-err: \(e)")
                 case .finished:
-                    print("ClassListViewModel: observed classes")
+                    print("AppState: observed classes")
                 }
             } receiveValue: { [weak self] classes in
                 for cls in classes {
@@ -180,10 +180,10 @@ extension AppState {
             .sink { completion in
                 switch completion {
                 case .failure(let e):
-                    print("ClassListViewModel: Failed to observe class")
-                    print("ClassListViewModel-err: \(e)")
+                    print("AppState: Failed to observe class")
+                    print("AppState-err: \(e)")
                 case .finished:
-                    print("ClassListViewModel: observed class")
+                    print("AppState: observed class")
                 }
             } receiveValue: { [weak self] cls in
                 
@@ -231,16 +231,16 @@ extension AppState {
             .sink { completion in
                 switch completion {
                 case .failure(let e):
-                    print("ClassListViewModel: Failed to observe ClassUser for uid")
-                    print("ClassListViewModel-err: \(e)")
+                    print("AppState: Failed to observe ClassUser for uid")
+                    print("AppState-err: \(e)")
                 case .finished:
-                    print("ClassListViewModel: observed ClassUser")
+                    print("AppState: observed ClassUser")
                 }
             } receiveValue: { [weak self] classes in
                 for cls in classes {
                     switch cls.1 {
                     case .added:
-                        self!.observeClass(classID: cls.0.documentID!)
+                        self!.observeClass(classID: cls.0.courseID)
                     case .modified:
                         print("This object cannot be modified")
                     case .removed:

@@ -40,6 +40,23 @@ class CourseListViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    func enrollInCourse(id: String) {
+        CourseRegistrationService_Firestore.shared.joinCourse(courseReg: CourseRegristration(courseID: id, userID: AuthService.shared.user!.uid))
+            .subscribe(on: DispatchQueue.global(qos: .userInitiated))
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .failure(let e):
+                    print("CourseListViewModel: Failed to register for course")
+                    print("CourseListViewModel-err: \(e)")
+                case .finished:
+                    print("CourseListViewModel: Finished registering for course")
+                }
+            } receiveValue: { docID in
+                print("DocID")
+            }.store(in: &cancellables)
+    }
+    
     deinit {
         for i in 0..<self.cancellables.count {
             self.cancellables[i].cancel()

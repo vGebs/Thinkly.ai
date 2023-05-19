@@ -89,13 +89,21 @@ struct CourseList: View {
             .onTapGesture {
                 if addClassPopUpPressed {
                     withAnimation {
+                        hideKeyboard()
                         addClassPopUpPressed = false
                     }
                 }
             }
             
-            AddCoursePopUp(classListViewModel: viewModel, addClassPressed: $addClassPopUpPressed)
-                .opacity(addClassPopUpPressed ? 1 : 0)
+            if AppState.shared.user != nil {
+                if AppState.shared.user!.role == "Teacher" {
+                    AddCoursePopUp(classListViewModel: viewModel, addClassPressed: $addClassPopUpPressed)
+                        .opacity(addClassPopUpPressed ? 1 : 0)
+                } else {
+                    AddCourseStudentPopup(classListViewModel: viewModel, addClassPressed: $addClassPopUpPressed)
+                        .opacity(addClassPopUpPressed ? 1 : 0)
+                }
+            }
         }
     }
     
