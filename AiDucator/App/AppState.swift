@@ -66,8 +66,6 @@ class AppState: ObservableObject {
                 }
             }.assign(to: &$onLandingView)
         
-        AuthService.shared.listen()
-        
         AuthService.shared.$user
             .sink { [weak self] user in
                 if let u = user {
@@ -78,7 +76,20 @@ class AppState: ObservableObject {
     }
     
     func logout() {
-        AuthService.shared.logout()
+        AuthService.shared.signOut()
+            .sink { completion in
+                switch completion {
+                case .failure(let e):
+                    print("AuthService: Failed to logout")
+                    print("AuthService-err: \(e)")
+                case .finished:
+                    print("AuthService: Logged out")
+                }
+            } receiveValue: { [weak self] _ in
+                AppState.shared.onMainView = false
+                AppState.shared.onLandingView = true
+                self?.user = nil
+            }.store(in: &cancellables)
     }
 }
 

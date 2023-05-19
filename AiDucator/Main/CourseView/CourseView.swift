@@ -31,15 +31,15 @@ struct CourseView: View {
                     HStack {
                         
                         Image(systemName: course!.sfSymbol)
-                            .font(.system(size: 14, weight: .black, design: .rounded))
+                            .font(.system(size: 12, weight: .black, design: .rounded))
                             .foregroundColor(.black)
                             
                         Text(course!.title)
-                            .font(.system(size: 16, weight: .black, design: .rounded))
+                            .font(.system(size: 14, weight: .black, design: .rounded))
                             .foregroundColor(Color.buttonPrimary)
                     }
                     .frame(width: screenWidth, height: 40)
-                    .padding(.bottom, screenHeight * 0.07)
+                    .padding(.bottom, screenHeight * 0.065)
                 }
             }
         }
@@ -128,7 +128,7 @@ struct CourseView: View {
                     .foregroundColor(.accent)
                     .padding(.leading)
                 
-                Text("Quizes")
+                Text("Quizzes")
                     .foregroundColor(.primary)
                     .font(.system(size: 30, weight: .bold, design: .rounded))
                 Spacer()
@@ -232,4 +232,4 @@ struct CourseView: View {
     }
 }
 
-let tabs = ["Notes", "Assignments", "Feed", "Quizes", "Grades"]
+let tabs = ["Notes", "Assignments", "Feed", "Quizzes", "Grades"]

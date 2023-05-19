@@ -18,7 +18,9 @@ class AuthService: ObservableObject {
     
     private var cancellables: [AnyCancellable] = []
     
-    private init() {  }
+    private init() {
+        self.listen()
+    }
     
     // MARK: - Sign In
 
@@ -50,7 +52,7 @@ class AuthService: ObservableObject {
 
     // MARK: - Sign Out
 
-    private func signOut() -> AnyPublisher<Void, Error> {
+    func signOut() -> AnyPublisher<Void, Error> {
         return Future { promise in
             do {
                 try Auth.auth().signOut()
@@ -60,32 +62,15 @@ class AuthService: ObservableObject {
             }
         }.eraseToAnyPublisher()
     }
-    
-    func logout() {
-        self.signOut()
-            .sink { completion in
-                switch completion {
-                case .failure(let e):
-                    print("AuthService: Failed to logout")
-                    print("AuthService-err: \(e)")
-                case .finished:
-                    print("AuthService: Logged out")
-                }
-            } receiveValue: { [weak self] _ in
-                AppState.shared.onMainView = false
-                AppState.shared.onLandingView = true
-                self?.user = nil
-            }.store(in: &cancellables)
-    }
 
     // MARK: - State Changes
 
-    private func listen() -> AnyPublisher<Auth, Never> {
+    private func listen_() -> AnyPublisher<Auth, Never> {
         return AuthStatePublisher().eraseToAnyPublisher()
     }
     
-    func listen() {
-        authListener = self.listen()
+    private func listen() {
+        authListener = self.listen_()
             .sink { completion in
                 switch completion {
                 case .finished:

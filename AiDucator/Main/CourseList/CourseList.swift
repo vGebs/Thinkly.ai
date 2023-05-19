@@ -139,30 +139,6 @@ struct CourseList: View {
         .padding(.top)
     }
     
-    var addClassButton_big: some View {
-        Button(action: {
-            withAnimation {
-                addClassPopUpPressed = true
-            }
-        }) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(lineWidth: 2)
-                    .foregroundColor(.accent)
-                HStack{
-                    Image(systemName: "plus.app")
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(.buttonPrimary)
-                        .padding(.leading)
-                    Text("Add Class")
-                        .font(.title2)
-                        .foregroundColor(.primary)
-                    Spacer()
-                }
-            }
-        }.frame(width: screenWidth * 0.9, height: screenHeight / 20)
-    }
-    
     var wave: some View {
         ZStack {
             VStack {
@@ -205,11 +181,15 @@ struct CourseList: View {
                 VStack {
                     Spacer()
                     
+                    Image(systemName: "brain")
+                        .font(.system(size: 20, weight: .black, design: .rounded))
+                        .foregroundColor(Color.black)
+                    
                     Text("Thinkly.ai")
                         .font(.system(size: 20, weight: .black, design: .rounded))
-                        .frame(width: 110, height: 40)
                         .foregroundColor(Color.buttonPrimary)
                 }
+                .frame(width: screenWidth, height: screenHeight * 0.85)
             }
         }
     }
@@ -234,6 +214,30 @@ struct CourseList: View {
             
             addClassButton_big
         }
+    }
+    
+    var addClassButton_big: some View {
+        Button(action: {
+            withAnimation {
+                addClassPopUpPressed = true
+            }
+        }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(lineWidth: 2)
+                    .foregroundColor(.accent)
+                HStack{
+                    Image(systemName: "plus.app")
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(.buttonPrimary)
+                        .padding(.leading)
+                    Text("Add Class")
+                        .font(.title2)
+                        .foregroundColor(.primary)
+                    Spacer()
+                }
+            }
+        }.frame(width: screenWidth * 0.9, height: screenHeight / 20)
     }
     
     func settingsTapped() {

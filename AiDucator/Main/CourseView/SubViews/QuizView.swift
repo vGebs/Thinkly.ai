@@ -11,7 +11,7 @@ struct QuizView: View {
     
     var body: some View {
         ZStack {
-            Text("Quizes")
+            Text("Quizzes")
                 .font(.system(size: 25, weight: .black, design: .rounded))
                 .foregroundColor(.buttonPrimary)
         }.frame(width: screenWidth, height: screenHeight)
