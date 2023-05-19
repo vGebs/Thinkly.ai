@@ -56,8 +56,10 @@ struct CourseView: View {
             Button(action: {
                 withAnimation {
                     course = nil
-                    DispatchQueue.main.async { 
-                        self.offsetManager.offset = screenWidth * 2
+                    DispatchQueue.main.async {
+                        withAnimation {
+                            self.offsetManager.offset = screenWidth * 2
+                        }
                     }
                 }
             }) {

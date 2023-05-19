@@ -37,7 +37,9 @@ struct Pager<Content: View>: UIViewRepresentable {
     init(tabs: [Any], rect: CGRect, offset: Binding<CGFloat>, @ViewBuilder content: ()-> Content) {
         self.content = content()
         DispatchQueue.main.async {
-            OffsetManager.shared.offset = offset.wrappedValue
+            withAnimation {
+                OffsetManager.shared.offset = offset.wrappedValue
+            }
         }
         self.rect = rect
         self.tabs = tabs
@@ -108,7 +110,9 @@ struct Pager<Content: View>: UIViewRepresentable {
         
         func scrollViewDidScroll(_ scrollView: UIScrollView) {
             DispatchQueue.main.async {
-                OffsetManager.shared.offset = scrollView.contentOffset.x
+                withAnimation {
+                    OffsetManager.shared.offset = scrollView.contentOffset.x
+                }
             }
         }
     }
