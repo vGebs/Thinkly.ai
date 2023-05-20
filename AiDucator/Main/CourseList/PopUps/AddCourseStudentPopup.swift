@@ -45,6 +45,7 @@ struct AddCourseStudentPopup: View {
                 HStack {
                     Button(action: {
                         withAnimation {
+                            hideKeyboard()
                             addClassPressed = false
                         }
                     }) {

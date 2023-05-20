@@ -96,7 +96,7 @@ struct CourseList: View {
             }
             
             if AppState.shared.user != nil {
-                if AppState.shared.user!.role == "Teacher" {
+                if AppState.shared.user!.role == "teacher" {
                     AddCoursePopUp(classListViewModel: viewModel, addClassPressed: $addClassPopUpPressed)
                         .opacity(addClassPopUpPressed ? 1 : 0)
                 } else {

@@ -226,8 +226,8 @@
 		FA9CFA962A158312000BDE95 /* CourseList */ = {
 			isa = PBXGroup;
 			children = (
-				FA9CFAB32A18265C000BDE95 /* PopUps */,
 				FAEC5D312A0EFD9500A48F05 /* CourseList.swift */,
+				FA9CFAB32A18265C000BDE95 /* PopUps */,
 				FA9CFA972A158322000BDE95 /* CourseListViewModel.swift */,
 				FA9CFAB12A171270000BDE95 /* AddCoursePopUpViewModel.swift */,
 			);
