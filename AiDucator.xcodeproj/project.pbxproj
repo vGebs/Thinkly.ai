@@ -41,6 +41,9 @@
 		FA9CFAB02A171236000BDE95 /* AddCoursePopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAAF2A171236000BDE95 /* AddCoursePopUp.swift */; };
 		FA9CFAB22A171270000BDE95 /* AddCoursePopUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAB12A171270000BDE95 /* AddCoursePopUpViewModel.swift */; };
 		FA9CFAB52A182672000BDE95 /* AddCourseStudentPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAB42A182672000BDE95 /* AddCourseStudentPopup.swift */; };
+		FA9CFAB82A193D87000BDE95 /* NotesService_Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAB72A193D87000BDE95 /* NotesService_Firestore.swift */; };
+		FA9CFABA2A193FA4000BDE95 /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAB92A193FA4000BDE95 /* Notes.swift */; };
+		FA9CFABC2A194335000BDE95 /* NoteSectionService_Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFABB2A194335000BDE95 /* NoteSectionService_Firestore.swift */; };
 		FABD79B12A098CA100201145 /* AiDucatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79B02A098CA100201145 /* AiDucatorApp.swift */; };
 		FABD79B32A098CA100201145 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79B22A098CA100201145 /* ContentView.swift */; };
 		FABD79B52A098CA300201145 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FABD79B42A098CA300201145 /* Assets.xcassets */; };
@@ -96,6 +99,9 @@
 		FA9CFAAF2A171236000BDE95 /* AddCoursePopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCoursePopUp.swift; sourceTree = "<group>"; };
 		FA9CFAB12A171270000BDE95 /* AddCoursePopUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCoursePopUpViewModel.swift; sourceTree = "<group>"; };
 		FA9CFAB42A182672000BDE95 /* AddCourseStudentPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCourseStudentPopup.swift; sourceTree = "<group>"; };
+		FA9CFAB72A193D87000BDE95 /* NotesService_Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesService_Firestore.swift; sourceTree = "<group>"; };
+		FA9CFAB92A193FA4000BDE95 /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
+		FA9CFABB2A194335000BDE95 /* NoteSectionService_Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteSectionService_Firestore.swift; sourceTree = "<group>"; };
 		FABD79AD2A098CA100201145 /* AiDucator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiDucator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FABD79B02A098CA100201145 /* AiDucatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiDucatorApp.swift; sourceTree = "<group>"; };
 		FABD79B22A098CA100201145 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -182,6 +188,7 @@
 				FA0CDC402A0F25D4007AF6E7 /* User.swift */,
 				FA9CFA842A1050B1000BDE95 /* Course.swift */,
 				FA9CFA8F2A157C42000BDE95 /* CourseRegristration.swift */,
+				FA9CFAB92A193FA4000BDE95 /* Notes.swift */,
 				FA0CDC462A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld */,
 			);
 			path = Models;
@@ -227,9 +234,8 @@
 			isa = PBXGroup;
 			children = (
 				FAEC5D312A0EFD9500A48F05 /* CourseList.swift */,
-				FA9CFAB32A18265C000BDE95 /* PopUps */,
 				FA9CFA972A158322000BDE95 /* CourseListViewModel.swift */,
-				FA9CFAB12A171270000BDE95 /* AddCoursePopUpViewModel.swift */,
+				FA9CFAB32A18265C000BDE95 /* PopUps */,
 			);
 			path = CourseList;
 			sourceTree = "<group>";
@@ -261,8 +267,18 @@
 			children = (
 				FA9CFAAF2A171236000BDE95 /* AddCoursePopUp.swift */,
 				FA9CFAB42A182672000BDE95 /* AddCourseStudentPopup.swift */,
+				FA9CFAB12A171270000BDE95 /* AddCoursePopUpViewModel.swift */,
 			);
 			path = PopUps;
+			sourceTree = "<group>";
+		};
+		FA9CFAB62A193D6B000BDE95 /* NotesService */ = {
+			isa = PBXGroup;
+			children = (
+				FA9CFAB72A193D87000BDE95 /* NotesService_Firestore.swift */,
+				FA9CFABB2A194335000BDE95 /* NoteSectionService_Firestore.swift */,
+			);
+			path = NotesService;
 			sourceTree = "<group>";
 		};
 		FABD79A42A098CA100201145 = {
@@ -349,6 +365,7 @@
 		FAEC5D202A0EF3CB00A48F05 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				FA9CFAB62A193D6B000BDE95 /* NotesService */,
 				FA0CDC3A2A0F2500007AF6E7 /* UserService */,
 				FA9CFA862A107888000BDE95 /* ClassService */,
 				FA9CFA912A157D13000BDE95 /* ClassUserService */,
@@ -470,6 +487,7 @@
 				FA9CFA952A157D66000BDE95 /* CourseRegistrationService_Firestore.swift in Sources */,
 				FA0CDC3C2A0F2517007AF6E7 /* UserService_CoreData.swift in Sources */,
 				FA0CDC372A0F241A007AF6E7 /* QuerySnapshotPublisher.swift in Sources */,
+				FA9CFAB82A193D87000BDE95 /* NotesService_Firestore.swift in Sources */,
 				FAEC5D2C2A0EF5DF00A48F05 /* AuthPublisher.swift in Sources */,
 				FA9CFA8C2A10789F000BDE95 /* CourseService_Firestore.swift in Sources */,
 				FA9CFA9A2A15DF68000BDE95 /* MainView.swift in Sources */,
@@ -492,6 +510,7 @@
 				FABD79B32A098CA100201145 /* ContentView.swift in Sources */,
 				FA9CFAA12A16AFD0000BDE95 /* Pager.swift in Sources */,
 				FA9CFAA62A16B337000BDE95 /* AssignmentsView.swift in Sources */,
+				FA9CFABC2A194335000BDE95 /* NoteSectionService_Firestore.swift in Sources */,
 				FAEC5D182A0EF27B00A48F05 /* SigninSignupValidation.swift in Sources */,
 				FA9CFA832A0FAB43000BDE95 /* Notepad.swift in Sources */,
 				FA9CFA9F2A16AD36000BDE95 /* NavBar.swift in Sources */,
@@ -503,6 +522,7 @@
 				FA9CFAAE2A16D709000BDE95 /* SineWave.swift in Sources */,
 				FA0CDC412A0F25D4007AF6E7 /* User.swift in Sources */,
 				FA9CFA902A157C42000BDE95 /* CourseRegristration.swift in Sources */,
+				FA9CFABA2A193FA4000BDE95 /* Notes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
