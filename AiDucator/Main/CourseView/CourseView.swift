@@ -36,7 +36,7 @@ struct CourseView: View {
                             
                         Text(course!.title)
                             .font(.system(size: 14, weight: .black, design: .rounded))
-                            .foregroundColor(Color.buttonPrimary)
+                            .foregroundColor(.buttonPrimary)
                     }
                     .frame(width: screenWidth, height: 40)
                     .padding(.bottom, screenHeight * 0.065)
@@ -184,7 +184,6 @@ struct CourseView: View {
                 .padding(.bottom, screenHeight * 0.035),
             alignment: .bottom
         )
-        .preferredColorScheme(.dark)
         .edgesIgnoringSafeArea(.all)
     }
     

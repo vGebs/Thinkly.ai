@@ -14,55 +14,98 @@ struct NotesView: View {
     var body: some View {
         ZStack {
             VStack {
+                Spacer()
                 ScrollView {
-                    if let user = AppState.shared.user {
-                        if user.role == "teacher" {
-                            addChapterButton
-                            Divider()
-                        }
-                    }
+//                    Spacer().padding(.top, screenHeight * 0.11)
                     
                     ForEach(viewModel.chapters) { chapter in
                         MyUnitsDropDown(chapter: chapter, popup: true)
                             .padding(.horizontal, 5)
                     }
                     .padding(.top, screenHeight * 0.01)
+                    
+                    if let user = AppState.shared.user {
+                        if user.role == "teacher" {
+                            
+                            Divider()
+                            
+                            if showTextField {
+                                titleTextFieldView
+                            } else {
+                                addChapterButton
+                            }
+                        }
+                    }
                 }
-                .frame(width: screenWidth)
-                .padding(screenHeight * 0.12)
-                
-                Spacer()
+                .frame(width: screenWidth, height: screenHeight * (1 - 0.11))
             }
-        }.frame(width: screenWidth, height: screenHeight)
+        }
+        .edgesIgnoringSafeArea(.all)
+        .frame(width: screenWidth, height: screenHeight)
     }
+    
+    @State var showTextField = false
+    @State var chapterTitle = ""
     
     var addChapterButton: some View {
         Button(action: {
-            
+            showTextField = true
         }) {
             ZStack {
                 RoundedRectangle(cornerRadius: 20)
                     .foregroundColor(.black)
-                
                 RoundedRectangle(cornerRadius: 20)
                     .stroke(lineWidth: 3)
                     .foregroundColor(.buttonPrimary)
-                
                 HStack {
                     Image(systemName: "plus.app")
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .foregroundColor(.accent)
                         .padding(.leading, 5)
-                    
                     Text("Add Chapter")
                         .font(.system(size: 20, weight: .bold, design: .rounded))
                         .foregroundColor(.primary)
-                    
                     Spacer()
                 }
                 .padding()
-            }.padding(.top, 5)
-            .frame(width: screenWidth * 0.9)
+            }
+            .padding(.top, 5)
+            .frame(width: UIScreen.main.bounds.width * 0.9)
+        }
+    }
+    
+    
+    var titleTextFieldView: some View {
+        ZStack {
+            TextField("Enter chapter title", text: $chapterTitle)
+                .padding()
+                .background(Color.black)
+                .cornerRadius(20)
+                .padding(.top, 5)
+                .frame(width: UIScreen.main.bounds.width * 0.9)
+            
+            HStack {
+                Spacer()
+                Button(action: {
+                    viewModel.addChapter(title: chapterTitle)
+                    chapterTitle = ""
+                    showTextField = false
+                }) {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                        .foregroundColor(.buttonPrimary)
+                }
+                
+                Button(action: {
+                    chapterTitle = ""
+                    showTextField = false
+                }) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                        .foregroundColor(.buttonPrimary)
+                }
+                .padding(.trailing)
+            }.padding(.trailing)
         }
     }
 }
@@ -86,6 +129,13 @@ class NotesViewModel: ObservableObject {
             Note(title: "Final info and shit", content: "")
         ])
     ]
+    
+    func addChapter(title: String) {
+        guard title != "" else { return }
+        
+        let chapter = Chapter(title: title, notes: [])
+        self.chapters.append(chapter)
+    }
 }
 
 
@@ -138,6 +188,30 @@ struct MyUnitsDropDown: View {
                         .padding(.horizontal)
                         .padding(.bottom)
                     }.padding(.top)
+                    
+                    Divider()
+                    
+                    if let user = AppState.shared.user {
+                        if user.role == "teacher" {
+                            Button(action: {
+                                
+                            }) {
+                                HStack {
+                                    Image(systemName: "plus.app")
+                                        .font(.system(size: 15, weight: .regular, design: .rounded))
+                                        .foregroundColor(.buttonPrimary)
+                                    
+                                    Text("Add Notes")
+                                        .font(.system(size: 18, weight: .regular, design: .rounded))
+                                        .foregroundColor(.primary)
+                                    
+                                    Spacer()
+                                }
+                                .padding(.horizontal)
+                                .padding(.bottom)
+                            }.padding(.top)
+                        }
+                    }
                 }
             }
         }
