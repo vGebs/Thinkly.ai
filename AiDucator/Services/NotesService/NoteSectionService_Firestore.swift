@@ -22,18 +22,26 @@ class NoteSectionService_Firestore {
     
     private let db = Firestore.firestore()
     
+    enum NoteSectionError: Error {
+        case noNoteSectionFound
+    }
+    
     private init() {}
     
     func addSection(_ section: NoteSection) -> AnyPublisher<String, Error> {
         return firestore.create(collection: collection, data: section)
     }
-    
-    func getSection(with classID: String, and index: Int) -> AnyPublisher<[NoteSection], Error> {
-        let query = db.collection(collection)
-            .whereField("classID", isEqualTo: classID)
+
+    func getSection(with noteID: String, and index: Int) -> AnyPublisher<NoteSection?, Error> {
+        let query: Query = db.collection(collection)
+            .whereField("noteID", isEqualTo: noteID)
             .whereField("index", isEqualTo: index)
         
         return firestore.read(query: query)
+            .tryMap { (sections: [NoteSection]) in
+                return sections.first
+            }
+            .eraseToAnyPublisher()
     }
     
     func updateSection(_ section: NoteSection) -> AnyPublisher<Void, Error> {

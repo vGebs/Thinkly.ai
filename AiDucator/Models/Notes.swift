@@ -8,6 +8,20 @@
 import Foundation
 import FirebaseFirestoreSwift
 
+// Note model
+struct Note: Identifiable {
+    let id = UUID()
+    var title: String
+    var content: String
+}
+
+// Chapter model
+struct Chapter: Identifiable {
+    let id = UUID()
+    var title: String
+    var notes: [Note]
+}
+
 // /Notes/noteId
 //   - title
 //   - teacherId
