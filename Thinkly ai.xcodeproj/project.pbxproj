@@ -102,7 +102,7 @@
 		FA9CFAB72A193D87000BDE95 /* NotesService_Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesService_Firestore.swift; sourceTree = "<group>"; };
 		FA9CFAB92A193FA4000BDE95 /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
 		FA9CFABB2A194335000BDE95 /* NoteSectionService_Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteSectionService_Firestore.swift; sourceTree = "<group>"; };
-		FABD79AD2A098CA100201145 /* AiDucator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiDucator.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FABD79AD2A098CA100201145 /* Thinkly ai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Thinkly ai.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FABD79B02A098CA100201145 /* AiDucatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiDucatorApp.swift; sourceTree = "<group>"; };
 		FABD79B22A098CA100201145 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		FABD79B42A098CA300201145 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -292,7 +292,7 @@
 		FABD79AE2A098CA100201145 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FABD79AD2A098CA100201145 /* AiDucator.app */,
+				FABD79AD2A098CA100201145 /* Thinkly ai.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -398,9 +398,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FABD79AC2A098CA100201145 /* AiDucator */ = {
+		FABD79AC2A098CA100201145 /* Thinkly ai */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FABD79BC2A098CA300201145 /* Build configuration list for PBXNativeTarget "AiDucator" */;
+			buildConfigurationList = FABD79BC2A098CA300201145 /* Build configuration list for PBXNativeTarget "Thinkly ai" */;
 			buildPhases = (
 				FABD79A92A098CA100201145 /* Sources */,
 				FABD79AA2A098CA100201145 /* Frameworks */,
@@ -410,14 +410,14 @@
 			);
 			dependencies = (
 			);
-			name = AiDucator;
+			name = "Thinkly ai";
 			packageProductDependencies = (
 				FAEC5D242A0EF52000A48F05 /* FirebaseAuth */,
 				FAEC5D262A0EF52000A48F05 /* FirebaseFirestore */,
 				FAEC5D282A0EF52000A48F05 /* FirebaseFirestoreSwift */,
 			);
 			productName = AiDucator;
-			productReference = FABD79AD2A098CA100201145 /* AiDucator.app */;
+			productReference = FABD79AD2A098CA100201145 /* Thinkly ai.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -435,7 +435,7 @@
 					};
 				};
 			};
-			buildConfigurationList = FABD79A82A098CA100201145 /* Build configuration list for PBXProject "AiDucator" */;
+			buildConfigurationList = FABD79A82A098CA100201145 /* Build configuration list for PBXProject "Thinkly ai" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -451,7 +451,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FABD79AC2A098CA100201145 /* AiDucator */,
+				FABD79AC2A098CA100201145 /* Thinkly ai */,
 			);
 		};
 /* End PBXProject section */
@@ -717,7 +717,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		FABD79A82A098CA100201145 /* Build configuration list for PBXProject "AiDucator" */ = {
+		FABD79A82A098CA100201145 /* Build configuration list for PBXProject "Thinkly ai" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FABD79BA2A098CA300201145 /* Debug */,
@@ -726,7 +726,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FABD79BC2A098CA300201145 /* Build configuration list for PBXNativeTarget "AiDucator" */ = {
+		FABD79BC2A098CA300201145 /* Build configuration list for PBXNativeTarget "Thinkly ai" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FABD79BD2A098CA300201145 /* Debug */,

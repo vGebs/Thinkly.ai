@@ -16,7 +16,6 @@ struct NotesView: View {
             VStack {
                 Spacer()
                 ScrollView {
-//                    Spacer().padding(.top, screenHeight * 0.11)
                     
                     ForEach(viewModel.chapters) { chapter in
                         MyUnitsDropDown(chapter: chapter, popup: true)
@@ -36,6 +35,8 @@ struct NotesView: View {
                             }
                         }
                     }
+                    
+                    Spacer().padding(.bottom, screenHeight * 0.13)
                 }
                 .frame(width: screenWidth, height: screenHeight * (1 - 0.11))
             }
