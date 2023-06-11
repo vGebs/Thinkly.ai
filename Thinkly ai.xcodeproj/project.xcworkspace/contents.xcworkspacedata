@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/macbook/Documents/Software General/apps/AiDucator/iOS/AiDucator/Thinkly ai.xcodeproj">
+      location = "self:">
    </FileRef>
 </Workspace>
