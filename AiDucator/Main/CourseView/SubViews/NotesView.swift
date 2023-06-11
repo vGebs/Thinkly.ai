@@ -10,6 +10,7 @@ import SwiftUI
 struct NotesView: View {
     
     @StateObject var viewModel = NotesViewModel()
+    @State var showAutoGenPopup = false
     
     var body: some View {
         ZStack {
@@ -31,7 +32,10 @@ struct NotesView: View {
                             if showTextField {
                                 titleTextFieldView
                             } else {
-                                addChapterButton
+                                HStack {
+                                    addChapterButton
+                                    generateOutline
+                                }.frame(width: screenWidth * 0.9)
                             }
                         }
                     }
@@ -40,9 +44,49 @@ struct NotesView: View {
                 }
                 .frame(width: screenWidth, height: screenHeight * (1 - 0.11))
             }
+            .disabled(showAutoGenPopup)
+            .blur(radius: showAutoGenPopup ? 10 : 0)
+            .onTapGesture {
+                hideKeyboard()
+                withAnimation {
+                    showAutoGenPopup = false
+                }
+            }
+            if showAutoGenPopup {
+                AutoGenPopup()
+                    .transition(.asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .bottom)))
+            }
         }
         .edgesIgnoringSafeArea(.all)
         .frame(width: screenWidth, height: screenHeight)
+    }
+    
+    var generateOutline: some View {
+        Button(action: {
+            withAnimation {
+                showAutoGenPopup = true
+            }
+        }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .foregroundColor(.black)
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(lineWidth: 3)
+                    .foregroundColor(.buttonPrimary)
+                HStack {
+                    Image(systemName: "terminal")
+                        .font(.system(size: 17, weight: .bold, design: .rounded))
+                        .foregroundColor(.accent)
+                        .padding(.leading, 5)
+                    Text("Auto-Gen")
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .foregroundColor(.primary)
+                    Spacer()
+                }
+                .padding()
+            }
+            .padding(.top, 5)
+        }
     }
     
     @State var showTextField = false
@@ -60,18 +104,17 @@ struct NotesView: View {
                     .foregroundColor(.buttonPrimary)
                 HStack {
                     Image(systemName: "plus.app")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .font(.system(size: 17, weight: .bold, design: .rounded))
                         .foregroundColor(.accent)
                         .padding(.leading, 5)
-                    Text("Add Chapter")
-                        .font(.system(size: 20, weight: .bold, design: .rounded))
+                    Text("Add Module")
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.primary)
                     Spacer()
                 }
                 .padding()
             }
             .padding(.top, 5)
-            .frame(width: UIScreen.main.bounds.width * 0.9)
         }
     }
     
@@ -223,18 +266,18 @@ struct MyUnitsDropDown: View {
         HStack {
             Image(systemName: "newspaper")
                 .foregroundColor(.buttonPrimary)
-                .font(.system(size: 22, weight: .regular, design: .rounded))
+                .font(.system(size: 16, weight: .regular, design: .rounded))
                 .padding(.horizontal)
             
             Text(chapter.title)
-                .font(.system(size: 16, weight: .semibold, design: .rounded))
+                .font(.system(size: 20, weight: .semibold, design: .rounded))
                 .foregroundColor(.primary)
             
             Spacer()
             if chapter.notes.count > 0 {
                 Image(systemName: expanded ? "chevron.up" : "chevron.down")
                     .foregroundColor(.buttonPrimary)
-                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                    .font(.system(size: 17, weight: .semibold, design: .rounded))
                     .padding(.trailing)
             } else {
                 Button(action: {
@@ -248,5 +291,111 @@ struct MyUnitsDropDown: View {
             }
         }
         .padding(.vertical)
+    }
+}
+import SwiftUI
+
+struct AutoGenPopup: View {
+    @State var courseName: String = ""
+    @State var courseDurationInWeeks: Double = 15
+    @State var classesPerWeek: Double = 3
+    @State var classLengthInHours: Double = 1
+    @State var studyHoursPerWeek: Double = 10
+    @State var gradeLevel: String = ""
+    @State var textBookReferences: String = ""
+    @State var learningObjectives: String = ""
+    @State var preRequisites: String = ""
+    @State var topicPreferences: String = ""
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 20)
+                .foregroundColor(.black)
+            
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(lineWidth: 4)
+                .foregroundColor(.buttonPrimary)
+            
+            ScrollView {
+                
+                VStack(spacing: 20) {
+                    
+                    Text("Auto-Gen Course Sections")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+
+                    VStack {
+                        TextFieldView__(title: "Course Name", text: $courseName)
+                        NumberInputView(title: "Course Duration in Weeks", value: $courseDurationInWeeks, range: 1...52)
+                        NumberInputView(title: "Classes per Week", value: $classesPerWeek, range: 1...7)
+                        NumberInputView(title: "Class Length in Hours", value: $classLengthInHours, range: 1...5)
+                        NumberInputView(title: "Study Hours per Week", value: $studyHoursPerWeek, range: 1...40)
+                        TextFieldView__(title: "Grade Level", text: $gradeLevel)
+                    }
+
+                    VStack {
+                        TextFieldView__(title: "Textbook References", text: $textBookReferences)
+                        TextFieldView__(title: "Learning Objectives", text: $learningObjectives)
+                    }
+
+                    VStack {
+                        TextFieldView__(title: "Prerequisites", text: $preRequisites)
+                        TextFieldView__(title: "Topic Preferences", text: $topicPreferences)
+                    }
+                    
+                    Button(action: submitForm) {
+                        Text("Submit")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .padding(.horizontal)
+                }
+                .padding()
+            }
+        }.frame(width: screenWidth * 0.9, height: screenHeight * 0.75)
+    }
+
+    func submitForm() {
+        // Handle form submission here
+    }
+}
+
+struct TextFieldView__: View {
+    let title: String
+    @Binding var text: String
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(title)
+                .font(.headline)
+            TextField(title, text: $text)
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+        }
+    }
+}
+
+struct NumberInputView: View {
+    let title: String
+    @Binding var value: Double
+    let range: ClosedRange<Double>
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(title)
+                .font(.headline)
+            HStack {
+                Slider(value: $value, in: range)
+                Text("\(Int(value))")
+                    .frame(width: 50)
+            }
+            .padding(.vertical)
+        }
     }
 }
