@@ -17,8 +17,8 @@ struct AddCoursePopUp: View {
     var warning = "Enter the title for the class"
     
     @State var overlapPressed = true
-    @State var learningObjectivePressed = false
-    @State var courseOverviewPressed = false
+    @State var learningObjectivePressed = true
+    @State var courseOverviewPressed = true
     @State var prerequisitePressed = false
     
     @State var areYouSure = false
@@ -66,7 +66,6 @@ struct AddCoursePopUp: View {
                     }
                     
                     
-                    
                     if viewModel.learningObjectives.count > 0 {
                         Divider()
                         
@@ -80,7 +79,6 @@ struct AddCoursePopUp: View {
                             LoadingView()
                         }
                     }
-                    
                     
                     
                     if viewModel.courseOverviewSuggestions.count > 0 {
@@ -98,21 +96,23 @@ struct AddCoursePopUp: View {
                     }
                     
                     VStack {
-                        Divider()
+                        
                         
                         if viewModel.prerequisites.count > 0 {
+                            Divider()
                             prerequisitesView
                         }
                         
+                        Divider()
                         actionButton
                         
                         if viewModel.concepts.count > 0 || viewModel.learningObjectives.count > 0 || viewModel.courseOverviewSuggestions.count > 0 || viewModel.prerequisites.count > 0 {
+                            Divider()
                             if !areYouSure {
                                 resetAllButton
                             } else {
                                 areYouSureView
                             }
-                            
                         }
                     }
                 }
@@ -284,13 +284,14 @@ struct AddCoursePopUp: View {
             }
             HStack {
                 if viewModel.textbooks.count > 1 {
+                    Spacer()
                     Button(action: {
                         withAnimation {
                             _ = viewModel.textbooks.popLast()
                         }
                     }) {
-                        Text("Remove textbook")
-                            .font(.system(size: 18, weight: .regular, design: .rounded))
+                        Image(systemName: "minus.square")
+                            .font(.system(size: 16, weight: .regular, design: .rounded))
                             .padding()
                             .background(content: {
                                 ZStack {
@@ -304,6 +305,7 @@ struct AddCoursePopUp: View {
                             .foregroundColor(.white)
                             .cornerRadius(8)
                     }
+                    Spacer()
                 }
                 
                 Button(action: {
@@ -311,7 +313,7 @@ struct AddCoursePopUp: View {
                         viewModel.textbooks.append(Textbook(title: "", author: ""))
                     }
                 }) {
-                    Text("Add textbook")
+                    Image(systemName: "plus.square")
                         .font(.system(size: 18, weight: .regular, design: .rounded))
                         .padding()
                         .background(content: {
@@ -325,6 +327,10 @@ struct AddCoursePopUp: View {
                         })
                         .foregroundColor(.white)
                         .cornerRadius(8)
+                }
+                
+                if viewModel.textbooks.count > 1 {
+                    Spacer()
                 }
             }
         }
@@ -431,21 +437,24 @@ struct AddCoursePopUp: View {
                 HStack {
                     regenerateOverlapButton
                     
-                    addOneConceptButton
+                    removeAllConcepts
                 }
             }
         }
     }
     
-    var addOneConceptButton: some View {
+    var removeAllConcepts: some View {
         
         Button(action: {
-            
+            withAnimation {
+                overlapPressed = false
+                viewModel.concepts = []
+            }
         }) {
             ZStack {
                 
-                Image(systemName: "plus.square")
-                    .font(.system(size: 24, weight: .regular, design: .rounded))
+                Image(systemName: "trash")
+                    .font(.system(size: 18, weight: .regular, design: .rounded))
                     .padding()
                     .background(content: {
                         ZStack {
@@ -466,8 +475,10 @@ struct AddCoursePopUp: View {
         VStack {
             if viewModel.concepts.count > 0 {
                 Button(action: {
-                    viewModel.concepts = []
-                    viewModel.findTextbookOverlap()
+                    withAnimation {
+                        viewModel.concepts = []
+                        viewModel.findTextbookOverlap()
+                    }
                 }) {
                     HStack {
                         ZStack {
@@ -504,20 +515,25 @@ struct AddCoursePopUp: View {
                     learningObjectivePressed = true
                     viewModel.getLearningObjectives()
                 }) {
-                    Text("Generate Learning Objectives")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .padding()
-                        .background(content: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundColor(.black)
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(lineWidth: 4)
-                                    .foregroundColor(.buttonPrimary)
-                            }
-                        })
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
+                    HStack {
+                        Image(systemName: "terminal")
+                            .font(.system(size: 16, weight: .bold, design: .rounded))
+                            .foregroundColor(.accent)
+                        Text("Generate Learning Objectives")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                    }
+                    .padding()
+                    .background(content: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.black)
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(lineWidth: 4)
+                                .foregroundColor(.buttonPrimary)
+                        }
+                    })
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
                 }
             }
         }
@@ -539,20 +555,25 @@ struct AddCoursePopUp: View {
                             LoadingView()
                                 .padding(.top, 5)
                         } else {
-                            Text("Find Concept Overlap")
-                                .font(.system(size: 18, weight: .regular, design: .rounded))
-                                .padding()
-                                .background(content: {
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .foregroundColor(.black)
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(lineWidth: 4)
-                                            .foregroundColor(.buttonPrimary)
-                                    }
-                                })
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
+                            HStack {
+                                Image(systemName: "terminal")
+                                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                                    .foregroundColor(.accent)
+                                Text("Find Concept Overlap")
+                                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                            }
+                            .padding()
+                            .background(content: {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundColor(.black)
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(lineWidth: 4)
+                                        .foregroundColor(.buttonPrimary)
+                                }
+                            })
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
                         }
                     }.disabled(viewModel.loading)
                 }
@@ -643,21 +664,24 @@ struct AddCoursePopUp: View {
             if !courseOverviewPressed && viewModel.courseOverviewSuggestions.count == 0 {
                 HStack {
                     regenerateLearningObjectivesButton
-                    addOneLearningObjectiveButton
+                    removeAllLearningObjectivesButton
                 }
             }
         }
     }
     
-    var addOneLearningObjectiveButton: some View {
+    var removeAllLearningObjectivesButton: some View {
         
         Button(action: {
-            
+            withAnimation {
+                learningObjectivePressed = false
+                viewModel.learningObjectives = []
+            }
         }) {
             ZStack {
                 
-                Image(systemName: "plus.square")
-                    .font(.system(size: 24, weight: .regular, design: .rounded))
+                Image(systemName: "trash")
+                    .font(.system(size: 18, weight: .regular, design: .rounded))
                     .padding()
                     .background(content: {
                         ZStack {
@@ -678,8 +702,12 @@ struct AddCoursePopUp: View {
         VStack {
             if viewModel.learningObjectives.count > 0 {
                 Button(action: {
-                    viewModel.learningObjectives = []
-                    viewModel.getLearningObjectives()
+                    withAnimation {
+                        withAnimation {
+                            viewModel.learningObjectives = []
+                            viewModel.getLearningObjectives()
+                        }
+                    }
                 }) {
                     HStack {
                         ZStack {
@@ -716,20 +744,24 @@ struct AddCoursePopUp: View {
                     courseOverviewPressed = true
                     viewModel.getCourseTitleSuggestion()
                 }) {
-                    Text("Generate Course Title")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .padding()
-                        .background(content: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundColor(.black)
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(lineWidth: 4)
-                                    .foregroundColor(.buttonPrimary)
-                            }
-                        })
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
+                    HStack {
+                        Image(systemName: "terminal")
+                            .font(.system(size: 16, weight: .bold, design: .rounded))
+                        Text("Generate Course Title")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                    }
+                    .padding()
+                    .background(content: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.black)
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(lineWidth: 4)
+                                .foregroundColor(.buttonPrimary)
+                        }
+                    })
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
                 }
             }
         }
@@ -836,47 +868,23 @@ struct AddCoursePopUp: View {
                 HStack {
                     regenerateCourseOverviewButton
                     
-                    addOneCourseOverviewButton
-                    
-                    resetCourseOverView
+                    removeAllCourseOverView
                 }
             }
         }
     }
     
-    var resetCourseOverView: some View {
+    var removeAllCourseOverView: some View {
         Button(action: {
-            viewModel.courseOverviewSuggestions = []
-        }) {
-            ZStack {
-                
-                Text("Reset")
-                    .font(.system(size: 18, weight: .regular, design: .rounded))
-                    .padding()
-                    .background(content: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .foregroundColor(.black)
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(lineWidth: 4)
-                                .foregroundColor(.buttonPrimary)
-                        }
-                    })
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
+            withAnimation {
+                courseOverviewPressed = false
+                viewModel.courseOverviewSuggestions = []
             }
-        }
-    }
-    
-    var addOneCourseOverviewButton: some View {
-        
-        Button(action: {
-            
         }) {
             ZStack {
                 
-                Image(systemName: "plus.square")
-                    .font(.system(size: 24, weight: .regular, design: .rounded))
+                Image(systemName: "trash")
+                    .font(.system(size: 18, weight: .regular, design: .rounded))
                     .padding()
                     .background(content: {
                         ZStack {
@@ -897,8 +905,10 @@ struct AddCoursePopUp: View {
         VStack {
             if viewModel.courseOverviewSuggestions.count > 0 {
                 Button(action: {
-                    viewModel.courseOverviewSuggestions = []
-                    viewModel.getCourseTitleSuggestion()
+                    withAnimation {
+                        viewModel.courseOverviewSuggestions = []
+                        viewModel.getCourseTitleSuggestion()
+                    }
                 }) {
                     HStack {
                         ZStack {
@@ -935,20 +945,24 @@ struct AddCoursePopUp: View {
                     prerequisitePressed = true
                     viewModel.getPrerequisites()
                 }) {
-                    Text("Generate Prerequisites")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .padding()
-                        .background(content: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundColor(.black)
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(lineWidth: 4)
-                                    .foregroundColor(.buttonPrimary)
-                            }
-                        })
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
+                    HStack {
+                        Image(systemName: "terminal")
+                            .font(.system(size: 16, weight: .bold, design: .rounded))
+                        Text("Generate Prerequisites")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                    }
+                    .padding()
+                    .background(content: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.black)
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(lineWidth: 4)
+                                .foregroundColor(.buttonPrimary)
+                        }
+                    })
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
                 }
                 .disabled(viewModel.selectedCourseIndex == -1)
                 .opacity(viewModel.selectedCourseIndex > -1 ? 1 : 0.3)
@@ -1035,7 +1049,48 @@ struct AddCoursePopUp: View {
                     .padding()
                 }.padding(.horizontal)
             }
-            
+            if viewModel.prerequisites.count > 0 {
+                HStack {
+                    regeneratePrerequisites
+                }
+            }
+        }
+    }
+    
+    var regeneratePrerequisites: some View {
+        VStack {
+            if viewModel.concepts.count > 0 {
+                Button(action: {
+                    withAnimation {
+                        viewModel.prerequisites = []
+                        viewModel.getPrerequisites()
+                    }
+                }) {
+                    HStack {
+                        ZStack {
+                            Image(systemName: "square")
+                                .font(.system(size: 24, weight: .regular, design: .rounded))
+                            Image(systemName: "arrow.clockwise")
+                                .font(.system(size: 10, weight: .bold, design: .rounded))
+                        }
+                        
+                        Text("Regenerate")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                    }
+                    .padding()
+                    .background(content: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.black)
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(lineWidth: 4)
+                                .foregroundColor(.buttonPrimary)
+                        }
+                    })
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                }
+            }
         }
     }
     
@@ -1137,9 +1192,10 @@ struct AddCoursePopUp: View {
                     }
                 }
             }
-            .padding(.horizontal)
-            .padding(.bottom)
-            .padding(.top, 3)
+            .padding()
+//            .padding(.horizontal)
+//            .padding(.bottom)
+//            .padding(.top, 3)
             .disabled(!self.viewModel.titleIsValid)
             .opacity(self.viewModel.titleIsValid ? 1 : 0.4)
         }
@@ -1172,13 +1228,14 @@ struct AddCoursePopUp: View {
                 }
             }
         }
-        .padding(.horizontal)
-        .padding(.bottom)
+        .padding()
+//        .padding(.horizontal)
+//        .padding(.bottom)
     }
     
     var areYouSureView: some View {
         VStack{
-            Text("Are you sure you want to rest your progress")
+            Text("Are you sure you want to reset your progress")
                 .font(.system(size: 16, weight: .regular, design: .rounded))
                 .foregroundColor(.primary)
             
@@ -1191,6 +1248,8 @@ struct AddCoursePopUp: View {
                         learningObjectivePressed = false
                         courseOverviewPressed = false
                         prerequisitePressed = false
+                        
+                        areYouSure = false
                     }
                 }) {
                     ZStack{

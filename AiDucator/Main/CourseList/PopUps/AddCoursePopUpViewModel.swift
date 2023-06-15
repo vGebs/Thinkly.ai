@@ -6,6 +6,7 @@
 //
 
 import Combine
+import SwiftUI
 import Foundation
 
 class AddCoursePopUpViewModel: ObservableObject {
@@ -105,9 +106,11 @@ class AddCoursePopUpViewModel: ObservableObject {
             } receiveValue: { [weak self] c in
 
                 let sortedConcepts = c.concepts.sorted { $0.overlapRatingOutOfTen > $1.overlapRatingOutOfTen }
-
-                self?.concepts = sortedConcepts
-                self?.loading = false
+                
+                withAnimation {
+                    self?.concepts = sortedConcepts
+                    self?.loading = false
+                }
             }.store(in: &cancellables)
     }
     
@@ -125,8 +128,10 @@ class AddCoursePopUpViewModel: ObservableObject {
                         print("AddCoursePopUpViewModel.getLearningObjectives: Success")
                     }
                 } receiveValue: { [weak self] objectives in
-                    self?.learningObjectives = objectives.learningObjectives
-                    self?.loading = false
+                    withAnimation {
+                        self?.learningObjectives = objectives.learningObjectives
+                        self?.loading = false
+                    }
                 }.store(in: &cancellables)
         }
     }
@@ -146,9 +151,10 @@ class AddCoursePopUpViewModel: ObservableObject {
                         print("courseDef.getCourseTitleSuggestion: Success")
                     }
                 } receiveValue: { [weak self] suggestions in
-                    
-                    self?.courseOverviewSuggestions = suggestions.courseOverview
-                    self?.loading = false
+                    withAnimation {
+                        self?.courseOverviewSuggestions = suggestions.courseOverview
+                        self?.loading = false
+                    }
                 }.store(in: &cancellables)
             
         } else {
@@ -183,11 +189,11 @@ class AddCoursePopUpViewModel: ObservableObject {
                         print("courseDef.getCourseTitleSuggestion: Success")
                     }
                 } receiveValue: { [weak self] prereqs in
-                    self?.prerequisites = prereqs.prerequisites
-                    self?.loading = false
+                    withAnimation {
+                        self?.prerequisites = prereqs.prerequisites
+                        self?.loading = false
+                    }
                 }.store(in: &cancellables)
-        } else {
-            print("we need learning objectives,")
         }
     }
 }
