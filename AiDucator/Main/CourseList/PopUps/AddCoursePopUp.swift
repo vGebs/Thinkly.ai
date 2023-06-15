@@ -46,6 +46,7 @@ struct AddCoursePopUp: View {
                         overlapButton
                     } else if viewModel.loading && !learningObjectivePressed && !courseOverviewPressed && !prerequisitePressed{
                         Divider()
+                        conceptTitleView
                         LoadingView()
                     }
                     
@@ -61,6 +62,7 @@ struct AddCoursePopUp: View {
                             generateLearningObjectivesButton
                         } else if viewModel.loading && !courseOverviewPressed && !prerequisitePressed{
                             Divider()
+                            learningObjectiveTitleView
                             LoadingView()
                         }
                     }
@@ -76,6 +78,7 @@ struct AddCoursePopUp: View {
                             generateCourseOverviewButton
                         } else if viewModel.loading && !prerequisitePressed {
                             Divider()
+                            courseOverViewTitleView
                             LoadingView()
                         }
                     }
@@ -91,6 +94,7 @@ struct AddCoursePopUp: View {
                             generatePrerequisitesButton
                         } else if viewModel.loading {
                             Divider()
+                            prerequisitesTitleView
                             LoadingView()
                         }
                     }
@@ -292,6 +296,7 @@ struct AddCoursePopUp: View {
                     }) {
                         Image(systemName: "minus.square")
                             .font(.system(size: 16, weight: .regular, design: .rounded))
+                            .foregroundColor(.accent)
                             .padding()
                             .background(content: {
                                 ZStack {
@@ -315,6 +320,7 @@ struct AddCoursePopUp: View {
                 }) {
                     Image(systemName: "plus.square")
                         .font(.system(size: 18, weight: .regular, design: .rounded))
+                        .foregroundColor(.accent)
                         .padding()
                         .background(content: {
                             ZStack {
@@ -336,19 +342,24 @@ struct AddCoursePopUp: View {
         }
     }
     
+    var conceptTitleView: some View {
+        HStack {
+            Image(systemName: "lasso.and.sparkles")
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .foregroundColor(.accent)
+            
+            Text("Concept Overlap From Textbooks")
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundColor(.primary)
+            
+            Spacer()
+        }.padding(.horizontal)
+    }
+    
     var conceptsView: some View {
         VStack {
-            HStack {
-                Image(systemName: "lasso.and.sparkles")
-                    .font(.system(size: 16, weight: .bold, design: .rounded))
-                    .foregroundColor(.accent)
-                
-                Text("Concept Overlap From Textbooks")
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .foregroundColor(.primary)
-                
-                Spacer()
-            }.padding(.horizontal)
+            
+            conceptTitleView
             
             ForEach(viewModel.concepts.indices, id: \.self) { index in
                 ZStack {
@@ -465,7 +476,7 @@ struct AddCoursePopUp: View {
                                 .foregroundColor(.buttonPrimary)
                         }
                     })
-                    .foregroundColor(.white)
+                    .foregroundColor(.accent)
                     .cornerRadius(8)
             }
         }
@@ -484,8 +495,10 @@ struct AddCoursePopUp: View {
                         ZStack {
                             Image(systemName: "square")
                                 .font(.system(size: 24, weight: .regular, design: .rounded))
+                                .foregroundColor(.accent)
                             Image(systemName: "arrow.clockwise")
                                 .font(.system(size: 10, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
                         }
                         
                         Text("Regenerate")
@@ -581,19 +594,24 @@ struct AddCoursePopUp: View {
         }
     }
     
+    var learningObjectiveTitleView: some View {
+        HStack {
+            Image(systemName: "lightbulb")
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .foregroundColor(.accent)
+            
+            Text("Learning Objectives")
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundColor(.primary)
+            
+            Spacer()
+        }.padding(.horizontal)
+    }
+    
     var learningObjectivesView: some View {
         VStack {
-            HStack {
-                Image(systemName: "lightbulb")
-                    .font(.system(size: 16, weight: .bold, design: .rounded))
-                    .foregroundColor(.accent)
-                
-                Text("Learning Objectives")
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .foregroundColor(.primary)
-                
-                Spacer()
-            }.padding(.horizontal)
+            
+            learningObjectiveTitleView
             
             ForEach(viewModel.learningObjectives.indices, id: \.self) { index in
                 ZStack {
@@ -692,7 +710,7 @@ struct AddCoursePopUp: View {
                                 .foregroundColor(.buttonPrimary)
                         }
                     })
-                    .foregroundColor(.white)
+                    .foregroundColor(.accent)
                     .cornerRadius(8)
             }
         }
@@ -713,8 +731,10 @@ struct AddCoursePopUp: View {
                         ZStack {
                             Image(systemName: "square")
                                 .font(.system(size: 24, weight: .regular, design: .rounded))
+                                .foregroundColor(.accent)
                             Image(systemName: "arrow.clockwise")
                                 .font(.system(size: 10, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
                         }
                         
                         Text("Regenerate")
@@ -747,6 +767,7 @@ struct AddCoursePopUp: View {
                     HStack {
                         Image(systemName: "terminal")
                             .font(.system(size: 16, weight: .bold, design: .rounded))
+                            .foregroundColor(.accent)
                         Text("Generate Course Title")
                             .font(.system(size: 18, weight: .bold, design: .rounded))
                     }
@@ -767,20 +788,23 @@ struct AddCoursePopUp: View {
         }
     }
     
+    var courseOverViewTitleView: some View {
+        HStack {
+            Image(systemName: "highlighter")
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .foregroundColor(.accent)
+            
+            Text("Course Titles")
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundColor(.primary)
+            
+            Spacer()
+        }.padding(.horizontal)
+    }
+    
     var courseOverviewView: some View {
         VStack {
-            HStack {
-                Image(systemName: "highlighter")
-                    .font(.system(size: 16, weight: .bold, design: .rounded))
-                    .foregroundColor(.accent)
-                
-                Text("Course")
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .foregroundColor(.primary)
-                
-                Spacer()
-            }.padding(.horizontal)
-            
+            courseOverViewTitleView
             ForEach(viewModel.courseOverviewSuggestions.indices, id: \.self) { index in
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
@@ -895,7 +919,7 @@ struct AddCoursePopUp: View {
                                 .foregroundColor(.buttonPrimary)
                         }
                     })
-                    .foregroundColor(.white)
+                    .foregroundColor(.accent)
                     .cornerRadius(8)
             }
         }
@@ -914,8 +938,10 @@ struct AddCoursePopUp: View {
                         ZStack {
                             Image(systemName: "square")
                                 .font(.system(size: 24, weight: .regular, design: .rounded))
+                                .foregroundColor(.accent)
                             Image(systemName: "arrow.clockwise")
                                 .font(.system(size: 10, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
                         }
                         
                         Text("Regenerate")
@@ -948,6 +974,7 @@ struct AddCoursePopUp: View {
                     HStack {
                         Image(systemName: "terminal")
                             .font(.system(size: 16, weight: .bold, design: .rounded))
+                            .foregroundColor(.accent)
                         Text("Generate Prerequisites")
                             .font(.system(size: 18, weight: .bold, design: .rounded))
                     }
@@ -970,20 +997,23 @@ struct AddCoursePopUp: View {
         }
     }
     
+    var prerequisitesTitleView: some View {
+        HStack {
+            Image(systemName: "directcurrent")
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .foregroundColor(.accent)
+            
+            Text("Prerequisites")
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundColor(.primary)
+            
+            Spacer()
+        }.padding(.horizontal)
+    }
+    
     var prerequisitesView: some View {
         VStack {
-            HStack {
-                Image(systemName: "directcurrent")
-                    .font(.system(size: 16, weight: .bold, design: .rounded))
-                    .foregroundColor(.accent)
-                
-                Text("Prerequisites")
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .foregroundColor(.primary)
-                
-                Spacer()
-            }.padding(.horizontal)
-            
+            prerequisitesTitleView
             ForEach(viewModel.prerequisites.indices, id: \.self) { index in
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
@@ -1070,8 +1100,10 @@ struct AddCoursePopUp: View {
                         ZStack {
                             Image(systemName: "square")
                                 .font(.system(size: 24, weight: .regular, design: .rounded))
+                                .foregroundColor(.accent)
                             Image(systemName: "arrow.clockwise")
                                 .font(.system(size: 10, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
                         }
                         
                         Text("Regenerate")
