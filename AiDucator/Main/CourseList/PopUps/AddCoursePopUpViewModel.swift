@@ -56,11 +56,15 @@ class AddCoursePopUpViewModel: ObservableObject {
         )
     ]
     
+    
     @Published var learningObjectives: [LearningObjective] = [
         LearningObjective(description: "Learn the fundamental guidelines for designing effective, maintainable, and scalable system architectures.", objectiveTitle: "Understand Software Design Principles"),
         LearningObjective(description: "Discover the factors contributing to system scalability and the techniques to handle growing amounts of work, accommodating increased demand for resources.", objectiveTitle: "Explore System Scalability"),
         LearningObjective(description: "Enhance the ability of a system to operate consistently without failures, ensuring continuous availability and smooth functioning.", objectiveTitle: "Improve System Reliability")
     ]
+    
+    
+    
     @Published var courseOverviewSuggestions: [CourseOverview] = [
         CourseOverview(courseTitle: "Mastering Software Design and Scalability", courseDescription: "A comprehensive course that covers essential design principles for building optimized and scalable system architectures, while emphasizing reliability and maintainability."),
         CourseOverview(courseTitle: "Architecting Scalable and Reliable Systems", courseDescription: "Build high-quality software systems by understanding the key design principles, ensuring continuous availability, and effectively handling system growth."),
@@ -68,7 +72,10 @@ class AddCoursePopUpViewModel: ObservableObject {
         CourseOverview(courseTitle: "Principles of Effective Software Design and Scalability", courseDescription: "Develop the skills to design robust, scalable, and dependable software systems by mastering fundamental principles and learning techniques that ensure growth and consistency."),
         CourseOverview(courseTitle: "Building High-Performance Scalable Systems", courseDescription: "Understand the principles of excellent software design and learn how to create reliable and scalable system architectures that can handle increased demand for resources.")
     ]
+        
     @Published var prerequisites: [Prerequisite] = []
+    
+    @Published var selectedCourseIndex = -1
     
     @Published var loading = false
     
@@ -150,7 +157,17 @@ class AddCoursePopUpViewModel: ObservableObject {
     }
     
     func getPrerequisites() {
-        if textbooks.count > 0 && learningObjectives.count > 0 && courseOverviewSuggestions.count > 0 {
+        if textbooks.count > 0 && learningObjectives.count > 0 && courseOverviewSuggestions.count > 0 && selectedCourseIndex > -1{
+            let selectedCourse = courseOverviewSuggestions[selectedCourseIndex]
+            
+            // Clear all other courses
+            courseOverviewSuggestions.removeAll()
+            
+            // Append selected course back into array
+            courseOverviewSuggestions.append(selectedCourse)
+            
+            selectedCourseIndex = 0
+            
             let input = PrerequisitesInput(textbooks: textbooks, learningObjectives: learningObjectives, courseOverview: courseOverviewSuggestions[0])
             
             self.loading = true
@@ -172,5 +189,14 @@ class AddCoursePopUpViewModel: ObservableObject {
         } else {
             print("we need learning objectives,")
         }
+    }
+}
+
+extension AddCoursePopUpViewModel {
+    func resetAll() {
+        concepts = []
+        learningObjectives = []
+        courseOverviewSuggestions = []
+        prerequisites = []
     }
 }

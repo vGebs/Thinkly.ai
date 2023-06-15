@@ -21,6 +21,8 @@ struct AddCoursePopUp: View {
     @State var courseOverviewPressed = false
     @State var prerequisitePressed = false
     
+    @State var areYouSure = false
+    
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 25)
@@ -40,47 +42,51 @@ struct AddCoursePopUp: View {
                     
                     
                     if !overlapPressed {
+                        Divider()
                         overlapButton
-                    } else if viewModel.loading {
+                    } else if viewModel.loading && !learningObjectivePressed && !courseOverviewPressed && !prerequisitePressed{
+                        Divider()
                         LoadingView()
                     }
                     
-                    Divider()
-                        .padding(.top)
+                    
                     
                     if viewModel.concepts.count > 0 {
+                        Divider()
+                        
                         conceptsView
                         
                         if !learningObjectivePressed && viewModel.learningObjectives.count == 0{
                             Divider()
                             generateLearningObjectivesButton
-                                .padding(.top)
-                        } else if viewModel.loading {
+                        } else if viewModel.loading && !courseOverviewPressed && !prerequisitePressed{
                             Divider()
                             LoadingView()
                         }
                     }
                     
-                    Divider()
-                        .padding(.top)
+                    
                     
                     if viewModel.learningObjectives.count > 0 {
-                        learningObjectives
+                        Divider()
+                        
+                        learningObjectivesView
                         
                         if !courseOverviewPressed && viewModel.courseOverviewSuggestions.count == 0 {
                             Divider()
                             generateCourseOverviewButton
-                        } else if viewModel.loading {
+                        } else if viewModel.loading && !prerequisitePressed {
                             Divider()
                             LoadingView()
                         }
                     }
                     
-                    Divider()
-                        .padding(.top)
+                    
                     
                     if viewModel.courseOverviewSuggestions.count > 0 {
-                        courseOverview
+                        Divider()
+                        
+                        courseOverviewView
                         
                         if !prerequisitePressed && viewModel.prerequisites.count == 0 {
                             Divider()
@@ -93,13 +99,21 @@ struct AddCoursePopUp: View {
                     
                     VStack {
                         Divider()
-                            .padding(.top)
                         
                         if viewModel.prerequisites.count > 0 {
                             prerequisitesView
                         }
                         
                         actionButton
+                        
+                        if viewModel.concepts.count > 0 || viewModel.learningObjectives.count > 0 || viewModel.courseOverviewSuggestions.count > 0 || viewModel.prerequisites.count > 0 {
+                            if !areYouSure {
+                                resetAllButton
+                            } else {
+                                areYouSureView
+                            }
+                            
+                        }
                     }
                 }
             }
@@ -419,8 +433,6 @@ struct AddCoursePopUp: View {
                     
                     addOneConceptButton
                 }
-                .padding(.vertical)
-                .padding(.horizontal)
             }
         }
     }
@@ -548,7 +560,7 @@ struct AddCoursePopUp: View {
         }
     }
     
-    var learningObjectives: some View {
+    var learningObjectivesView: some View {
         VStack {
             HStack {
                 Image(systemName: "lightbulb")
@@ -723,7 +735,7 @@ struct AddCoursePopUp: View {
         }
     }
     
-    var courseOverview: some View {
+    var courseOverviewView: some View {
         VStack {
             HStack {
                 Image(systemName: "highlighter")
@@ -755,22 +767,27 @@ struct AddCoursePopUp: View {
                             Spacer()
                             
                             
-                            Button(action: {
-                                withAnimation {
-                                    var temp = viewModel.courseOverviewSuggestions
-                                    temp.remove(at: index)
-                                    viewModel.courseOverviewSuggestions = temp
-                                    
-                                    if viewModel.courseOverviewSuggestions.count == 0 {
-                                        courseOverviewPressed = false
-                                    }
-                                }
-                            }) {
-                                Image(systemName: "trash")
+//                            Button(action: {
+//                                withAnimation {
+//                                    var temp = viewModel.courseOverviewSuggestions
+//                                    temp.remove(at: index)
+//                                    viewModel.courseOverviewSuggestions = temp
+//
+//                                    if viewModel.courseOverviewSuggestions.count == 0 {
+//                                        courseOverviewPressed = false
+//                                    }
+//                                }
+//                            }) {
+//                                Image(systemName: "trash")
+//                                    .foregroundColor(.buttonPrimary)
+//                                    .font(.system(size: 16, weight: .bold, design: .rounded))
+//                            }
+                            
+                            if !prerequisitePressed && viewModel.prerequisites.count == 0 {
+                                Image(systemName: viewModel.selectedCourseIndex == index ? "checkmark.square" : "square")
                                     .foregroundColor(.buttonPrimary)
                                     .font(.system(size: 16, weight: .bold, design: .rounded))
                             }
-                            
                         }
                         HStack {
                             Text(viewModel.courseOverviewSuggestions[index].courseTitle)
@@ -800,7 +817,19 @@ struct AddCoursePopUp: View {
                         }.padding(.bottom)
                     }
                     .padding()
-                }.padding(.horizontal)
+                }
+                .padding(.horizontal)
+                .onTapGesture {
+                    if !prerequisitePressed {
+                        withAnimation {
+                            if viewModel.selectedCourseIndex == index {
+                                viewModel.selectedCourseIndex = -1
+                            } else {
+                                viewModel.selectedCourseIndex = index
+                            }
+                        }
+                    }
+                }
             }
             
             if !prerequisitePressed && viewModel.prerequisites.count == 0 {
@@ -808,7 +837,33 @@ struct AddCoursePopUp: View {
                     regenerateCourseOverviewButton
                     
                     addOneCourseOverviewButton
+                    
+                    resetCourseOverView
                 }
+            }
+        }
+    }
+    
+    var resetCourseOverView: some View {
+        Button(action: {
+            viewModel.courseOverviewSuggestions = []
+        }) {
+            ZStack {
+                
+                Text("Reset")
+                    .font(.system(size: 18, weight: .regular, design: .rounded))
+                    .padding()
+                    .background(content: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.black)
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(lineWidth: 4)
+                                .foregroundColor(.buttonPrimary)
+                        }
+                    })
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
             }
         }
     }
@@ -895,6 +950,8 @@ struct AddCoursePopUp: View {
                         .foregroundColor(.white)
                         .cornerRadius(8)
                 }
+                .disabled(viewModel.selectedCourseIndex == -1)
+                .opacity(viewModel.selectedCourseIndex > -1 ? 1 : 0.3)
             }
         }
     }
@@ -1081,10 +1138,115 @@ struct AddCoursePopUp: View {
                 }
             }
             .padding(.horizontal)
-            .padding(.vertical)
+            .padding(.bottom)
             .padding(.top, 3)
             .disabled(!self.viewModel.titleIsValid)
             .opacity(self.viewModel.titleIsValid ? 1 : 0.4)
+        }
+    }
+    
+    var resetAllButton: some View {
+        Button(action: {
+            withAnimation {
+                areYouSure = true
+            }
+        }) {
+            ZStack{
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(lineWidth: 2.5)
+                    .foregroundColor(.buttonPrimary)
+                
+                HStack {
+                    Spacer()
+                    
+                    Image(systemName: "trash")
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .foregroundColor(.primary)
+                    
+                    
+                    Text("Reset all")
+                        .font(.system(size: 18, weight: .black, design: .rounded))
+                        .foregroundColor(.white)
+                        .padding(.vertical)
+                    Spacer()
+                }
+            }
+        }
+        .padding(.horizontal)
+        .padding(.bottom)
+    }
+    
+    var areYouSureView: some View {
+        VStack{
+            Text("Are you sure you want to rest your progress")
+                .font(.system(size: 16, weight: .regular, design: .rounded))
+                .foregroundColor(.primary)
+            
+            HStack {
+                Button(action: {
+                    withAnimation {
+                        viewModel.resetAll()
+                        
+                        overlapPressed = false
+                        learningObjectivePressed = false
+                        courseOverviewPressed = false
+                        prerequisitePressed = false
+                    }
+                }) {
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(lineWidth: 2.5)
+                            .foregroundColor(.buttonPrimary)
+                        
+                        HStack {
+                            Spacer()
+                            
+                            Image(systemName: "trash")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            
+                            Text("Yes")
+                                .font(.system(size: 18, weight: .black, design: .rounded))
+                                .foregroundColor(.white)
+                                .padding(.vertical)
+                            Spacer()
+                        }
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.bottom)
+                
+                Button(action: {
+                    withAnimation {
+                        areYouSure = false
+                    }
+                    
+                }) {
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(lineWidth: 2.5)
+                            .foregroundColor(.buttonPrimary)
+                        
+                        HStack {
+                            Spacer()
+                            
+                            Image(systemName: "xmark.square")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            
+                            Text("No")
+                                .font(.system(size: 18, weight: .black, design: .rounded))
+                                .foregroundColor(.white)
+                                .padding(.vertical)
+                            Spacer()
+                        }
+                    }
+                }
+                .padding(.trailing)
+                .padding(.bottom)
+            }
         }
     }
 }
