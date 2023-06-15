@@ -16,39 +16,102 @@ struct AddCoursePopUp: View {
     @State var textIsValid = true
     var warning = "Enter the title for the class"
     
+    @State var overlapPressed = true
+    @State var learningObjectivePressed = false
+    @State var courseOverviewPressed = false
+    @State var prerequisitePressed = false
+    
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 25)
                 .foregroundColor(.black)
             
+            
+            VStack {
+                ScrollView {
+                    
+                    header
+                    
+                    if overlapPressed {
+                        hardCodedTextbooks
+                    } else {
+                        addTextbooks
+                    }
+                    
+                    
+                    if !overlapPressed {
+                        overlapButton
+                    } else if viewModel.loading {
+                        LoadingView()
+                    }
+                    
+                    Divider()
+                        .padding(.top)
+                    
+                    if viewModel.concepts.count > 0 {
+                        conceptsView
+                        
+                        if !learningObjectivePressed && viewModel.learningObjectives.count == 0{
+                            Divider()
+                            generateLearningObjectivesButton
+                                .padding(.top)
+                        } else if viewModel.loading {
+                            Divider()
+                            LoadingView()
+                        }
+                    }
+                    
+                    Divider()
+                        .padding(.top)
+                    
+                    if viewModel.learningObjectives.count > 0 {
+                        learningObjectives
+                        
+                        if !courseOverviewPressed && viewModel.courseOverviewSuggestions.count == 0 {
+                            Divider()
+                            generateCourseOverviewButton
+                        } else if viewModel.loading {
+                            Divider()
+                            LoadingView()
+                        }
+                    }
+                    
+                    Divider()
+                        .padding(.top)
+                    
+                    if viewModel.courseOverviewSuggestions.count > 0 {
+                        courseOverview
+                        
+                        if !prerequisitePressed && viewModel.prerequisites.count == 0 {
+                            Divider()
+                            generatePrerequisitesButton
+                        } else if viewModel.loading {
+                            Divider()
+                            LoadingView()
+                        }
+                    }
+                    
+                    VStack {
+                        Divider()
+                            .padding(.top)
+                        
+                        if viewModel.prerequisites.count > 0 {
+                            prerequisitesView
+                        }
+                        
+                        actionButton
+                    }
+                }
+            }
+            
             RoundedRectangle(cornerRadius: 25)
                 .stroke(lineWidth: 4)
                 .foregroundColor(.buttonPrimary)
-            
-            header
-            
-            VStack {
-                
-                Spacer()
-                    .padding(.top, 50)
-                
-                addTitle
-                
-                addDescription
-                
-                addStartDate
-                
-                addEndDate
-                
-                addSymbol
-                
-                actionButton
-            }
         }
         .onTapGesture {
             hideKeyboard()
         }
-        .frame(width: screenWidth * 0.9, height: screenHeight / 1.7)
+        .frame(width: screenWidth * 0.9, height: screenHeight / 1.4)
     }
     
     var header: some View {
@@ -85,34 +148,838 @@ struct AddCoursePopUp: View {
         }
     }
     
-    var addTitle: some View {
-        HStack {
-            TextFieldView(
-                outputText: $viewModel.className,
-                inputWarning: $textIsValid,
-                title: "Course Title",
-                imageString: "newspaper",
-                phoneOrTextfield: .textfield,
-                warning: warning,
-                isSecureField: false
-            )
+    var hardCodedTextbooks: some View {
+        VStack {
+            HStack {
+                Image(systemName: "newspaper")
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .foregroundColor(.accent)
+                
+                Text("Textbooks")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundColor(.primary)
+                
+                Spacer()
+            }.padding(.horizontal)
+            
+            ForEach(viewModel.textbooks.indices, id: \.self) { index in
+                ZStack {
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(lineWidth: 2)
+                        .foregroundColor(.buttonPrimary)
+                    
+                    VStack {
+                        HStack {
+                            Image(systemName: "newspaper")
+                                .foregroundColor(.accent)
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                            
+                            Text("Title")
+                                .font(.system(size: 20, weight: .bold, design: .rounded))
+                            
+                            Spacer()
+                            
+                        }
+                        .padding(.top)
+                        .padding(.horizontal)
+                        
+                        HStack{
+                            Text(viewModel.textbooks[index].title)
+                                .font(.system(size: 16, weight: .regular, design: .rounded))
+                                .foregroundColor(.primary)
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        .padding(.bottom)
+                        
+                        HStack {
+                            Image(systemName: "person.text.rectangle")
+                                .foregroundColor(.accent)
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                            
+                            Text("Author")
+                                .font(.system(size: 20, weight: .bold, design: .rounded))
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        
+                        HStack{
+                            Text(viewModel.textbooks[index].author)
+                                .font(.system(size: 16, weight: .regular, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        .padding(.bottom)
+                    }
+                }.padding(.horizontal)
+            }
         }
-        .padding(.top,2)
     }
     
-    var addDescription: some View {
-        HStack {
-            TextFieldView(
-                outputText: $viewModel.classDescription,
-                inputWarning: $textIsValid,
-                title: "Course Description",
-                imageString: "note.text",
-                phoneOrTextfield: .textfield,
-                warning: warning,
-                isSecureField: false
-            )
+    var addTextbooks: some View {
+        VStack {
+            HStack {
+                Image(systemName: "newspaper")
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .foregroundColor(.accent)
+                
+                Text("Textbooks")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundColor(.primary)
+                
+                Spacer()
+            }.padding(.horizontal)
+            ForEach(viewModel.textbooks.indices, id: \.self) { index in
+                ZStack {
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(lineWidth: 2)
+                        .foregroundColor(.buttonPrimary)
+                    
+                    VStack {
+                        HStack {
+                            TextFieldView(
+                                outputText: $viewModel.textbooks[index].title,
+                                inputWarning: $textIsValid,
+                                title: "Title",
+                                imageString: "newspaper",
+                                phoneOrTextfield: .textfield,
+                                warning: warning,
+                                isSecureField: false
+                            )
+                        }
+                        .padding(.top,2)
+                        
+                        HStack {
+                            TextFieldView(
+                                outputText: $viewModel.textbooks[index].author,
+                                inputWarning: $textIsValid,
+                                title: "Author",
+                                imageString: "person.text.rectangle",
+                                phoneOrTextfield: .textfield,
+                                warning: warning,
+                                isSecureField: false
+                            )
+                        }
+                        .padding(.top,2)
+                        
+                    }
+                    .padding(.vertical)
+                }.padding(.horizontal)
+            }
+            HStack {
+                if viewModel.textbooks.count > 1 {
+                    Button(action: {
+                        withAnimation {
+                            _ = viewModel.textbooks.popLast()
+                        }
+                    }) {
+                        Text("Remove textbook")
+                            .font(.system(size: 18, weight: .regular, design: .rounded))
+                            .padding()
+                            .background(content: {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundColor(.black)
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(lineWidth: 4)
+                                        .foregroundColor(.buttonPrimary)
+                                }
+                            })
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                    }
+                }
+                
+                Button(action: {
+                    withAnimation {
+                        viewModel.textbooks.append(Textbook(title: "", author: ""))
+                    }
+                }) {
+                    Text("Add textbook")
+                        .font(.system(size: 18, weight: .regular, design: .rounded))
+                        .padding()
+                        .background(content: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundColor(.black)
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(lineWidth: 4)
+                                    .foregroundColor(.buttonPrimary)
+                            }
+                        })
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+            }
         }
-        .padding(.top,2)
+    }
+    
+    var conceptsView: some View {
+        VStack {
+            HStack {
+                Image(systemName: "lasso.and.sparkles")
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .foregroundColor(.accent)
+                
+                Text("Concept Overlap From Textbooks")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundColor(.primary)
+                
+                Spacer()
+            }.padding(.horizontal)
+            
+            ForEach(viewModel.concepts.indices, id: \.self) { index in
+                ZStack {
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(lineWidth: 2)
+                        .foregroundColor(.buttonPrimary)
+                        
+                    VStack {
+                        HStack {
+                            Image(systemName: "lasso.and.sparkles")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
+                            Text("Concept")
+                                .font(.system(size: 20, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                            
+                            if !learningObjectivePressed && viewModel.learningObjectives.count == 0 {
+                                Button(action: {
+                                    withAnimation {
+                                        var temp = viewModel.concepts
+                                        temp.remove(at: index)
+                                        viewModel.concepts = temp
+                                        
+                                        if viewModel.concepts.count == 0 {
+                                            overlapPressed = false
+                                        }
+                                    }
+                                }) {
+                                    Image(systemName: "trash")
+                                        .foregroundColor(.buttonPrimary)
+                                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                                }
+                            }
+                        }
+                        HStack {
+                            Text(viewModel.concepts[index].conceptTitle)
+                                .font(.system(size: 16, weight: .regular, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                        }.padding(.bottom)
+                        
+                        HStack {
+                            Image(systemName: "doc.plaintext")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
+                            Text("Concept Description")
+                                .font(.system(size: 20, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                        }
+                        
+                        HStack {
+                            Text(viewModel.concepts[index].descriptionOfConcept)
+                                .font(.system(size: 16, weight: .regular, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                        }.padding(.bottom)
+                        
+                        HStack {
+                            Image(systemName: "sportscourt")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
+                            Text("Concept Overlap Rating")
+                                .font(.system(size: 20, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                        }
+                        
+                        HStack {
+                            Text("\(String(viewModel.concepts[index].overlapRatingOutOfTen))/10")
+                                .font(.system(size: 16, weight: .regular, design: .rounded))
+                                .foregroundColor(.primary)
+                            Spacer()
+                        }
+                    }
+                    .padding()
+                }.padding(.horizontal)
+            }
+            if !learningObjectivePressed && viewModel.learningObjectives.count == 0 {
+                HStack {
+                    regenerateOverlapButton
+                    
+                    addOneConceptButton
+                }
+                .padding(.vertical)
+                .padding(.horizontal)
+            }
+        }
+    }
+    
+    var addOneConceptButton: some View {
+        
+        Button(action: {
+            
+        }) {
+            ZStack {
+                
+                Image(systemName: "plus.square")
+                    .font(.system(size: 24, weight: .regular, design: .rounded))
+                    .padding()
+                    .background(content: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.black)
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(lineWidth: 4)
+                                .foregroundColor(.buttonPrimary)
+                        }
+                    })
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }
+        }
+    }
+    
+    var regenerateOverlapButton: some View {
+        VStack {
+            if viewModel.concepts.count > 0 {
+                Button(action: {
+                    viewModel.concepts = []
+                    viewModel.findTextbookOverlap()
+                }) {
+                    HStack {
+                        ZStack {
+                            Image(systemName: "square")
+                                .font(.system(size: 24, weight: .regular, design: .rounded))
+                            Image(systemName: "arrow.clockwise")
+                                .font(.system(size: 10, weight: .bold, design: .rounded))
+                        }
+                        
+                        Text("Regenerate")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                    }
+                    .padding()
+                    .background(content: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.black)
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(lineWidth: 4)
+                                .foregroundColor(.buttonPrimary)
+                        }
+                    })
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                }
+            }
+        }
+    }
+    
+    var generateLearningObjectivesButton: some View {
+        VStack {
+            if viewModel.concepts.count > 0 {
+                Button(action: {
+                    learningObjectivePressed = true
+                    viewModel.getLearningObjectives()
+                }) {
+                    Text("Generate Learning Objectives")
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .padding()
+                        .background(content: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundColor(.black)
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(lineWidth: 4)
+                                    .foregroundColor(.buttonPrimary)
+                            }
+                        })
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+            }
+        }
+    }
+    
+    var overlapButton: some View {
+        VStack {
+            if viewModel.textbooks.count > 1 {
+                if viewModel.textbooks[1].title != "" && viewModel.textbooks[1].author != "" {
+                    Button(action: {
+                        if !overlapPressed && viewModel.concepts.count == 0 {
+                            withAnimation {
+                                overlapPressed = true
+                            }
+                            viewModel.findTextbookOverlap()
+                        }
+                    }) {
+                        if viewModel.loading {
+                            LoadingView()
+                                .padding(.top, 5)
+                        } else {
+                            Text("Find Concept Overlap")
+                                .font(.system(size: 18, weight: .regular, design: .rounded))
+                                .padding()
+                                .background(content: {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .foregroundColor(.black)
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(lineWidth: 4)
+                                            .foregroundColor(.buttonPrimary)
+                                    }
+                                })
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                        }
+                    }.disabled(viewModel.loading)
+                }
+            }
+        }
+    }
+    
+    var learningObjectives: some View {
+        VStack {
+            HStack {
+                Image(systemName: "lightbulb")
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .foregroundColor(.accent)
+                
+                Text("Learning Objectives")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundColor(.primary)
+                
+                Spacer()
+            }.padding(.horizontal)
+            
+            ForEach(viewModel.learningObjectives.indices, id: \.self) { index in
+                ZStack {
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(lineWidth: 2)
+                        .foregroundColor(.buttonPrimary)
+                        
+                    VStack {
+                        HStack {
+                            Image(systemName: "lightbulb")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
+                            Text("Objective")
+                                .font(.system(size: 20, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                            
+                            if !courseOverviewPressed && viewModel.courseOverviewSuggestions.count == 0{
+                                Button(action: {
+                                    withAnimation {
+                                        var temp = viewModel.learningObjectives
+                                        temp.remove(at: index)
+                                        viewModel.learningObjectives = temp
+                                        
+                                        if viewModel.learningObjectives.count == 0 {
+                                            learningObjectivePressed = false
+                                        }
+                                    }
+                                }) {
+                                    Image(systemName: "trash")
+                                        .foregroundColor(.buttonPrimary)
+                                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                                }
+                            }
+                            
+                        }
+                        HStack {
+                            Text(viewModel.learningObjectives[index].objectiveTitle)
+                                .font(.system(size: 16, weight: .regular, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                        }.padding(.bottom)
+                        
+                        HStack {
+                            Image(systemName: "doc.plaintext")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
+                            Text("Objective Description")
+                                .font(.system(size: 20, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                        }
+                        
+                        HStack {
+                            Text(viewModel.learningObjectives[index].description)
+                                .font(.system(size: 16, weight: .regular, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                        }
+                    }
+                    .padding()
+                }.padding(.horizontal)
+            }
+            if !courseOverviewPressed && viewModel.courseOverviewSuggestions.count == 0 {
+                HStack {
+                    regenerateLearningObjectivesButton
+                    addOneLearningObjectiveButton
+                }
+            }
+        }
+    }
+    
+    var addOneLearningObjectiveButton: some View {
+        
+        Button(action: {
+            
+        }) {
+            ZStack {
+                
+                Image(systemName: "plus.square")
+                    .font(.system(size: 24, weight: .regular, design: .rounded))
+                    .padding()
+                    .background(content: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.black)
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(lineWidth: 4)
+                                .foregroundColor(.buttonPrimary)
+                        }
+                    })
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }
+        }
+    }
+    
+    var regenerateLearningObjectivesButton: some View {
+        VStack {
+            if viewModel.learningObjectives.count > 0 {
+                Button(action: {
+                    viewModel.learningObjectives = []
+                    viewModel.getLearningObjectives()
+                }) {
+                    HStack {
+                        ZStack {
+                            Image(systemName: "square")
+                                .font(.system(size: 24, weight: .regular, design: .rounded))
+                            Image(systemName: "arrow.clockwise")
+                                .font(.system(size: 10, weight: .bold, design: .rounded))
+                        }
+                        
+                        Text("Regenerate")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                    }
+                    .padding()
+                    .background(content: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.black)
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(lineWidth: 4)
+                                .foregroundColor(.buttonPrimary)
+                        }
+                    })
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                }
+            }
+        }
+    }
+    
+    var generateCourseOverviewButton: some View {
+        VStack {
+            if viewModel.learningObjectives.count > 0 {
+                Button(action: {
+                    courseOverviewPressed = true
+                    viewModel.getCourseTitleSuggestion()
+                }) {
+                    Text("Generate Course Title")
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .padding()
+                        .background(content: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundColor(.black)
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(lineWidth: 4)
+                                    .foregroundColor(.buttonPrimary)
+                            }
+                        })
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+            }
+        }
+    }
+    
+    var courseOverview: some View {
+        VStack {
+            HStack {
+                Image(systemName: "highlighter")
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .foregroundColor(.accent)
+                
+                Text("Course")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundColor(.primary)
+                
+                Spacer()
+            }.padding(.horizontal)
+            
+            ForEach(viewModel.courseOverviewSuggestions.indices, id: \.self) { index in
+                ZStack {
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(lineWidth: 2)
+                        .foregroundColor(.buttonPrimary)
+                        
+                    VStack {
+                        HStack {
+                            Image(systemName: "highlighter")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
+                            Text("Course Name")
+                                .font(.system(size: 20, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                            
+                            
+                            Button(action: {
+                                withAnimation {
+                                    var temp = viewModel.courseOverviewSuggestions
+                                    temp.remove(at: index)
+                                    viewModel.courseOverviewSuggestions = temp
+                                    
+                                    if viewModel.courseOverviewSuggestions.count == 0 {
+                                        courseOverviewPressed = false
+                                    }
+                                }
+                            }) {
+                                Image(systemName: "trash")
+                                    .foregroundColor(.buttonPrimary)
+                                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                            }
+                            
+                        }
+                        HStack {
+                            Text(viewModel.courseOverviewSuggestions[index].courseTitle)
+                                .font(.system(size: 16, weight: .regular, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                        }.padding(.bottom)
+                        
+                        HStack {
+                            Image(systemName: "doc.plaintext")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
+                            Text("Course Description")
+                                .font(.system(size: 20, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                        }
+                        
+                        HStack {
+                            Text(viewModel.courseOverviewSuggestions[index].courseDescription)
+                                .font(.system(size: 16, weight: .regular, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                        }.padding(.bottom)
+                    }
+                    .padding()
+                }.padding(.horizontal)
+            }
+            
+            if !prerequisitePressed && viewModel.prerequisites.count == 0 {
+                HStack {
+                    regenerateCourseOverviewButton
+                    
+                    addOneCourseOverviewButton
+                }
+            }
+        }
+    }
+    
+    var addOneCourseOverviewButton: some View {
+        
+        Button(action: {
+            
+        }) {
+            ZStack {
+                
+                Image(systemName: "plus.square")
+                    .font(.system(size: 24, weight: .regular, design: .rounded))
+                    .padding()
+                    .background(content: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.black)
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(lineWidth: 4)
+                                .foregroundColor(.buttonPrimary)
+                        }
+                    })
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }
+        }
+    }
+    
+    var regenerateCourseOverviewButton: some View {
+        VStack {
+            if viewModel.courseOverviewSuggestions.count > 0 {
+                Button(action: {
+                    viewModel.courseOverviewSuggestions = []
+                    viewModel.getCourseTitleSuggestion()
+                }) {
+                    HStack {
+                        ZStack {
+                            Image(systemName: "square")
+                                .font(.system(size: 24, weight: .regular, design: .rounded))
+                            Image(systemName: "arrow.clockwise")
+                                .font(.system(size: 10, weight: .bold, design: .rounded))
+                        }
+                        
+                        Text("Regenerate")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                    }
+                    .padding()
+                    .background(content: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.black)
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(lineWidth: 4)
+                                .foregroundColor(.buttonPrimary)
+                        }
+                    })
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                }
+            }
+        }
+    }
+    
+    var generatePrerequisitesButton: some View {
+        VStack {
+            if viewModel.courseOverviewSuggestions.count > 0 {
+                Button(action: {
+                    prerequisitePressed = true
+                    viewModel.getPrerequisites()
+                }) {
+                    Text("Generate Prerequisites")
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .padding()
+                        .background(content: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundColor(.black)
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(lineWidth: 4)
+                                    .foregroundColor(.buttonPrimary)
+                            }
+                        })
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+            }
+        }
+    }
+    
+    var prerequisitesView: some View {
+        VStack {
+            HStack {
+                Image(systemName: "directcurrent")
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .foregroundColor(.accent)
+                
+                Text("Prerequisites")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundColor(.primary)
+                
+                Spacer()
+            }.padding(.horizontal)
+            
+            ForEach(viewModel.prerequisites.indices, id: \.self) { index in
+                ZStack {
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(lineWidth: 2)
+                        .foregroundColor(.buttonPrimary)
+                        
+                    VStack {
+                        HStack {
+                            Image(systemName: "directcurrent")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
+                            Text("Prerequisite")
+                                .font(.system(size: 20, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                            
+                            
+                            Button(action: {
+                                withAnimation {
+                                    var temp = viewModel.prerequisites
+                                    temp.remove(at: index)
+                                    viewModel.prerequisites = temp
+                                    
+                                    if viewModel.prerequisites.count == 0 {
+                                        prerequisitePressed = false
+                                    }
+                                }
+                            }) {
+                                Image(systemName: "trash")
+                                    .foregroundColor(.buttonPrimary)
+                                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                            }
+                            
+                        }
+                        HStack {
+                            Text(viewModel.prerequisites[index].prerequisiteTitle)
+                                .font(.system(size: 16, weight: .regular, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                        }.padding(.bottom)
+                        
+                        HStack {
+                            Image(systemName: "doc.plaintext")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
+                            Text("Prerequisite Description")
+                                .font(.system(size: 20, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                        }
+                        
+                        HStack {
+                            Text(viewModel.prerequisites[index].prerequisiteDescription)
+                                .font(.system(size: 16, weight: .regular, design: .rounded))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                        }.padding(.bottom)
+                    }
+                    .padding()
+                }.padding(.horizontal)
+            }
+            
+        }
     }
     
     var addStartDate: some View {
@@ -191,7 +1058,7 @@ struct AddCoursePopUp: View {
                 ZStack{
                     RoundedRectangle(cornerRadius: 16)
                         .stroke(lineWidth: 2.5)
-                        .foregroundColor(Color.buttonPrimary)
+                        .foregroundColor(.buttonPrimary)
                     
                     HStack {
                         Spacer()

@@ -32,8 +32,8 @@ struct TimingStructure: Codable {
 }
 
 struct Textbook: Codable {
-    let title: String
-    let author: String
+    var title: String
+    var author: String
 }
 
 struct LearningObjective: Codable {
