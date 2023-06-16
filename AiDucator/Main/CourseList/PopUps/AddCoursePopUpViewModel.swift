@@ -79,6 +79,8 @@ class AddCoursePopUpViewModel: ObservableObject {
     @Published var selectedCourseIndex = -1
     
     @Published var loading = false
+    @Published var errorOcurred = false
+    
     
     init() {
         $className
@@ -95,11 +97,16 @@ class AddCoursePopUpViewModel: ObservableObject {
         self.loading = true
         courseDef.findTextbookOverlap(textbooks: textbooks)
             .receive(on: DispatchQueue.main)
-            .sink { completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .failure(let e):
                     print("AddCoursePopUpViewModel: Failed to get textbook overlap")
                     print("AddCoursePopUpViewModel-err: \(e)")
+                    
+                    withAnimation {
+                        self?.errorOcurred = true
+                        self?.loading = false
+                    }
                 case .finished:
                     print("AddCoursePopUpViewModel: Success")
                 }
@@ -119,11 +126,16 @@ class AddCoursePopUpViewModel: ObservableObject {
         if self.concepts.count != 0 {
             courseDef.getLearningObjectives(concepts: self.concepts)
                 .receive(on: DispatchQueue.main)
-                .sink { completion in
+                .sink { [weak self] completion in
                     switch completion {
                     case .failure(let e):
                         print("AddCoursePopUpViewModel: Failed to get learning objectives")
                         print("AddCoursePopUpViewModel: \(e)")
+                        
+                        withAnimation {
+                            self?.errorOcurred = true
+                            self?.loading = false
+                        }
                     case .finished:
                         print("AddCoursePopUpViewModel.getLearningObjectives: Success")
                     }
@@ -142,11 +154,16 @@ class AddCoursePopUpViewModel: ObservableObject {
             self.loading = true
             courseDef.getCourseTitleSuggestion(learningObjectives: self.learningObjectives)
                 .receive(on: DispatchQueue.main)
-                .sink { completion in
+                .sink { [weak self] completion in
                     switch completion {
                     case .failure(let e):
                         print("courseDef.getCourseTitleSuggestion: Failed")
                         print("courseDef.getCourseTitleSuggestion: \(e)")
+                        
+                        withAnimation {
+                            self?.errorOcurred = true
+                            self?.loading = false
+                        }
                     case .finished:
                         print("courseDef.getCourseTitleSuggestion: Success")
                     }
@@ -180,11 +197,16 @@ class AddCoursePopUpViewModel: ObservableObject {
             
             courseDef.getPrerequisites(input: input)
                 .receive(on: DispatchQueue.main)
-                .sink { completion in
+                .sink { [weak self] completion in
                     switch completion {
                     case .failure(let e):
                         print("courseDef.getCourseTitleSuggestion: Failed")
                         print("courseDef.getCourseTitleSuggestion: \(e)")
+                        
+                        withAnimation {
+                            self?.errorOcurred = true
+                            self?.loading = false
+                        }
                     case .finished:
                         print("courseDef.getCourseTitleSuggestion: Success")
                     }

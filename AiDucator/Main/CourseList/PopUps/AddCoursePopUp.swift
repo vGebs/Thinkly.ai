@@ -48,6 +48,13 @@ struct AddCoursePopUp: View {
                         Divider()
                         conceptTitleView
                         LoadingView()
+                    } else if viewModel.errorOcurred && !learningObjectivePressed && !courseOverviewPressed && !prerequisitePressed {
+                        ErrorPopup {
+                            withAnimation {
+                                viewModel.errorOcurred = false
+                                overlapPressed = false
+                            }
+                        }
                     }
                     
                     
@@ -64,6 +71,15 @@ struct AddCoursePopUp: View {
                             Divider()
                             learningObjectiveTitleView
                             LoadingView()
+                        } else if viewModel.errorOcurred && !courseOverviewPressed && !prerequisitePressed {
+                            Divider()
+                            learningObjectiveTitleView
+                            ErrorPopup {
+                                withAnimation {
+                                    viewModel.errorOcurred = false
+                                    learningObjectivePressed = false
+                                }
+                            }
                         }
                     }
                     
@@ -80,6 +96,15 @@ struct AddCoursePopUp: View {
                             Divider()
                             courseOverViewTitleView
                             LoadingView()
+                        } else if viewModel.errorOcurred && !prerequisitePressed {
+                            Divider()
+                            courseOverViewTitleView
+                            ErrorPopup {
+                                withAnimation {
+                                    viewModel.errorOcurred = false
+                                    courseOverviewPressed = false
+                                }
+                            }
                         }
                     }
                     
@@ -96,11 +121,20 @@ struct AddCoursePopUp: View {
                             Divider()
                             prerequisitesTitleView
                             LoadingView()
+                        } else if viewModel.errorOcurred {
+                            Divider()
+                            prerequisitesTitleView
+                            
+                            ErrorPopup {
+                                withAnimation {
+                                    viewModel.errorOcurred = false
+                                    prerequisitePressed = false
+                                }
+                            }
                         }
                     }
                     
                     VStack {
-                        
                         
                         if viewModel.prerequisites.count > 0 {
                             Divider()
@@ -155,7 +189,7 @@ struct AddCoursePopUp: View {
             VStack {
                 HStack {
                     Spacer()
-                    Text("Add Course")
+                    Text("Create Course")
                         .font(.system(size: 22, weight: .black, design: .rounded))
                         .foregroundColor(.primary)
                         .padding(.top)
@@ -1338,6 +1372,40 @@ struct AddCoursePopUp: View {
                 .padding(.trailing)
                 .padding(.bottom)
             }
+        }
+    }
+}
+
+struct ErrorPopup: View {
+    var action: () -> Void
+    @State var opacity = 1.0
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "figure.fall")
+                .font(.system(size: 20, weight: .bold, design: .rounded))
+                .foregroundColor(.accent)
+            VStack {
+                Text("Whoops.. we fell down..")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundColor(.accent)
+                Text("Please try again")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundColor(.accent)
+            }
+        }
+        .opacity(opacity)
+        .animation(.easeInOut(duration: 0.5), value: opacity)
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                withAnimation {
+                    opacity = 0
+                    action()
+                }
+            }
+        }
+        .onDisappear {
+            opacity = 1
         }
     }
 }
