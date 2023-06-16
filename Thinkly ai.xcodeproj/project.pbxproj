@@ -38,7 +38,7 @@
 		FA9CFAAA2A16B37C000BDE95 /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAA92A16B37C000BDE95 /* QuizView.swift */; };
 		FA9CFAAC2A16B390000BDE95 /* GradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAAB2A16B390000BDE95 /* GradesView.swift */; };
 		FA9CFAAE2A16D709000BDE95 /* SineWave.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAAD2A16D709000BDE95 /* SineWave.swift */; };
-		FA9CFAB02A171236000BDE95 /* AddCoursePopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAAF2A171236000BDE95 /* AddCoursePopUp.swift */; };
+		FA9CFAB02A171236000BDE95 /* CourseDefinitionPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAAF2A171236000BDE95 /* CourseDefinitionPopup.swift */; };
 		FA9CFAB22A171270000BDE95 /* AddCoursePopUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAB12A171270000BDE95 /* AddCoursePopUpViewModel.swift */; };
 		FA9CFAB52A182672000BDE95 /* AddCourseStudentPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAB42A182672000BDE95 /* AddCourseStudentPopup.swift */; };
 		FA9CFAB82A193D87000BDE95 /* NotesService_Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAB72A193D87000BDE95 /* NotesService_Firestore.swift */; };
@@ -101,7 +101,7 @@
 		FA9CFAA92A16B37C000BDE95 /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
 		FA9CFAAB2A16B390000BDE95 /* GradesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradesView.swift; sourceTree = "<group>"; };
 		FA9CFAAD2A16D709000BDE95 /* SineWave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SineWave.swift; sourceTree = "<group>"; };
-		FA9CFAAF2A171236000BDE95 /* AddCoursePopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCoursePopUp.swift; sourceTree = "<group>"; };
+		FA9CFAAF2A171236000BDE95 /* CourseDefinitionPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDefinitionPopup.swift; sourceTree = "<group>"; };
 		FA9CFAB12A171270000BDE95 /* AddCoursePopUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCoursePopUpViewModel.swift; sourceTree = "<group>"; };
 		FA9CFAB42A182672000BDE95 /* AddCourseStudentPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCourseStudentPopup.swift; sourceTree = "<group>"; };
 		FA9CFAB72A193D87000BDE95 /* NotesService_Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesService_Firestore.swift; sourceTree = "<group>"; };
@@ -277,7 +277,7 @@
 		FA9CFAB32A18265C000BDE95 /* PopUps */ = {
 			isa = PBXGroup;
 			children = (
-				FA9CFAAF2A171236000BDE95 /* AddCoursePopUp.swift */,
+				FA9CFAAF2A171236000BDE95 /* CourseDefinitionPopup.swift */,
 				FA9CFAB42A182672000BDE95 /* AddCourseStudentPopup.swift */,
 				FA9CFAB12A171270000BDE95 /* AddCoursePopUpViewModel.swift */,
 			);
@@ -498,7 +498,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA9CFAA82A16B355000BDE95 /* FeedView.swift in Sources */,
-				FA9CFAB02A171236000BDE95 /* AddCoursePopUp.swift in Sources */,
+				FA9CFAB02A171236000BDE95 /* CourseDefinitionPopup.swift in Sources */,
 				FAEC5D162A0EF21900A48F05 /* SigninSignupViewModel.swift in Sources */,
 				FA9CFAB52A182672000BDE95 /* AddCourseStudentPopup.swift in Sources */,
 				FA9E0B062A35572D0096BCCF /* assignmentCreationService.swift in Sources */,

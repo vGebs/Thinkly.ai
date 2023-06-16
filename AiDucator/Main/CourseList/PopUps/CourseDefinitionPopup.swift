@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AddCoursePopUp: View {
+struct CourseDefinitionPopup: View {
     @ObservedObject var classListViewModel: CourseListViewModel
     @Binding var addClassPressed: Bool
     
@@ -19,9 +19,10 @@ struct AddCoursePopUp: View {
     @State var overlapPressed = true
     @State var learningObjectivePressed = true
     @State var courseOverviewPressed = true
-    @State var prerequisitePressed = false
+    @State var prerequisitePressed = true
     
     @State var areYouSure = false
+    @State var aiGeneratedContentComplete = false
     
     var body: some View {
         ZStack {
@@ -34,124 +35,10 @@ struct AddCoursePopUp: View {
                     
                     header
                     
-                    if overlapPressed {
-                        hardCodedTextbooks
+                    if !aiGeneratedContentComplete {
+                        aiGeneratedPage
                     } else {
-                        addTextbooks
-                    }
-                    
-                    
-                    if !overlapPressed {
-                        Divider()
-                        overlapButton
-                    } else if viewModel.loading && !learningObjectivePressed && !courseOverviewPressed && !prerequisitePressed{
-                        Divider()
-                        conceptTitleView
-                        LoadingView()
-                    } else if viewModel.errorOcurred && !learningObjectivePressed && !courseOverviewPressed && !prerequisitePressed {
-                        ErrorPopup {
-                            withAnimation {
-                                viewModel.errorOcurred = false
-                                overlapPressed = false
-                            }
-                        }
-                    }
-                    
-                    
-                    
-                    if viewModel.concepts.count > 0 {
-                        Divider()
                         
-                        conceptsView
-                        
-                        if !learningObjectivePressed && viewModel.learningObjectives.count == 0{
-                            Divider()
-                            generateLearningObjectivesButton
-                        } else if viewModel.loading && !courseOverviewPressed && !prerequisitePressed{
-                            Divider()
-                            learningObjectiveTitleView
-                            LoadingView()
-                        } else if viewModel.errorOcurred && !courseOverviewPressed && !prerequisitePressed {
-                            Divider()
-                            learningObjectiveTitleView
-                            ErrorPopup {
-                                withAnimation {
-                                    viewModel.errorOcurred = false
-                                    learningObjectivePressed = false
-                                }
-                            }
-                        }
-                    }
-                    
-                    
-                    if viewModel.learningObjectives.count > 0 {
-                        Divider()
-                        
-                        learningObjectivesView
-                        
-                        if !courseOverviewPressed && viewModel.courseOverviewSuggestions.count == 0 {
-                            Divider()
-                            generateCourseOverviewButton
-                        } else if viewModel.loading && !prerequisitePressed {
-                            Divider()
-                            courseOverViewTitleView
-                            LoadingView()
-                        } else if viewModel.errorOcurred && !prerequisitePressed {
-                            Divider()
-                            courseOverViewTitleView
-                            ErrorPopup {
-                                withAnimation {
-                                    viewModel.errorOcurred = false
-                                    courseOverviewPressed = false
-                                }
-                            }
-                        }
-                    }
-                    
-                    
-                    if viewModel.courseOverviewSuggestions.count > 0 {
-                        Divider()
-                        
-                        courseOverviewView
-                        
-                        if !prerequisitePressed && viewModel.prerequisites.count == 0 {
-                            Divider()
-                            generatePrerequisitesButton
-                        } else if viewModel.loading {
-                            Divider()
-                            prerequisitesTitleView
-                            LoadingView()
-                        } else if viewModel.errorOcurred {
-                            Divider()
-                            prerequisitesTitleView
-                            
-                            ErrorPopup {
-                                withAnimation {
-                                    viewModel.errorOcurred = false
-                                    prerequisitePressed = false
-                                }
-                            }
-                        }
-                    }
-                    
-                    VStack {
-                        
-                        if viewModel.prerequisites.count > 0 {
-                            Divider()
-                            prerequisitesView
-                        }
-                        
-                        Divider()
-                        actionButton
-                        
-                        if viewModel.concepts.count > 0 || viewModel.learningObjectives.count > 0 || viewModel.courseOverviewSuggestions.count > 0 || viewModel.prerequisites.count > 0 {
-                            Divider()
-                            if !areYouSure {
-                                resetAllButton
-                            } else {
-                                areYouSureView
-                            }
-                        }
                     }
                 }
             }
@@ -170,6 +57,21 @@ struct AddCoursePopUp: View {
         ZStack {
             VStack {
                 HStack {
+                    if aiGeneratedContentComplete {
+                        Button(action: {
+                            withAnimation {
+                                aiGeneratedContentComplete = false
+                            }
+                        }) {
+                            Image(systemName: "arrowshape.backward")
+                                .font(.system(size: 20, weight: .bold, design: .rounded))
+                                .foregroundColor(.buttonPrimary)
+                        }
+                        .padding(.top)
+                        .padding(.leading)
+                    }
+                    
+                    Spacer()
                     Button(action: {
                         withAnimation {
                             addClassPressed = false
@@ -180,8 +82,7 @@ struct AddCoursePopUp: View {
                             .foregroundColor(.buttonPrimary)
                     }
                     .padding(.top)
-                    .padding(.leading)
-                    Spacer()
+                    .padding(.trailing)
                 }
                 Spacer()
             }
@@ -196,6 +97,130 @@ struct AddCoursePopUp: View {
                     Spacer()
                 }
                 Spacer()
+            }
+        }
+    }
+    
+    var aiGeneratedPage: some View {
+        VStack {
+            if overlapPressed {
+                hardCodedTextbooks
+            } else {
+                addTextbooks
+            }
+            
+            
+            if !overlapPressed {
+                Divider()
+                overlapButton
+            } else if viewModel.loading && !learningObjectivePressed && !courseOverviewPressed && !prerequisitePressed{
+                Divider()
+                conceptTitleView
+                LoadingView()
+            } else if viewModel.errorOcurred && !learningObjectivePressed && !courseOverviewPressed && !prerequisitePressed {
+                ErrorPopup {
+                    withAnimation {
+                        viewModel.errorOcurred = false
+                        overlapPressed = false
+                    }
+                }
+            }
+            
+            
+            
+            if viewModel.concepts.count > 0 {
+                Divider()
+                
+                conceptsView
+                
+                if !learningObjectivePressed && viewModel.learningObjectives.count == 0{
+                    Divider()
+                    generateLearningObjectivesButton
+                } else if viewModel.loading && !courseOverviewPressed && !prerequisitePressed{
+                    Divider()
+                    learningObjectiveTitleView
+                    LoadingView()
+                } else if viewModel.errorOcurred && !courseOverviewPressed && !prerequisitePressed {
+                    Divider()
+                    learningObjectiveTitleView
+                    ErrorPopup {
+                        withAnimation {
+                            viewModel.errorOcurred = false
+                            learningObjectivePressed = false
+                        }
+                    }
+                }
+            }
+            
+            
+            if viewModel.learningObjectives.count > 0 {
+                Divider()
+                
+                learningObjectivesView
+                
+                if !courseOverviewPressed && viewModel.courseOverviewSuggestions.count == 0 {
+                    Divider()
+                    generateCourseOverviewButton
+                } else if viewModel.loading && !prerequisitePressed {
+                    Divider()
+                    courseOverViewTitleView
+                    LoadingView()
+                } else if viewModel.errorOcurred && !prerequisitePressed {
+                    Divider()
+                    courseOverViewTitleView
+                    ErrorPopup {
+                        withAnimation {
+                            viewModel.errorOcurred = false
+                            courseOverviewPressed = false
+                        }
+                    }
+                }
+            }
+            
+            
+            if viewModel.courseOverviewSuggestions.count > 0 {
+                Divider()
+                
+                courseOverviewView
+                
+                if !prerequisitePressed && viewModel.prerequisites.count == 0 {
+                    Divider()
+                    generatePrerequisitesButton
+                } else if viewModel.loading {
+                    Divider()
+                    prerequisitesTitleView
+                    LoadingView()
+                } else if viewModel.errorOcurred {
+                    Divider()
+                    prerequisitesTitleView
+                    
+                    ErrorPopup {
+                        withAnimation {
+                            viewModel.errorOcurred = false
+                            prerequisitePressed = false
+                        }
+                    }
+                }
+            }
+            
+            VStack {
+                
+                if viewModel.prerequisites.count > 0 {
+                    Divider()
+                    prerequisitesView
+                }
+                
+                Divider()
+                actionButton
+                
+                if viewModel.concepts.count > 0 || viewModel.learningObjectives.count > 0 || viewModel.courseOverviewSuggestions.count > 0 || viewModel.prerequisites.count > 0 {
+                    Divider()
+                    if !areYouSure {
+                        resetAllButton
+                    } else {
+                        areYouSureView
+                    }
+                }
             }
         }
     }
@@ -856,23 +881,6 @@ struct AddCoursePopUp: View {
                             
                             Spacer()
                             
-                            
-//                            Button(action: {
-//                                withAnimation {
-//                                    var temp = viewModel.courseOverviewSuggestions
-//                                    temp.remove(at: index)
-//                                    viewModel.courseOverviewSuggestions = temp
-//
-//                                    if viewModel.courseOverviewSuggestions.count == 0 {
-//                                        courseOverviewPressed = false
-//                                    }
-//                                }
-//                            }) {
-//                                Image(systemName: "trash")
-//                                    .foregroundColor(.buttonPrimary)
-//                                    .font(.system(size: 16, weight: .bold, design: .rounded))
-//                            }
-                            
                             if !prerequisitePressed && viewModel.prerequisites.count == 0 {
                                 Image(systemName: viewModel.selectedCourseIndex == index ? "checkmark.square" : "square")
                                     .foregroundColor(.buttonPrimary)
@@ -1228,9 +1236,16 @@ struct AddCoursePopUp: View {
         VStack{
             Button(action: {
                 hideKeyboard()
-                classListViewModel.addCourse(title: viewModel.className, sfSymbol: viewModel.selectedClassType.sfSymbol, description: viewModel.classDescription, startDate: viewModel.durationFrom, endDate: viewModel.durationTo)
-                withAnimation {
-                    self.addClassPressed = false
+                
+                if aiGeneratedContentComplete {
+//                    classListViewModel.addCourse(title: viewModel.className, sfSymbol: viewModel.selectedClassType.sfSymbol, description: viewModel.classDescription, startDate: viewModel.durationFrom, endDate: viewModel.durationTo)
+                    withAnimation {
+                        self.addClassPressed = false
+                    }
+                } else {
+                    withAnimation {
+                        aiGeneratedContentComplete = true
+                    }
                 }
             }){
                 ZStack{
@@ -1240,7 +1255,7 @@ struct AddCoursePopUp: View {
                     
                     HStack {
                         Spacer()
-                        if !viewModel.titleIsValid {
+                        if viewModel.prerequisites.count == 0 {
                             Image(systemName: "lock")
                                 .font(.system(size: 18, weight: .bold, design: .rounded))
                                 .foregroundColor(.primary)
@@ -1250,7 +1265,7 @@ struct AddCoursePopUp: View {
                                 .foregroundColor(.primary)
                         }
                         
-                        Text("Add Course")
+                        Text(aiGeneratedContentComplete ? "Add Course" : "Continue")
                             .font(.system(size: 18, weight: .black, design: .rounded))
                             .foregroundColor(.white)
                             .padding(.vertical)
@@ -1259,11 +1274,8 @@ struct AddCoursePopUp: View {
                 }
             }
             .padding()
-//            .padding(.horizontal)
-//            .padding(.bottom)
-//            .padding(.top, 3)
-            .disabled(!self.viewModel.titleIsValid)
-            .opacity(self.viewModel.titleIsValid ? 1 : 0.4)
+            .disabled(viewModel.prerequisites.count == 0)
+            .opacity(viewModel.prerequisites.count > 0 ? 1 : 0.4)
         }
     }
     
@@ -1295,8 +1307,6 @@ struct AddCoursePopUp: View {
             }
         }
         .padding()
-//        .padding(.horizontal)
-//        .padding(.bottom)
     }
     
     var areYouSureView: some View {
