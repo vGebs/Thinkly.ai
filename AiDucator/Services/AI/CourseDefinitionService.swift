@@ -11,9 +11,18 @@ import Combine
 class CourseDefinitionService {
     let networkWrapper: NetworkWrapperCombine
     let baseURL = URL(string: "http://172.16.1.154:3000/courseDefinition")!
-
+    let pingURL = URL(string: "http://172.16.1.154:3000/ping")!
+    
     public init(networkWrapper: NetworkWrapperCombine = .init()) {
         self.networkWrapper = networkWrapper
+    }
+    
+    private func bundlePingRequest() -> URLRequest {
+        var request = URLRequest(url: pingURL)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        return request
     }
     
     public func findTextbookOverlap(textbooks: [Textbook]) -> AnyPublisher<ConceptResponse, Error> {
@@ -22,7 +31,7 @@ class CourseDefinitionService {
         request.httpMethod = "POST"
         request.httpBody = try? JSONEncoder().encode(textbooks)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        return networkWrapper.request(with: request)
+        return networkWrapper.request(with: request, timeout: 120, pingURLRequest: bundlePingRequest(), pingTimeout: 3)
     }
     
     public func getLearningObjectives(concepts: [Concept]) -> AnyPublisher<LearningObjectives, Error> {
@@ -31,7 +40,7 @@ class CourseDefinitionService {
         request.httpMethod = "POST"
         request.httpBody = try? JSONEncoder().encode(concepts)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        return networkWrapper.request(with: request)
+        return networkWrapper.request(with: request, timeout: 120, pingURLRequest: bundlePingRequest(), pingTimeout: 3)
     }
     
     public func getCourseTitleSuggestion(learningObjectives: [LearningObjective]) -> AnyPublisher<CourseOverviewSuggestions, Error> {
@@ -40,7 +49,7 @@ class CourseDefinitionService {
         request.httpMethod = "POST"
         request.httpBody = try? JSONEncoder().encode(learningObjectives)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        return networkWrapper.request(with: request)
+        return networkWrapper.request(with: request, timeout: 120, pingURLRequest: bundlePingRequest(), pingTimeout: 3)
     }
     
     public func getPrerequisites(input: PrerequisitesInput) -> AnyPublisher<Prerequisites, Error> {
@@ -49,7 +58,7 @@ class CourseDefinitionService {
         request.httpMethod = "POST"
         request.httpBody = try? JSONEncoder().encode(input)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        return networkWrapper.request(with: request)
+        return networkWrapper.request(with: request, timeout: 120, pingURLRequest: bundlePingRequest(), pingTimeout: 3)
     }
 }
 
