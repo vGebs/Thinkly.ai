@@ -6,6 +6,14 @@
 //
 
 import Foundation
+import FirebaseFirestoreSwift
+
+struct CourseDefinition_firestore: Codable, FirestoreProtocol {
+    @DocumentID var documentID: String?
+    let courseFull: CourseFull
+    let teacherID: String
+    var sfSymbol: String
+}
 
 struct CourseFull: Codable {
     let courseAssessments: [Assessment]
@@ -15,20 +23,20 @@ struct CourseFull: Codable {
     let learningObjectives: [LearningObjective]
     let courseOverview: CourseOverview
     let prerequisites: [Prerequisite]
-    let weeklyContents: [WeeklyContent]
+    var weeklyContents: [WeeklyContent]
 }
 
 struct Assessment: Codable {
     let assessmentType: String
-    let assessmentCount: Int
-    let percentageOfFinalGrade: Int
+    var assessmentCount: Int
+    var percentageOfFinalGrade: Int
 }
 
 struct TimingStructure: Codable {
-    let courseDurationInWeeks: Int
-    let classLengthInHours: Int
-    let classesPerWeek: Int
-    let studyHoursPerWeek: Int
+    var courseDurationInWeeks: Int
+    var classLengthInMinutes: Int
+    var classesPerWeek: Int
+    var studyHoursPerWeek: Int
 }
 
 struct Textbook: Codable {

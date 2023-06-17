@@ -16,13 +16,22 @@ struct CourseDefinitionPopup: View {
     @State var textIsValid = true
     var warning = "Enter the title for the class"
     
-    @State var overlapPressed = true
-    @State var learningObjectivePressed = true
-    @State var courseOverviewPressed = true
-    @State var prerequisitePressed = true
+    @State var overlapPressed = false
+    @State var learningObjectivePressed = false
+    @State var courseOverviewPressed = false
+    @State var prerequisitePressed = false
     
     @State var areYouSure = false
-    @State var aiGeneratedContentComplete = false
+    @State var userInputPageComplete = false
+    
+    
+    @State private var shouldScrollToTop = false
+
+    func scrollToTop() {
+        withAnimation {
+            shouldScrollToTop = true
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -31,14 +40,48 @@ struct CourseDefinitionPopup: View {
             
             
             VStack {
-                ScrollView {
-                    
-                    header
-                    
-                    if !aiGeneratedContentComplete {
-                        aiGeneratedPage
-                    } else {
-                        
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack {
+                            header
+                                .id(0)
+                            
+                            if !userInputPageComplete {
+                                gradeLevelView
+                                Divider()
+                                timingStructureView
+                                Divider()
+                                assessmentsView
+                                Divider()
+                                addSymbol
+                            } else {
+                                aiGeneratedPage
+                            }
+                            
+                            Divider()
+                            if !userInputPageComplete {
+                                actionButtonUserInput
+                            } else {
+                                actionButtonAIGenerated
+                            }
+                            
+                            if viewModel.concepts.count > 0 || viewModel.learningObjectives.count > 0 || viewModel.courseOverviewSuggestions.count > 0 || viewModel.prerequisites.count > 0 || (!userInputPageComplete && viewModel.gradeLevelValid){
+                                Divider()
+                                if !areYouSure {
+                                    resetAllButton
+                                } else {
+                                    areYouSureView
+                                }
+                            }
+                        }
+                        .onChange(of: shouldScrollToTop) { newValue in
+                            if newValue {
+                                withAnimation {
+                                    proxy.scrollTo(0, anchor: .top)
+                                    shouldScrollToTop = false
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -57,10 +100,10 @@ struct CourseDefinitionPopup: View {
         ZStack {
             VStack {
                 HStack {
-                    if aiGeneratedContentComplete {
+                    if userInputPageComplete {
                         Button(action: {
                             withAnimation {
-                                aiGeneratedContentComplete = false
+                                userInputPageComplete = false
                             }
                         }) {
                             Image(systemName: "arrowshape.backward")
@@ -209,18 +252,6 @@ struct CourseDefinitionPopup: View {
                     Divider()
                     prerequisitesView
                 }
-                
-                Divider()
-                actionButton
-                
-                if viewModel.concepts.count > 0 || viewModel.learningObjectives.count > 0 || viewModel.courseOverviewSuggestions.count > 0 || viewModel.prerequisites.count > 0 {
-                    Divider()
-                    if !areYouSure {
-                        resetAllButton
-                    } else {
-                        areYouSureView
-                    }
-                }
             }
         }
     }
@@ -307,6 +338,14 @@ struct CourseDefinitionPopup: View {
                     .foregroundColor(.primary)
                 
                 Spacer()
+                
+                Menu {
+                    Text("Textbook Mashup Mode requires at least 2 textbooks")
+                } label: {
+                    Label("", systemImage: "exclamationmark.circle")
+                        .foregroundColor(.buttonPrimary)
+                }
+                .font(.system(size: 14, weight: .semibold, design: .rounded))
             }.padding(.horizontal)
             ForEach(viewModel.textbooks.indices, id: \.self) { index in
                 ZStack {
@@ -1232,20 +1271,14 @@ struct CourseDefinitionPopup: View {
         .padding(.top, 2)
     }
     
-    var actionButton: some View{
+    var actionButtonUserInput: some View {
         VStack{
             Button(action: {
                 hideKeyboard()
                 
-                if aiGeneratedContentComplete {
-//                    classListViewModel.addCourse(title: viewModel.className, sfSymbol: viewModel.selectedClassType.sfSymbol, description: viewModel.classDescription, startDate: viewModel.durationFrom, endDate: viewModel.durationTo)
-                    withAnimation {
-                        self.addClassPressed = false
-                    }
-                } else {
-                    withAnimation {
-                        aiGeneratedContentComplete = true
-                    }
+                withAnimation {
+                    userInputPageComplete = true
+                    scrollToTop()
                 }
             }){
                 ZStack{
@@ -1255,6 +1288,57 @@ struct CourseDefinitionPopup: View {
                     
                     HStack {
                         Spacer()
+                        
+                        if !viewModel.gradeLevelValid {
+                            Image(systemName: "lock")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                        } else {
+                            Image(systemName: "lock.open")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                        }
+                        
+                        Text("Continue")
+                            .font(.system(size: 18, weight: .black, design: .rounded))
+                            .foregroundColor(.white)
+                            .padding(.vertical)
+                        Spacer()
+                    }
+                }
+            }
+            .padding()
+            .disabled(!viewModel.gradeLevelValid)
+            .opacity(viewModel.gradeLevelValid ? 1 : 0.4)
+        }
+    }
+    
+    var actionButtonAIGenerated: some View{
+        VStack{
+            Button(action: {
+                hideKeyboard()
+                
+                // classListViewModel.addCourse(title: viewModel.className, sfSymbol: viewModel.selectedClassType.sfSymbol, description: viewModel.classDescription, startDate: viewModel.durationFrom, endDate: viewModel.durationTo)
+                withAnimation {
+                    overlapPressed = false
+                    learningObjectivePressed = false
+                    courseOverviewPressed = false
+                    prerequisitePressed = false
+                    addClassPressed = false
+                    
+                    userInputPageComplete = false
+                    scrollToTop()
+                    viewModel.resetAll()
+                }
+            }){
+                ZStack{
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(lineWidth: 2.5)
+                        .foregroundColor(.buttonPrimary)
+                    
+                    HStack {
+                        Spacer()
+                        
                         if viewModel.prerequisites.count == 0 {
                             Image(systemName: "lock")
                                 .font(.system(size: 18, weight: .bold, design: .rounded))
@@ -1265,7 +1349,7 @@ struct CourseDefinitionPopup: View {
                                 .foregroundColor(.primary)
                         }
                         
-                        Text(aiGeneratedContentComplete ? "Add Course" : "Continue")
+                        Text("Add Course")
                             .font(.system(size: 18, weight: .black, design: .rounded))
                             .foregroundColor(.white)
                             .padding(.vertical)
@@ -1309,6 +1393,416 @@ struct CourseDefinitionPopup: View {
         .padding()
     }
     
+    var gradeLevelView: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(lineWidth: 2)
+                .foregroundColor(.buttonPrimary)
+            
+            VStack {
+                HStack {
+                    TextFieldView(outputText: $viewModel.gradeLevel, inputWarning: $viewModel.gradeLevelValid, title: "Grade Level", imageString: "figure.stairs", phoneOrTextfield: .textfield, warning: "Please enter the grade level. (i.e., Grade 11, 3rd-Year Engg)", isSecureField: false)
+                }
+                .padding(.top,2)
+            }
+            .padding(.vertical)
+        }
+        .padding(.horizontal)
+    }
+    
+    var timingStructureTitle: some View {
+        HStack {
+            Image(systemName: "clock")
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .foregroundColor(.accent)
+            
+            Text("Timing Structure")
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundColor(.primary)
+            
+            Spacer()
+        }.padding(.horizontal)
+    }
+    
+    var timingStructureView: some View {
+        
+        VStack {
+            timingStructureTitle
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(lineWidth: 3)
+                    .foregroundColor(.buttonPrimary)
+                
+                VStack {
+                    HStack {
+                        Image(systemName: "clock")
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                            .foregroundColor(.accent)
+                        
+                        Text(String("Class Length (in minutes)"))
+                            .font(.system(size: 16, weight: .bold, design: .rounded))
+                            .foregroundColor(.primary)
+                        
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            if viewModel.timingStructure.classLengthInMinutes > 0 {
+                                viewModel.timingStructure.classLengthInMinutes -= 1
+                            }
+                        }) {
+                            Image(systemName: "minus.square")
+                                .font(.system(size: 22, weight: .bold, design: .rounded))
+                                .foregroundColor(.buttonPrimary)
+                        }
+                        
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 5)
+                                .stroke(lineWidth: 2)
+                                .foregroundColor(.accent)
+                            
+                            Text(String(viewModel.timingStructure.classLengthInMinutes))
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                        }
+                        
+                        Button(action: {
+                            viewModel.timingStructure.classLengthInMinutes += 1
+                        }) {
+                            Image(systemName: "plus.square")
+                                .font(.system(size: 22, weight: .bold, design: .rounded))
+                                .foregroundColor(.buttonPrimary)
+                        }
+                        Spacer()
+                    }.padding(.bottom, 4)
+                
+                    
+                    HStack {
+                        Image(systemName: "number.square")
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                            .foregroundColor(.accent)
+                        
+                        Text(String("Number of Classes per Week"))
+                            .font(.system(size: 16, weight: .bold, design: .rounded))
+                            .foregroundColor(.primary)
+                        
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            if viewModel.timingStructure.classesPerWeek > 0 {
+                                viewModel.timingStructure.classesPerWeek -= 1
+                            }
+                        }) {
+                            Image(systemName: "minus.square")
+                                .font(.system(size: 22, weight: .bold, design: .rounded))
+                                .foregroundColor(.buttonPrimary)
+                        }
+                        
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 5)
+                                .stroke(lineWidth: 2)
+                                .foregroundColor(.accent)
+                            
+                            Text(String(viewModel.timingStructure.classesPerWeek))
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                        }
+                        
+                        Button(action: {
+                            viewModel.timingStructure.classesPerWeek += 1
+                        }) {
+                            Image(systemName: "plus.square")
+                                .font(.system(size: 22, weight: .bold, design: .rounded))
+                                .foregroundColor(.buttonPrimary)
+                        }
+                        Spacer()
+                    }.padding(.bottom, 4)
+                    
+                    HStack {
+                        Image(systemName: "pencil.line")
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                            .foregroundColor(.accent)
+                        
+                        Text(String("Expected Study Hrs per Week"))
+                            .font(.system(size: 16, weight: .bold, design: .rounded))
+                            .foregroundColor(.primary)
+                        
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            if viewModel.timingStructure.studyHoursPerWeek > 0 {
+                                viewModel.timingStructure.studyHoursPerWeek -= 1
+                            }
+                        }) {
+                            Image(systemName: "minus.square")
+                                .font(.system(size: 22, weight: .bold, design: .rounded))
+                                .foregroundColor(.buttonPrimary)
+                        }
+                        
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 5)
+                                .stroke(lineWidth: 2)
+                                .foregroundColor(.accent)
+                            
+                            Text(String(viewModel.timingStructure.studyHoursPerWeek))
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                        }
+                        
+                        Button(action: {
+                            viewModel.timingStructure.studyHoursPerWeek += 1
+                        }) {
+                            Image(systemName: "plus.square")
+                                .font(.system(size: 22, weight: .bold, design: .rounded))
+                                .foregroundColor(.buttonPrimary)
+                        }
+                        Spacer()
+                    }.padding(.bottom, 4)
+                    
+                    HStack {
+                        Image(systemName: "calendar.badge.clock")
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                            .foregroundColor(.accent)
+                        
+                        Text(String("Duration of Course in Weeks"))
+                            .font(.system(size: 16, weight: .bold, design: .rounded))
+                            .foregroundColor(.primary)
+                        
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            if viewModel.timingStructure.courseDurationInWeeks > 0 {
+                                viewModel.timingStructure.courseDurationInWeeks -= 1
+                            }
+                        }) {
+                            Image(systemName: "minus.square")
+                                .font(.system(size: 22, weight: .bold, design: .rounded))
+                                .foregroundColor(.buttonPrimary)
+                        }
+                        
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 5)
+                                .stroke(lineWidth: 2)
+                                .foregroundColor(.accent)
+                            
+                            Text(String(viewModel.timingStructure.courseDurationInWeeks))
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                        }
+                        
+                        Button(action: {
+                            viewModel.timingStructure.courseDurationInWeeks += 1
+                        }) {
+                            Image(systemName: "plus.square")
+                                .font(.system(size: 22, weight: .bold, design: .rounded))
+                                .foregroundColor(.buttonPrimary)
+                        }
+                        Spacer()
+                    }
+                }
+                .padding()
+            }
+            .padding(.horizontal)
+        }
+    }
+    
+    var assessmentsTitle: some View {
+        HStack {
+            Image(systemName: "checklist.checked")
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .foregroundColor(.accent)
+            
+            Text("Assessments")
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundColor(.primary)
+            
+            Spacer()
+        }.padding(.horizontal)
+    }
+    
+    var assessmentsView: some View {
+        VStack {
+            assessmentsTitle
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(lineWidth: 3)
+                    .foregroundColor(.buttonPrimary)
+                VStack {
+                    HStack {
+                        Image(systemName: "exclamationmark.3")
+                            .font(.system(size: 20, weight: .bold, design: .rounded))
+                            .foregroundColor(.accent)
+                        
+                        Text("Note")
+                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                            .foregroundColor(.primary)
+                        Spacer()
+                    }
+                    .padding(.bottom,3)
+                    
+                    HStack {
+                        Image(systemName: "exclamationmark.square")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .foregroundColor(.accent)
+                        
+                        Text("If the grade percentage is adjusted to zero, the type of assessment will be excluded.")
+                            .font(.system(size: 16, weight: .regular, design: .rounded))
+                            .foregroundColor(.gray)
+                        Spacer()
+                    }
+                    .padding(.bottom,5)
+                    
+                    HStack {
+                        Image(systemName: "exclamationmark.square")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .foregroundColor(.accent)
+                        
+                        Text("If all assessments are assigned a value of zero, the model will NOT allocate time for them in the course schedule.")
+                            .font(.system(size: 16, weight: .regular, design: .rounded))
+                            .foregroundColor(.gray)
+                        Spacer()
+                    }
+                }
+                .padding()
+            }.padding(.horizontal)
+            
+            ForEach(viewModel.courseAssessments.indices, id: \.self) { index in
+                VStack {
+                    HStack {
+                        if viewModel.courseAssessments[index].assessmentType == "Assignments" {
+                            Image(systemName: "tray")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
+                        } else if viewModel.courseAssessments[index].assessmentType == "Quizzes" {
+                            Image(systemName: "list.bullet.clipboard")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
+                        } else if viewModel.courseAssessments[index].assessmentType == "Labs" {
+                            Image(systemName: "testtube.2")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
+                        } else if viewModel.courseAssessments[index].assessmentType == "Midterms" {
+                            Image(systemName: "square.3.layers.3d.middle.filled")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
+                        } else if viewModel.courseAssessments[index].assessmentType == "Projects" {
+                            Image(systemName: "gearshape.2")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
+                        } else if viewModel.courseAssessments[index].assessmentType == "Final Exam" {
+                            Image(systemName: "text.line.last.and.arrowtriangle.forward")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.accent)
+                        }
+                        
+                        Text(viewModel.courseAssessments[index].assessmentType)
+                            .font(.system(size: 20, weight: .bold, design: .rounded))
+                            .foregroundColor(.primary)
+                        
+                        Spacer()
+                        
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 5)
+                    
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(lineWidth: 2)
+                            .foregroundColor(.buttonPrimary)
+                            
+                        VStack {
+                            if viewModel.courseAssessments[index].assessmentType != "Final Exam" {
+                                HStack {
+                                    Image(systemName: "number.square")
+                                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                                        .foregroundColor(.accent)
+                                    
+                                    Text("Number of \(viewModel.courseAssessments[index].assessmentType)")
+                                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                                        .foregroundColor(.primary)
+                                    
+                                    Spacer()
+                                }
+                                
+                                HStack {
+                                    Spacer()
+                                    Button(action: {
+                                        if viewModel.courseAssessments[index].assessmentCount > 0 {
+                                            viewModel.courseAssessments[index].assessmentCount -= 1
+                                        }
+                                    }) {
+                                        Image(systemName: "minus.square")
+                                            .font(.system(size: 22, weight: .bold, design: .rounded))
+                                            .foregroundColor(.buttonPrimary)
+                                    }
+                                    
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .stroke(lineWidth: 2)
+                                            .foregroundColor(.accent)
+                                        
+                                        Text(String(viewModel.courseAssessments[index].assessmentCount))
+                                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                                            .foregroundColor(.primary)
+                                    }
+                                    
+                                    Button(action: {
+                                        viewModel.courseAssessments[index].assessmentCount += 1
+                                    }) {
+                                        Image(systemName: "plus.square")
+                                            .font(.system(size: 22, weight: .bold, design: .rounded))
+                                            .foregroundColor(.buttonPrimary)
+                                    }
+                                    Spacer()
+                                }
+                            }
+                            
+                            HStack {
+                                Image(systemName: "percent")
+                                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                                    .foregroundColor(.accent)
+                                Text("Percentage of Final Grade")
+                                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                                    .foregroundColor(.primary)
+                                
+                                Spacer()
+                            }
+                            
+                            HStack {
+                                Picker("Course Symbol", selection: $viewModel.courseAssessments[index].percentageOfFinalGrade) {
+                                    ForEach(0..<101) { num in
+                                        HStack {
+                                            Text(String(num))
+                                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                                .foregroundColor(.primary)
+                                        }
+                                        .tag(num)
+                                    }
+                                }
+                                .frame(height: screenHeight / 10)
+                                .pickerStyle(WheelPickerStyle())
+                            }
+                        }
+                        .padding()
+                    }.padding(.horizontal)
+                }
+            }
+        }
+    }
+    
     var areYouSureView: some View {
         VStack{
             Text("Are you sure you want to reset your progress")
@@ -1318,14 +1812,19 @@ struct CourseDefinitionPopup: View {
             HStack {
                 Button(action: {
                     withAnimation {
-                        viewModel.resetAll()
-                        
-                        overlapPressed = false
-                        learningObjectivePressed = false
-                        courseOverviewPressed = false
-                        prerequisitePressed = false
+                        if !userInputPageComplete {
+                            viewModel.resetUserInput()
+                        } else {
+                            viewModel.resetAllAIGenerated()
+                            
+                            overlapPressed = false
+                            learningObjectivePressed = false
+                            courseOverviewPressed = false
+                            prerequisitePressed = false
+                        }
                         
                         areYouSure = false
+                        scrollToTop()
                     }
                 }) {
                     ZStack{
@@ -1426,13 +1925,13 @@ struct ClassType: Identifiable, Hashable {
 }
 
 let classTypes: [ClassType] = [
+    ClassType(id: "Computer Science", sfSymbol: "desktopcomputer"),
     ClassType(id: "Math", sfSymbol: "percent"),
     ClassType(id: "English Literature", sfSymbol: "book"),
     ClassType(id: "Biology", sfSymbol: "leaf.arrow.triangle.circlepath"),
     ClassType(id: "Physical Education", sfSymbol: "figure.walk"),
     ClassType(id: "History", sfSymbol: "clock"),
     ClassType(id: "Geography", sfSymbol: "globe"),
-    ClassType(id: "Computer Science", sfSymbol: "desktopcomputer"),
     ClassType(id: "Art", sfSymbol: "paintbrush"),
     ClassType(id: "Music", sfSymbol: "music.note"),
     ClassType(id: "Physics", sfSymbol: "atom"),
