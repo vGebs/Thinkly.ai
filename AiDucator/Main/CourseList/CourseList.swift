@@ -78,7 +78,6 @@ struct CourseList: View {
                                         CourseButton(course: course)
                                             .padding(.vertical, 3)
                                     }
-                                    .frame(width: screenWidth, height: screenHeight * 0.085)
                                 }
                                 .padding(.top, 10)
                             }
@@ -272,6 +271,7 @@ struct CourseList: View {
 struct CourseButton: View {
     
     var course: CourseDefinition
+    @State var showDescription = false
     
     var body: some View {
         ZStack {
@@ -283,46 +283,61 @@ struct CourseButton: View {
                 .stroke(lineWidth: 3)
                 .foregroundColor(.buttonPrimary)
             
-            HStack {
-                ZStack {
-                    VStack {
-                        Spacer()
-                        
-                        HStack {
-                            Spacer()
-                            Image(systemName: course.sfSymbol)
+            VStack {
+                HStack {
+                    Image(systemName: course.sfSymbol)
+                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                        .foregroundColor(.accent)
+                    
+                    Spacer()
+                    
+                    Text(course.courseFull.courseOverview.courseTitle)
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .foregroundColor(.primary)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        if !showDescription {
+                            withAnimation {
+                                showDescription = true
+                            }
+                        } else {
+                            withAnimation {
+                                showDescription = false
+                            }
+                        }
+                    }) {
+                        if !showDescription {
+                            Image(systemName: "chevron.down")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.buttonPrimary)
+                        } else {
+                            Image(systemName: "chevron.up")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.buttonPrimary)
+                        }
+                    }
+                }.padding(.bottom,3)
+                
+                if showDescription {
+                    HStack {
+                        VStack {
+                            Image(systemName: "doc.plaintext")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
                                 .foregroundColor(.accent)
-                                .font(.system(size: 25, weight: .bold, design: .rounded))
-                                .padding(.leading)
-                                .padding(.vertical)
                             Spacer()
                         }
                         
-                        Spacer()
-                    }
-                }
-                .padding(.leading, 9)
-                .padding(.trailing, 3)
-                .frame(width: screenHeight / 22, height: screenHeight / 22)
-                
-                VStack {
-                    HStack {
-                        Text(course.courseFull.courseOverview.courseTitle)
-                            .font(.system(size: 18, weight: .bold, design: .rounded))
-                            .foregroundColor(.primary)
-                        
-                        Spacer()
-                    }
-                    
-                    HStack {
                         Text(course.courseFull.courseOverview.courseDescription)
+                            .multilineTextAlignment(.leading)
                             .font(.system(size: 16, weight: .light, design: .rounded))
                             .foregroundColor(.primary)
                         
                         Spacer()
                     }
-                }.padding(.leading)
-            }
+                }
+            }.padding()
         }
         .padding(.horizontal)
     }
