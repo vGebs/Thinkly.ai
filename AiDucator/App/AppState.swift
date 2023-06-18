@@ -104,11 +104,13 @@ extension AppState {
                     return
                 }
                 
-                self?.user = User(documentID: u.documentID!,
-                                  name: u.name,
-                                  role: u.role,
-                                  uid: u.uid,
-                                  birthdate: u.birthdate)
+                self?.user = User(
+                    documentID: u.documentID!,
+                    name: u.name,
+                    role: u.role,
+                    uid: u.uid,
+                    birthdate: u.birthdate
+                )
                 
                 // 2. Determine if user is a teacher or student
                 if u.role == "teacher" {
@@ -263,6 +265,6 @@ extension AppState {
 
 extension AppState {
     func clearCache() {
-        ThinklyModel.shared.courseService.clearCache()
+        //ThinklyModel.shared.courseService.clearCache()
     }
 }

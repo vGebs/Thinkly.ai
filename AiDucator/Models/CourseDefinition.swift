@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseFirestoreSwift
 
-struct CourseDefinition_firestore: Codable, FirestoreProtocol {
+struct CourseDefinition: Codable, FirestoreProtocol {
     @DocumentID var documentID: String?
     let courseFull: CourseFull
     let teacherID: String

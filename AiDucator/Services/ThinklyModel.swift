@@ -15,7 +15,7 @@ class ThinklyModel {
     let model: CoreDataWrapper
     
     let userService: UserService_CoreData
-    let courseService: CourseService_CoreData
+    //let courseService: CourseService_CoreData
     
     private init() {
         let storeURL = try! FileManager.default
@@ -24,6 +24,6 @@ class ThinklyModel {
         model = CoreDataWrapper(modelName: "ThinklyModel", storeURL: storeURL)
         
         self.userService = UserService_CoreData(model: model)
-        self.courseService = CourseService_CoreData(model: model)
+        //self.courseService = CourseService_CoreData(model: model)
     }
 }

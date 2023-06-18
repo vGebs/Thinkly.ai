@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct CourseView: View {
-    @Binding var course: Course?
+    @Binding var course: CourseDefinition?
 
     @ObservedObject var offsetManager = OffsetManager.shared
     
@@ -34,7 +34,7 @@ struct CourseView: View {
                             .font(.system(size: 12, weight: .black, design: .rounded))
                             .foregroundColor(.black)
                             
-                        Text(course!.title)
+                        Text(course!.courseFull.courseOverview.courseTitle)
                             .font(.system(size: 14, weight: .black, design: .rounded))
                             .foregroundColor(.buttonPrimary)
                     }

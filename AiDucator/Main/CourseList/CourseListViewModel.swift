@@ -12,7 +12,7 @@ class CourseListViewModel: ObservableObject {
     
     private var cancellables: [AnyCancellable] = []
     
-    @Published var courses: [Course]?
+    @Published var courses: [CourseDefinition]?
     
     init() {
         AppState.shared.$user
@@ -23,9 +23,7 @@ class CourseListViewModel: ObservableObject {
             }.store(in: &cancellables)
     }
     
-    func addCourse(title: String, sfSymbol: String, description: String, startDate: Date, endDate: Date) {
-        
-        let course = Course(title: title, sfSymbol: sfSymbol, description: description, startDate: startDate, endDate: endDate, teacherID: AuthService.shared.user!.uid)
+    func addCourse(course: CourseDefinition) {
         
         CourseService_Firestore.shared.addCourse(course)
             .sink { completion in

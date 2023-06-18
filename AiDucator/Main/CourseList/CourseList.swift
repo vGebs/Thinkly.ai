@@ -25,7 +25,7 @@ import Combine
 struct CourseList: View {
 
     @StateObject var viewModel = CourseListViewModel()
-    @Binding var currentCourse: Course?
+    @Binding var currentCourse: CourseDefinition?
     
     @State var addClassPopUpPressed = false
     
@@ -55,7 +55,8 @@ struct CourseList: View {
                         Spacer()
                         
                         noCourses
-                        
+                        Spacer()
+                        Spacer()
                         Spacer()
                         
                     } else {
@@ -63,11 +64,12 @@ struct CourseList: View {
                             Spacer()
                             
                             noCourses
-                            
+                            Spacer()
+                            Spacer()
                             Spacer()
                         } else {
                             ScrollView(showsIndicators: false) {
-                                ForEach(viewModel.courses!, id: \.title) { course in
+                                ForEach(viewModel.courses!, id: \.courseFull.courseOverview.courseTitle) { course in
                                     Button(action: {
                                         withAnimation {
                                             self.currentCourse = course
@@ -203,25 +205,35 @@ struct CourseList: View {
     }
     
     var noCourses: some View {
-        VStack {
-            HStack {
-                
-                Image(systemName: "exclamationmark.triangle")
-                    .foregroundColor(.accent)
-                    .font(.system(size: 30, weight: .bold, design: .rounded))
-                
-                Text("You have no active courses")
-                    .foregroundColor(.primary)
-                    .font(.system(size: 20, weight: .bold, design: .rounded))
-                
-                Image(systemName: "exclamationmark.triangle")
-                    .foregroundColor(.accent)
-                    .font(.system(size: 30, weight: .bold, design: .rounded))
-                
-            }
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .foregroundColor(.black)
             
-            addClassButton_big
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(lineWidth: 3)
+                .foregroundColor(.buttonPrimary)
+            VStack {
+                HStack {
+                    
+                    Image(systemName: "exclamationmark.triangle")
+                        .foregroundColor(.accent)
+                        .font(.system(size: 30, weight: .bold, design: .rounded))
+                    
+                    Text("You have no active courses")
+                        .foregroundColor(.primary)
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                    
+                    Image(systemName: "exclamationmark.triangle")
+                        .foregroundColor(.accent)
+                        .font(.system(size: 30, weight: .bold, design: .rounded))
+                    
+                }
+                
+                addClassButton_big
+            }.padding()
         }
+        .padding(.horizontal)
+        .frame(height: screenHeight * 0.15)
     }
     
     var addClassButton_big: some View {
@@ -259,7 +271,7 @@ struct CourseList: View {
 
 struct CourseButton: View {
     
-    var course: Course
+    var course: CourseDefinition
     
     var body: some View {
         ZStack {
@@ -295,7 +307,7 @@ struct CourseButton: View {
                 
                 VStack {
                     HStack {
-                        Text(course.title)
+                        Text(course.courseFull.courseOverview.courseTitle)
                             .font(.system(size: 18, weight: .bold, design: .rounded))
                             .foregroundColor(.primary)
                         
@@ -303,7 +315,7 @@ struct CourseButton: View {
                     }
                     
                     HStack {
-                        Text(course.description)
+                        Text(course.courseFull.courseOverview.courseDescription)
                             .font(.system(size: 16, weight: .light, design: .rounded))
                             .foregroundColor(.primary)
                         

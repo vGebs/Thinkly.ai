@@ -10,7 +10,7 @@ import SwiftUI
 
 struct MainView: View {
     
-    @State var course: Course?
+    @State var course: CourseDefinition?
     @State private var offset: CGFloat = .zero
     
     var body: some View {
