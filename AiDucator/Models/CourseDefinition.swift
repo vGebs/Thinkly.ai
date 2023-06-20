@@ -59,7 +59,8 @@ struct Prerequisite: Codable {
     let prerequisiteTitle: String
 }
 
-struct WeeklyContent: Codable {
+struct WeeklyContent: Codable, Identifiable {
+    var id = UUID().uuidString
     let notesOutline: [NoteOutline]
     let assessments: [WeekAssessment]
     let topics: [Topic]
@@ -84,14 +85,16 @@ struct WeekAssessment: Codable {
     let assessmentType: String
 }
 
-struct Topic: Codable {
+struct Topic: Codable, Identifiable {
+    var id = UUID().uuidString
     let readings: [Reading]
     let topicName: String
 }
 
-struct Reading: Codable {
+struct Reading: Codable, Identifiable {
+    var id = UUID().uuidString
     let chapter: Int
-    let textbook: String
+    let textbook: Textbook
 }
 
 struct ClassOutline: Codable {

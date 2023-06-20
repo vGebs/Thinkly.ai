@@ -170,7 +170,7 @@ struct CourseView: View {
             Pager(tabs: tabs, rect: rect, offset: $offsetManager.offset) {
                 
                 HStack(spacing: 0){
-                    NotesView()
+                    NotesView(viewModel: NotesViewModel(courseDef: course))
                     AssignmentsView()
                     FeedView()
                     QuizView()
