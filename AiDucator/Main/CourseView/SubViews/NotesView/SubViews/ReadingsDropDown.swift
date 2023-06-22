@@ -54,8 +54,12 @@ struct ReadingsDropDown: View {
                             .font(.system(size: 16, weight: .bold, design: .rounded))
                             .foregroundColor(.accent)
                         
-                        Text("Chapter: \(reading.chapter)")
+                        Text("Chapter:")
                             .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .foregroundColor(.primary)
+                        
+                        Text("\(reading.chapter)")
+                            .font(.system(size: 18, weight: .regular, design: .rounded))
                             .foregroundColor(.primary)
                         Spacer()
                     }

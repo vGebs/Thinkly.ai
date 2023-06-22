@@ -17,11 +17,33 @@ struct NotesView: View {
                 Spacer()
                 ScrollView {
                     
-                    ForEach(viewModel.weeklyContent) { content in
-                        MyUnitsDropDown(thisWeeksContent: content)
-                            .padding(.horizontal, 5)
+                    if viewModel.weeklyContent.count > 0 {
+                        ForEach(viewModel.weeklyContent) { content in
+                            MyUnitsDropDown(thisWeeksContent: content)
+                                .padding(.horizontal, 5)
+                        }
+                        .padding(.top, screenHeight * 0.01)
                     }
-                    .padding(.top, screenHeight * 0.01)
+                    
+                    if viewModel.weeklyContent.count == 0 {
+                        ForEach(viewModel.preliminaryCurriculum, id: \.weekNumber) { topic in
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(lineWidth: 3)
+                                    .foregroundColor(.buttonPrimary)
+                                VStack {
+                                    HStack {
+                                        Text(String(topic.weekNumber))
+                                        Text(topic.topicTitle)
+                                        Spacer()
+                                    }
+                                    HStack {
+                                        Text(topic.topicDescription)
+                                    }
+                                }
+                            }
+                        }
+                    }
                     
                     if let user = AppState.shared.user {
                         if user.role == "teacher" {
@@ -30,11 +52,17 @@ struct NotesView: View {
                             
                             HStack {
                                 Spacer()
-                                generateOutline
+                                if !viewModel.loading {
+                                    if viewModel.weeklyContent.count == 0 && !viewModel.preliminaryCurriculumLocked {
+                                        generatePreliminaryCurriculumButton
+                                    } else {
+                                        generateOutline
+                                    }
+                                } else {
+                                    LoadingView()
+                                }
                                 Spacer()
                             }
-                            
-                            
                         }
                     }
                     
@@ -42,21 +70,37 @@ struct NotesView: View {
                 }
                 .frame(width: screenWidth, height: screenHeight * (1 - 0.11))
             }
-//            .disabled(showAutoGenPopup)
-//            .blur(radius: showAutoGenPopup ? 10 : 0)
-//            .onTapGesture {
-//                hideKeyboard()
-//                withAnimation {
-//                    showAutoGenPopup = false
-//                }
-//            }
-//            if showAutoGenPopup {
-//                AutoGenPopup()
-//                    .transition(.asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .bottom)))
-//            }
         }
         .edgesIgnoringSafeArea(.all)
         .frame(width: screenWidth, height: screenHeight)
+    }
+    
+    var generatePreliminaryCurriculumButton: some View {
+        Button(action: {
+            withAnimation {
+                viewModel.generatePreliminaryCurriculum()
+            }
+        }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .foregroundColor(.black)
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(lineWidth: 3)
+                    .foregroundColor(.buttonPrimary)
+                HStack {
+                    Image(systemName: "terminal")
+                        .font(.system(size: 17, weight: .bold, design: .rounded))
+                        .foregroundColor(.accent)
+                        .padding(.leading, 5)
+                    Text("Generate Preliminary Curriculum")
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .foregroundColor(.primary)
+                    Spacer()
+                }
+                .padding()
+            }
+            .padding(.top, 5)
+        }
     }
     
     var generateOutline: some View {
