@@ -17,6 +17,16 @@ struct NotesView: View {
                 Spacer()
                 ScrollView {
                     
+                    if viewModel.preliminaryCurriculum.count > 0 && !viewModel.preliminaryCurriculumLocked{
+                        warnings
+                        
+                        Divider()
+                        
+                        HStack {
+                            
+                        }
+                    }
+                    
                     if viewModel.weeklyContent.count > 0 {
                         ForEach(viewModel.weeklyContent) { content in
                             MyUnitsDropDown(thisWeeksContent: content)
@@ -26,42 +36,26 @@ struct NotesView: View {
                     }
                     
                     if viewModel.weeklyContent.count == 0 {
-                        ForEach(viewModel.preliminaryCurriculum, id: \.weekNumber) { topic in
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(lineWidth: 3)
-                                    .foregroundColor(.buttonPrimary)
-                                VStack {
-                                    HStack {
-                                        Text(String(topic.weekNumber))
-                                        Text(topic.topicTitle)
-                                        Spacer()
-                                    }
-                                    HStack {
-                                        Text(topic.topicDescription)
-                                    }
-                                }
-                            }
+                        ForEach(viewModel.preliminaryCurriculum.indices, id: \.self) { index in
+                            WeeklyTopicDropDown(topic: $viewModel.preliminaryCurriculum[index])
                         }
+                        .padding(.top, screenHeight * 0.01)
                     }
                     
                     if let user = AppState.shared.user {
                         if user.role == "teacher" {
-                            
-                            Divider()
-                            
-                            HStack {
-                                Spacer()
-                                if !viewModel.loading {
-                                    if viewModel.weeklyContent.count == 0 && !viewModel.preliminaryCurriculumLocked {
-                                        generatePreliminaryCurriculumButton
-                                    } else {
-                                        generateOutline
-                                    }
-                                } else {
+                            if viewModel.preliminaryCurriculum.count == 0 {
+                                
+                                preWarning
+                                if viewModel.loading {
                                     LoadingView()
+                                } else {
+                                    HStack {
+                                        Spacer()
+                                        generatePreliminaryCurriculumButton
+                                        Spacer()
+                                    }.padding(.horizontal)
                                 }
-                                Spacer()
                             }
                         }
                     }
@@ -73,6 +67,113 @@ struct NotesView: View {
         }
         .edgesIgnoringSafeArea(.all)
         .frame(width: screenWidth, height: screenHeight)
+    }
+    
+    var preWarning: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .foregroundColor(.black)
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(lineWidth: 3)
+                .foregroundColor(.accent)
+            VStack {
+                
+                HStack {
+                    VStack {
+                        Image(systemName: "lock.open.trianglebadge.exclamationmark")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .foregroundColor(.accent)
+                        Spacer()
+                    }
+                    
+                    Text("Press 'Generate' to get some preliminary units for your course.")
+                        .multilineTextAlignment(.leading)
+                        .font(.system(size: 16, weight: .regular, design: .rounded))
+                        .foregroundColor(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    
+                    Spacer()
+                }.padding(.bottom)
+                
+                HStack {
+                    VStack {
+                        Image(systemName: "lock.open.trianglebadge.exclamationmark")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .foregroundColor(.accent)
+                        Spacer()
+                    }
+                    
+                    Text("You will then be tasked with selecting the units you wish to include in your course.")
+                        .multilineTextAlignment(.leading)
+                        .font(.system(size: 16, weight: .regular, design: .rounded))
+                        .foregroundColor(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    
+                    Spacer()
+                }
+            }.padding()
+        }.padding()
+    }
+    
+    var warnings: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .foregroundColor(.black)
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(lineWidth: 3)
+                .foregroundColor(.accent)
+            VStack {
+                HStack {
+                    VStack {
+                        Image(systemName: "lock.open.trianglebadge.exclamationmark")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .foregroundColor(.accent)
+                        Spacer()
+                    }
+                    
+                    Text("Press 'Lock in Unit' to confirm the section you wish to have within your course.")
+                        .multilineTextAlignment(.leading)
+                        .font(.system(size: 16, weight: .regular, design: .rounded))
+                        .foregroundColor(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    
+                    Spacer()
+                }.padding(.bottom)
+                
+                HStack {
+                    VStack {
+                        Image(systemName: "lock.open.trianglebadge.exclamationmark")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .foregroundColor(.accent)
+                        Spacer()
+                    }
+                    
+                    Text("Press 'Regenerate Unlocked' to find other suitable units for those that are unlocked.")
+                        .multilineTextAlignment(.leading)
+                        .font(.system(size: 16, weight: .regular, design: .rounded))
+                        .foregroundColor(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    
+                    Spacer()
+                }.padding(.bottom)
+                
+                HStack {
+                    VStack {
+                        Image(systemName: "lock.open.trianglebadge.exclamationmark")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .foregroundColor(.accent)
+                        Spacer()
+                    }
+                    
+                    Text("When you have confirmed all units press 'Lock in Units'.")
+                        .multilineTextAlignment(.leading)
+                        .font(.system(size: 16, weight: .regular, design: .rounded))
+                        .foregroundColor(.primary)
+                    
+                    Spacer()
+                }
+            }.padding()
+        }.padding()
     }
     
     var generatePreliminaryCurriculumButton: some View {
@@ -92,10 +193,10 @@ struct NotesView: View {
                         .font(.system(size: 17, weight: .bold, design: .rounded))
                         .foregroundColor(.accent)
                         .padding(.leading, 5)
-                    Text("Generate Preliminary Curriculum")
+                    Text("Generate")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.primary)
-                    Spacer()
+                    
                 }
                 .padding()
             }

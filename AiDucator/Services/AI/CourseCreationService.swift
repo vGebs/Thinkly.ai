@@ -25,13 +25,13 @@ public class CourseCreationService {
         return request
     }
     
-    func generatePreliminaryCurriculum(data: PreliminaryCurriculumInput) -> AnyPublisher<PreliminaryCurriculumOutput, Error> {
-        let url = baseURL.appendingPathComponent("/generatePreliminaryCurriculum")
+    func generatePreliminaryCurriculum(data: PreliminaryCurriculumWeekInput) -> AnyPublisher<WeeklyTopic, Error> {
+        let url = baseURL.appendingPathComponent("/generatePreliminaryCurriculumForWeek")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = try? JSONEncoder().encode(data)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        return networkWrapper.request(with: request, timeout: 400, pingURLRequest: bundlePingRequest(), pingTimeout: 3)
+        return networkWrapper.request(with: request, timeout: 120, pingURLRequest: bundlePingRequest(), pingTimeout: 3)
     }
     
     func getWeeklyContent(data: WeeklyContentInput) -> AnyPublisher<WeeklyContent, Error> {
@@ -100,18 +100,29 @@ public class CourseCreationService {
 }
 
 struct PreliminaryCurriculumInput: Codable {
-    var courseTimingStructure: TimingStructure
     var gradeLevel: String
     var textBooks: [Textbook]
     var learningObjectives: [LearningObjective]
     var courseOverview: CourseOverview
     var prerequisites: [Prerequisite]
+    var weeklyTopic: [WeeklyTopic]
+}
+
+struct PreliminaryCurriculumWeekInput: Codable {
+    var weekNumber: Int
+    var totalWeeks: Int
+    var course: PreliminaryCurriculumInput
 }
 
 struct WeeklyTopic: Codable {
     var weekNumber: Int
     var topicDescription: String
     var topicTitle: String
+}
+
+struct WeeklyTopicLocked: Codable {
+    var weeklyTopic: WeeklyTopic
+    var lockedin: Bool = false
 }
 
 struct PreliminaryCurriculumOutput: Codable {
