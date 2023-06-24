@@ -21,26 +21,88 @@ struct NotesView: View {
                         warnings
                         
                         Divider()
-                        
-                        HStack {
-                            
+                        if let cDef = viewModel.courseDef {
+                            if cDef.courseFull.courseTimingStructure.courseDurationInWeeks == viewModel.preliminaryCurriculum.count {
+                                HStack {
+                                    if !viewModel.allLocked() {
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .foregroundColor(.black)
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .stroke(lineWidth: 3)
+                                                .foregroundColor(.buttonPrimary)
+                                            
+                                            Button(action: {
+                                                viewModel.regenerateUnlocked()
+                                            }) {
+                                                HStack {
+                                                    Image(systemName: "terminal")
+                                                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                                                        .foregroundColor(.accent)
+                                                    Text("Regenerate Unlocked")
+                                                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                        .foregroundColor(.primary)
+                                                }.padding()
+                                            }
+                                        }.padding(.horizontal)
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .foregroundColor(.black)
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .stroke(lineWidth: 3)
+                                            .foregroundColor(.buttonPrimary)
+                                        Button(action: {
+                                            if viewModel.allLocked() {
+                                                viewModel.unlockAll()
+                                            } else {
+                                                viewModel.lockAllUnits()
+                                            }
+                                        }) {
+                                            if viewModel.allLocked() {
+                                                HStack {
+                                                    Image(systemName: "lock.open")
+                                                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                                                        .foregroundColor(.accent)
+                                                    Text("Unlock Units")
+                                                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                        .foregroundColor(.primary)
+                                                }.padding()
+                                            } else {
+                                                HStack {
+                                                    Image(systemName: "lock")
+                                                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                                                        .foregroundColor(.accent)
+                                                    Text("Lock In Units")
+                                                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                        .foregroundColor(.primary)
+                                                }.padding()
+                                            }
+                                        }
+                                    }.padding(.horizontal)
+                                }
+                            }
                         }
                     }
                     
-                    if viewModel.weeklyContent.count > 0 {
-                        ForEach(viewModel.weeklyContent) { content in
-                            MyUnitsDropDown(thisWeeksContent: content)
-                                .padding(.horizontal, 5)
-                        }
-                        .padding(.top, screenHeight * 0.01)
-                    }
+//                    if viewModel.weeklyContent.count > 0 {
+//                        ForEach(viewModel.weeklyContent) { content in
+//                            MyUnitsDropDown(thisWeeksContent: content)
+//                                .padding(.horizontal, 5)
+//                        }
+//                        .padding(.top, screenHeight * 0.01)
+//                    }
                     
-                    if viewModel.weeklyContent.count == 0 {
+//                    if viewModel.weeklyContent.count == 0 {
                         ForEach(viewModel.preliminaryCurriculum.indices, id: \.self) { index in
                             WeeklyTopicDropDown(topic: $viewModel.preliminaryCurriculum[index])
                         }
                         .padding(.top, screenHeight * 0.01)
-                    }
+//                    }
                     
                     if let user = AppState.shared.user {
                         if user.role == "teacher" {
@@ -204,33 +266,33 @@ struct NotesView: View {
         }
     }
     
-    var generateOutline: some View {
-        Button(action: {
-            withAnimation {
-                
-            }
-        }) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 20)
-                    .foregroundColor(.black)
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(lineWidth: 3)
-                    .foregroundColor(.buttonPrimary)
-                HStack {
-                    Image(systemName: "terminal")
-                        .font(.system(size: 17, weight: .bold, design: .rounded))
-                        .foregroundColor(.accent)
-                        .padding(.leading, 5)
-                    Text("Generate Week: \(viewModel.weeklyContent.count + 1)")
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                        .foregroundColor(.primary)
-                    Spacer()
-                }
-                .padding()
-            }
-            .padding(.top, 5)
-        }
-    }
+//    var generateOutline: some View {
+//        Button(action: {
+//            withAnimation {
+//
+//            }
+//        }) {
+//            ZStack {
+//                RoundedRectangle(cornerRadius: 20)
+//                    .foregroundColor(.black)
+//                RoundedRectangle(cornerRadius: 20)
+//                    .stroke(lineWidth: 3)
+//                    .foregroundColor(.buttonPrimary)
+//                HStack {
+//                    Image(systemName: "terminal")
+//                        .font(.system(size: 17, weight: .bold, design: .rounded))
+//                        .foregroundColor(.accent)
+//                        .padding(.leading, 5)
+//                    Text("Generate Week: \(viewModel.weeklyContent.count + 1)")
+//                        .font(.system(size: 16, weight: .bold, design: .rounded))
+//                        .foregroundColor(.primary)
+//                    Spacer()
+//                }
+//                .padding()
+//            }
+//            .padding(.top, 5)
+//        }
+//    }
 }
 
 

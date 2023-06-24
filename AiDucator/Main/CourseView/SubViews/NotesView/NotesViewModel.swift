@@ -13,12 +13,8 @@ import Combine
 
 class NotesViewModel: ObservableObject {
     
-    @Published var weeklyContent: [WeeklyContent] = [
-        
-    ]
-    
     @Published var preliminaryCurriculum: [WeeklyTopicLocked] = [
-        WeeklyTopicLocked(weeklyTopic: WeeklyTopic(weekNumber: 1, topicDescription: "Description awe f awe fa wef a we fa we fa we f awe f awe f awe fa wef ", topicTitle: "Intro to the best shittin course around folks"))
+        
     ]
     //WeeklyTopicLocked(weeklyTopic: WeeklyTopic(weekNumber: 1, topicDescription: "Description awe f awe fa wef a we fa we fa we f awe f awe f awe fa wef ", topicTitle: "Intro to shittin"))
     @Published var preliminaryCurriculumLocked = false
@@ -29,46 +25,6 @@ class NotesViewModel: ObservableObject {
     
     let courseCreation: CourseCreationService
     let courseDef: CourseDefinition?
-    
-//    WeeklyContent(
-//        notesOutline: [],
-//        assessments: [],
-//        topics: [
-//            Topic(readings: [
-//                Reading(
-//                    chapter: 1,
-//                    textbook: Textbook(
-//                        title: "Designing Data-Intensive Applications: The Big Ideas Behind Reliable, Scalable, and Maintainable Systems",
-//                        author: "Martin Kleppmann"
-//                )),
-//                Reading(
-//                    chapter: 1,
-//                    textbook: Textbook(
-//                        title: "FUNDAMENTALS OF SOFTWARE ARCHITECTURE: AN ENGINEERING APPROACH",
-//                        author: "Mark Richards"
-//                    )),
-//                Reading(
-//                    chapter: 1,
-//                    textbook: Textbook(
-//                        title: "Clean Architecture: A Craftsman's Guide to Software Structure and Design",
-//                        author: "Robert Martin"
-//                    ))
-//                 ],
-//                  topicName: "Introduction to Software Architecture"),
-//
-//            Topic(readings: [
-//                Reading(
-//                    chapter: 2,
-//                    textbook: Textbook(
-//                        title: "FUNDAMENTALS OF SOFTWARE ARCHITECTURE: AN ENGINEERING APPROACH",
-//                        author: "Mark Richards"
-//                    ))
-//            ],
-//                  topicName: "Software Requirements and Design")
-//        ],
-//        week: 1,
-//        classOutline: []
-//    )
     
     init(courseDef: CourseDefinition?) {
         //on init we need to fetch the weekly content
@@ -90,16 +46,17 @@ class NotesViewModel: ObservableObject {
         } else {
             self.preliminaryCurriculumWeekInput = PreliminaryCurriculumWeekInput(weekNumber: 0, totalWeeks: 0, course: PreliminaryCurriculumInput(gradeLevel: "", textBooks: [], learningObjectives: [], courseOverview: CourseOverview(courseTitle: "", courseDescription: ""), prerequisites: [], weeklyTopic: []))
         }
+        
+        self.observePreliminaryCurriculum()
     }
     
     @Published var loading = false
     
     func generatePreliminaryCurriculum() {
-        if let courseDef = courseDef {
-            self.loading = true
+        
+        self.loading = true
             
-            generatePreliminaryCurriculum(withInput: self.preliminaryCurriculumWeekInput)
-        }
+        generatePreliminaryCurriculum(withInput: self.preliminaryCurriculumWeekInput)
     }
     
     private func generatePreliminaryCurriculum(withInput: PreliminaryCurriculumWeekInput) {
@@ -128,5 +85,71 @@ class NotesViewModel: ObservableObject {
                 }
             }.store(in: &cancellables)
 
+    }
+    
+    func lockAllUnits() {
+        for i in 0..<preliminaryCurriculum.count {
+            preliminaryCurriculum[i].lockedin = true
+        }
+    }
+    
+    func regenerateUnlocked() {
+        let weeksToFetch = preliminaryCurriculum.filter { !$0.lockedin }.map { $0.weeklyTopic.weekNumber }
+        preliminaryCurriculum = preliminaryCurriculum.filter { $0.lockedin }
+        
+        let topics = preliminaryCurriculum.map { $0.weeklyTopic }
+        
+        for week in weeksToFetch {
+            generateUnit(for: week, prelim: PreliminaryCurriculumWeekInput(weekNumber: week, totalWeeks: courseDef!.courseFull.courseTimingStructure.courseDurationInWeeks, course: PreliminaryCurriculumInput(gradeLevel: courseDef!.courseFull.gradeLevel, textBooks: courseDef!.courseFull.textbooks, learningObjectives: courseDef!.courseFull.learningObjectives,courseOverview: courseDef!.courseFull.courseOverview, prerequisites: courseDef!.courseFull.prerequisites, weeklyTopic: topics)))
+        }
+    }
+    
+    func generateUnit(for weekNumber: Int, prelim: PreliminaryCurriculumWeekInput) {
+        courseCreation.generatePreliminaryCurriculum(data: prelim)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .failure(let e):
+                    print("NotesViewModel: Failed to generate unit")
+                    print("NotesViewModel-err: \(e)")
+                case .finished:
+                    print("NotesViewModel: Finished generating unit")
+                }
+            } receiveValue: { [weak self] topic in
+                self?.preliminaryCurriculum.append(WeeklyTopicLocked(weeklyTopic: topic))
+            }.store(in: &cancellables)
+    }
+    
+    func allLocked() -> Bool {
+        for topic in preliminaryCurriculum {
+            if !topic.lockedin {
+                return false
+            }
+        }
+        return true
+    }
+    
+    func unlockAll() {
+        for i in 0..<preliminaryCurriculum.count {
+            preliminaryCurriculum[i].lockedin = false
+        }
+    }
+}
+
+extension NotesViewModel {
+    private func observePreliminaryCurriculum() {
+        $preliminaryCurriculum
+            .sink { [weak self] _ in
+                self?.sortPreliminaryCurriculum()
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func sortPreliminaryCurriculum() {
+        DispatchQueue.main.async {
+            if self.preliminaryCurriculum.count > 1 {
+                self.preliminaryCurriculum.sort { $0.weeklyTopic.weekNumber < $1.weeklyTopic.weekNumber }
+            }
+        }
     }
 }
