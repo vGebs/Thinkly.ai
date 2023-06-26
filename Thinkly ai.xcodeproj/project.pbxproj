@@ -22,6 +22,8 @@
 		FA5115032A3FE737004AA1D9 /* UnitDropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5115022A3FE737004AA1D9 /* UnitDropDown.swift */; };
 		FA5115052A42428A004AA1D9 /* ReadingsDropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5115042A42428A004AA1D9 /* ReadingsDropDown.swift */; };
 		FA5115072A44F689004AA1D9 /* WeeklyTopicDropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5115062A44F689004AA1D9 /* WeeklyTopicDropDown.swift */; };
+		FA5115092A491AFF004AA1D9 /* SelfLearnCourseDefinitionPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5115082A491AFF004AA1D9 /* SelfLearnCourseDefinitionPopup.swift */; };
+		FA51150B2A492B56004AA1D9 /* SelfLearnCourseDefinitionPopupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA51150A2A492B56004AA1D9 /* SelfLearnCourseDefinitionPopupViewModel.swift */; };
 		FA9CFA832A0FAB43000BDE95 /* Notepad.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA822A0FAB43000BDE95 /* Notepad.swift */; };
 		FA9CFA882A107893000BDE95 /* CourseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA872A107893000BDE95 /* CourseService.swift */; };
 		FA9CFA8A2A10789C000BDE95 /* CourseService_CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA892A10789C000BDE95 /* CourseService_CoreData.swift */; };
@@ -88,6 +90,8 @@
 		FA5115022A3FE737004AA1D9 /* UnitDropDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitDropDown.swift; sourceTree = "<group>"; };
 		FA5115042A42428A004AA1D9 /* ReadingsDropDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingsDropDown.swift; sourceTree = "<group>"; };
 		FA5115062A44F689004AA1D9 /* WeeklyTopicDropDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyTopicDropDown.swift; sourceTree = "<group>"; };
+		FA5115082A491AFF004AA1D9 /* SelfLearnCourseDefinitionPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfLearnCourseDefinitionPopup.swift; sourceTree = "<group>"; };
+		FA51150A2A492B56004AA1D9 /* SelfLearnCourseDefinitionPopupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfLearnCourseDefinitionPopupViewModel.swift; sourceTree = "<group>"; };
 		FA9CFA822A0FAB43000BDE95 /* Notepad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notepad.swift; sourceTree = "<group>"; };
 		FA9CFA872A107893000BDE95 /* CourseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseService.swift; sourceTree = "<group>"; };
 		FA9CFA892A10789C000BDE95 /* CourseService_CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseService_CoreData.swift; sourceTree = "<group>"; };
@@ -305,6 +309,8 @@
 				FA9CFAAF2A171236000BDE95 /* CourseDefinitionPopup.swift */,
 				FA9CFAB42A182672000BDE95 /* AddCourseStudentPopup.swift */,
 				FA9CFAB12A171270000BDE95 /* AddCoursePopUpViewModel.swift */,
+				FA5115082A491AFF004AA1D9 /* SelfLearnCourseDefinitionPopup.swift */,
+				FA51150A2A492B56004AA1D9 /* SelfLearnCourseDefinitionPopupViewModel.swift */,
 			);
 			path = PopUps;
 			sourceTree = "<group>";
@@ -550,6 +556,7 @@
 				FAEC5D1F2A0EF37900A48F05 /* LoadingView.swift in Sources */,
 				FA0CDC352A0F23FD007AF6E7 /* DocumentSnapshotPublisher.swift in Sources */,
 				FA070DF22A0E0AF5008EF241 /* Colors.swift in Sources */,
+				FA51150B2A492B56004AA1D9 /* SelfLearnCourseDefinitionPopupViewModel.swift in Sources */,
 				FA9CFA982A158322000BDE95 /* CourseListViewModel.swift in Sources */,
 				FA0CDC3E2A0F2521007AF6E7 /* UserService_Firestore.swift in Sources */,
 				FA9CFA8E2A11CF8E000BDE95 /* ThinklyModel.swift in Sources */,
@@ -569,6 +576,7 @@
 				FA9CFA9F2A16AD36000BDE95 /* NavBar.swift in Sources */,
 				FA0CDC452A0F281B007AF6E7 /* CoreDataWrapper.swift in Sources */,
 				FA9CFAA42A16B31E000BDE95 /* NotesView.swift in Sources */,
+				FA5115092A491AFF004AA1D9 /* SelfLearnCourseDefinitionPopup.swift in Sources */,
 				FABD79B12A098CA100201145 /* AiDucatorApp.swift in Sources */,
 				FA9CFA932A157D44000BDE95 /* CourseRegistrationService.swift in Sources */,
 				FA0CDC322A0F237D007AF6E7 /* FirestoreWrapper.swift in Sources */,
