@@ -767,7 +767,7 @@ struct CourseDefinitionPopup: View {
                         }
                         
                         HStack {
-                            Text(viewModel.learningObjectives[index].description)
+                            Text(viewModel.learningObjectives[index].objectiveDescription)
                                 .font(.system(size: 16, weight: .regular, design: .rounded))
                                 .foregroundColor(.primary)
                             

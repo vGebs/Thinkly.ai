@@ -23,7 +23,11 @@ struct SelfLearnCourseDefinitionPopup: View {
                     userPrompt
                     
                     if viewModel.userPrompt.count > 15 && viewModel.learningObjectives.count == 0 {
-                        generateLearningObjectivesButton
+                        if viewModel.loading {
+                            LoadingView()
+                        } else {
+                            generateLearningObjectivesButton
+                        }
                     }
                     
                     
@@ -217,7 +221,7 @@ struct SelfLearnCourseDefinitionPopup: View {
                         }
                         
                         HStack {
-                            Text(viewModel.learningObjectives[index].description)
+                            Text(viewModel.learningObjectives[index].objectiveDescription)
                                 .font(.system(size: 16, weight: .regular, design: .rounded))
                                 .foregroundColor(.primary)
                             

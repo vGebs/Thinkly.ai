@@ -45,7 +45,7 @@ struct Textbook: Codable {
 }
 
 struct LearningObjective: Codable {
-    let description: String
+    let objectiveDescription: String
     let objectiveTitle: String
 }
 
