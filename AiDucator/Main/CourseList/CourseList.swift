@@ -25,7 +25,7 @@ import Combine
 struct CourseList: View {
 
     @StateObject var viewModel = CourseListViewModel()
-    @Binding var currentCourse: CourseDefinition?
+    @Binding var currentCourse: Course_selfLearn?
     
     @State var addClassPopUpPressed = false
     
@@ -69,7 +69,7 @@ struct CourseList: View {
                             Spacer()
                         } else {
                             ScrollView(showsIndicators: false) {
-                                ForEach(viewModel.courses!, id: \.courseFull.courseOverview.courseTitle) { course in
+                                ForEach(viewModel.courses!, id: \.courseOverview.courseTitle) { course in
                                     Button(action: {
                                         withAnimation {
                                             self.currentCourse = course
@@ -271,7 +271,7 @@ struct CourseList: View {
 
 struct CourseButton: View {
     
-    var course: CourseDefinition
+    var course: Course_selfLearn
     @State var showDescription = false
     
     var body: some View {
@@ -292,7 +292,7 @@ struct CourseButton: View {
                     
                     Spacer()
                     
-                    Text(course.courseFull.courseOverview.courseTitle)
+                    Text(course.courseOverview.courseTitle)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .foregroundColor(.primary)
                     
@@ -330,7 +330,7 @@ struct CourseButton: View {
                             Spacer()
                         }
                         
-                        Text(course.courseFull.courseOverview.courseDescription)
+                        Text(course.courseOverview.courseDescription)
                             .multilineTextAlignment(.leading)
                             .font(.system(size: 16, weight: .light, design: .rounded))
                             .foregroundColor(.primary)

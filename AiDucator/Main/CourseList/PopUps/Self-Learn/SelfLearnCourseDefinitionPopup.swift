@@ -46,6 +46,8 @@ struct SelfLearnCourseDefinitionPopup: View {
                         if viewModel.courseOverviewSuggestions.count > 0 {
                             Divider()
                             courseOverviewView
+                            Divider()
+                            addSymbol
                         }
                     }
                     
@@ -318,7 +320,7 @@ struct SelfLearnCourseDefinitionPopup: View {
     
     var generateCourseOverviewButton: some View {
         VStack {
-            if viewModel.learningObjectives.count > 0 {
+            if viewModel.learningObjectives.count > 0 && viewModel.courseOverviewSuggestions.count == 0{
                 Button(action: {
                     viewModel.getCourseTitleSuggestion()
                 }) {
@@ -501,26 +503,38 @@ struct SelfLearnCourseDefinitionPopup: View {
         }
     }
     
+    var addSymbol: some View {
+        HStack {
+            Image(systemName: "brain")
+                .font(.system(size: 14, weight: .semibold, design: .rounded))
+                .foregroundColor(.accent)
+                .padding(.leading)
+            Text("Course Symbol")
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundColor(.primary)
+            
+            Spacer()
+            
+            Picker("Course Symbol", selection: $viewModel.selectedClassType) {
+                ForEach(classTypes) { classType in
+                    HStack {
+                        Image(systemName: classType.sfSymbol)
+                    }
+                    .tag(classType)
+                }
+            }
+            .frame(height: screenHeight / 10)
+            .pickerStyle(WheelPickerStyle())
+        }
+        .padding(.top, 2)
+    }
+    
     var addCourseButton: some View{
         VStack{
             Button(action: {
                 hideKeyboard()
                 
-//                classListViewModel.addCourse(
-//                    course: CourseDefinition(
-//                        courseFull: CourseFull(
-//                            courseAssessments: viewModel.courseAssessments,
-//                            courseTimingStructure: viewModel.timingStructure,
-//                            gradeLevel: viewModel.gradeLevel,
-//                            textbooks: viewModel.textbooks,
-//                            learningObjectives: viewModel.learningObjectives,
-//                            courseOverview: viewModel.courseOverviewSuggestions[0],
-//                            prerequisites: viewModel.prerequisites,
-//                            weeklyContents: []),
-//                        teacherID: AppState.shared.user!.uid,
-//                        sfSymbol: viewModel.selectedClassType.sfSymbol
-//                    )
-//                )
+                classListViewModel.addCourse(course: Course_selfLearn(learningObjectives: viewModel.learningObjectives, courseOverview: viewModel.courseOverviewSuggestions[viewModel.selectedCourseIndex], sfSymbol: viewModel.selectedClassType.sfSymbol, teacherID: AppState.shared.user!.uid))
                 
                 withAnimation {
                     addCoursePressed = false

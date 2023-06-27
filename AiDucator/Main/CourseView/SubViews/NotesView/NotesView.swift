@@ -22,70 +22,69 @@ struct NotesView: View {
                         
                         Divider()
                         if let cDef = viewModel.courseDef {
-                            if cDef.courseFull.courseTimingStructure.courseDurationInWeeks == viewModel.preliminaryCurriculum.count {
-                                HStack {
-                                    if !viewModel.allLocked() {
-                                        ZStack {
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .foregroundColor(.black)
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .stroke(lineWidth: 3)
-                                                .foregroundColor(.buttonPrimary)
-                                            
-                                            Button(action: {
-                                                viewModel.regenerateUnlocked()
-                                            }) {
-                                                HStack {
-                                                    Image(systemName: "terminal")
-                                                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                                                        .foregroundColor(.accent)
-                                                    Text("Regenerate Unlocked")
-                                                        .font(.system(size: 14, weight: .bold, design: .rounded))
-                                                        .foregroundColor(.primary)
-                                                }.padding()
-                                            }
-                                        }.padding(.horizontal)
-                                    }
-                                    
-                                    Spacer()
-                                    
-                                    
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .foregroundColor(.black)
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .stroke(lineWidth: 3)
-                                            .foregroundColor(.buttonPrimary)
-                                        Button(action: {
-                                            if viewModel.allLocked() {
-                                                viewModel.unlockAll()
-                                            } else {
-                                                viewModel.lockAllUnits()
-                                            }
-                                        }) {
-                                            if viewModel.allLocked() {
-                                                HStack {
-                                                    Image(systemName: "lock.open")
-                                                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                                                        .foregroundColor(.accent)
-                                                    Text("Unlock Units")
-                                                        .font(.system(size: 14, weight: .bold, design: .rounded))
-                                                        .foregroundColor(.primary)
-                                                }.padding()
-                                            } else {
-                                                HStack {
-                                                    Image(systemName: "lock")
-                                                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                                                        .foregroundColor(.accent)
-                                                    Text("Lock In Units")
-                                                        .font(.system(size: 14, weight: .bold, design: .rounded))
-                                                        .foregroundColor(.primary)
-                                                }.padding()
-                                            }
-                                        }
-                                    }.padding(.horizontal)
-                                }
-                            }
+//                            if cDef.courseFull.courseTimingStructure.courseDurationInWeeks == viewModel.preliminaryCurriculum.count {
+//                                HStack {
+//                                    if !viewModel.allLocked() {
+//                                        ZStack {
+//                                            RoundedRectangle(cornerRadius: 15)
+//                                                .foregroundColor(.black)
+//                                            RoundedRectangle(cornerRadius: 15)
+//                                                .stroke(lineWidth: 3)
+//                                                .foregroundColor(.buttonPrimary)
+//
+//                                            Button(action: {
+//                                                viewModel.regenerateUnlocked()
+//                                            }) {
+//                                                HStack {
+//                                                    Image(systemName: "terminal")
+//                                                        .font(.system(size: 16, weight: .bold, design: .rounded))
+//                                                        .foregroundColor(.accent)
+//                                                    Text("Regenerate Unlocked")
+//                                                        .font(.system(size: 14, weight: .bold, design: .rounded))
+//                                                        .foregroundColor(.primary)
+//                                                }.padding()
+//                                            }
+//                                        }.padding(.horizontal)
+//                                    }
+//
+//                                    Spacer()
+//
+//                                    ZStack {
+//                                        RoundedRectangle(cornerRadius: 15)
+//                                            .foregroundColor(.black)
+//                                        RoundedRectangle(cornerRadius: 15)
+//                                            .stroke(lineWidth: 3)
+//                                            .foregroundColor(.buttonPrimary)
+//                                        Button(action: {
+//                                            if viewModel.allLocked() {
+//                                                viewModel.unlockAll()
+//                                            } else {
+//                                                viewModel.lockAllUnits()
+//                                            }
+//                                        }) {
+//                                            if viewModel.allLocked() {
+//                                                HStack {
+//                                                    Image(systemName: "lock.open")
+//                                                        .font(.system(size: 16, weight: .bold, design: .rounded))
+//                                                        .foregroundColor(.accent)
+//                                                    Text("Unlock Units")
+//                                                        .font(.system(size: 14, weight: .bold, design: .rounded))
+//                                                        .foregroundColor(.primary)
+//                                                }.padding()
+//                                            } else {
+//                                                HStack {
+//                                                    Image(systemName: "lock")
+//                                                        .font(.system(size: 16, weight: .bold, design: .rounded))
+//                                                        .foregroundColor(.accent)
+//                                                    Text("Lock In Units")
+//                                                        .font(.system(size: 14, weight: .bold, design: .rounded))
+//                                                        .foregroundColor(.primary)
+//                                                }.padding()
+//                                            }
+//                                        }
+//                                    }.padding(.horizontal)
+//                                }
+//                            }
                         }
                     }
                     

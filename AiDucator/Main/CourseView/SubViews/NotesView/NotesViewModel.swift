@@ -24,28 +24,28 @@ class NotesViewModel: ObservableObject {
     var cancellables: [AnyCancellable] = []
     
     let courseCreation: CourseCreationService
-    let courseDef: CourseDefinition?
+    let courseDef: Course_selfLearn?
     
-    init(courseDef: CourseDefinition?) {
+    init(courseDef: Course_selfLearn?) {
         //on init we need to fetch the weekly content
         //we will not store all of weeks in the same document (faster fetching)
         //Once we get the CourseDefinition,
         self.courseDef = courseDef
         self.courseCreation = CourseCreationService()
         
-        if let courseDef = courseDef {
-            self.preliminaryCurriculumWeekInput = PreliminaryCurriculumWeekInput(
-                weekNumber: 1, totalWeeks: courseDef.courseFull.courseTimingStructure.courseDurationInWeeks, course: PreliminaryCurriculumInput(gradeLevel: courseDef.courseFull.gradeLevel,
-                                                                  textBooks: courseDef.courseFull.textbooks,
-                                                                  learningObjectives: courseDef.courseFull.learningObjectives,
-                                                                  courseOverview: courseDef.courseFull.courseOverview,
-                                                                  prerequisites: courseDef.courseFull.prerequisites,
-                                                                  weeklyTopic: [])
-                
-            )
-        } else {
+//        if let courseDef = courseDef {
+//            self.preliminaryCurriculumWeekInput = PreliminaryCurriculumWeekInput(
+//                weekNumber: 1, totalWeeks: courseDef.courseFull.courseTimingStructure.courseDurationInWeeks, course: PreliminaryCurriculumInput(gradeLevel: courseDef.courseFull.gradeLevel,
+//                                                                  textBooks: courseDef.courseFull.textbooks,
+//                                                                  learningObjectives: courseDef.courseFull.learningObjectives,
+//                                                                  courseOverview: courseDef.courseFull.courseOverview,
+//                                                                  prerequisites: courseDef.courseFull.prerequisites,
+//                                                                  weeklyTopic: [])
+//
+//            )
+//        } else {
             self.preliminaryCurriculumWeekInput = PreliminaryCurriculumWeekInput(weekNumber: 0, totalWeeks: 0, course: PreliminaryCurriculumInput(gradeLevel: "", textBooks: [], learningObjectives: [], courseOverview: CourseOverview(courseTitle: "", courseDescription: ""), prerequisites: [], weeklyTopic: []))
-        }
+//        }
         
         self.observePreliminaryCurriculum()
     }
@@ -76,15 +76,14 @@ class NotesViewModel: ObservableObject {
                 self?.preliminaryCurriculumWeekInput.course.weeklyTopic.append(topic)
                 self?.preliminaryCurriculumWeekInput.weekNumber += 1
                 
-                if self!.courseDef!.courseFull.courseTimingStructure.courseDurationInWeeks >= self!.preliminaryCurriculumWeekInput.weekNumber {
-                    self?.generatePreliminaryCurriculum(withInput: self!.preliminaryCurriculumWeekInput)
-                }
+//                if self!.courseDef!.courseFull.courseTimingStructure.courseDurationInWeeks >= self!.preliminaryCurriculumWeekInput.weekNumber {
+//                    self?.generatePreliminaryCurriculum(withInput: self!.preliminaryCurriculumWeekInput)
+//                }
                 
-                if self!.courseDef!.courseFull.courseTimingStructure.courseDurationInWeeks == self!.preliminaryCurriculumWeekInput.weekNumber {
-                    self?.loading = false
-                }
+//                if self!.courseDef!.courseFull.courseTimingStructure.courseDurationInWeeks == self!.preliminaryCurriculumWeekInput.weekNumber {
+//                    self?.loading = false
+//                }
             }.store(in: &cancellables)
-
     }
     
     func lockAllUnits() {
@@ -99,9 +98,9 @@ class NotesViewModel: ObservableObject {
         
         let topics = preliminaryCurriculum.map { $0.weeklyTopic }
         
-        for week in weeksToFetch {
-            generateUnit(for: week, prelim: PreliminaryCurriculumWeekInput(weekNumber: week, totalWeeks: courseDef!.courseFull.courseTimingStructure.courseDurationInWeeks, course: PreliminaryCurriculumInput(gradeLevel: courseDef!.courseFull.gradeLevel, textBooks: courseDef!.courseFull.textbooks, learningObjectives: courseDef!.courseFull.learningObjectives,courseOverview: courseDef!.courseFull.courseOverview, prerequisites: courseDef!.courseFull.prerequisites, weeklyTopic: topics)))
-        }
+//        for week in weeksToFetch {
+//            generateUnit(for: week, prelim: PreliminaryCurriculumWeekInput(weekNumber: week, totalWeeks: courseDef!.courseFull.courseTimingStructure.courseDurationInWeeks, course: PreliminaryCurriculumInput(gradeLevel: courseDef!.courseFull.gradeLevel, textBooks: courseDef!.courseFull.textbooks, learningObjectives: courseDef!.courseFull.learningObjectives,courseOverview: courseDef!.courseFull.courseOverview, prerequisites: courseDef!.courseFull.prerequisites, weeklyTopic: topics)))
+//        }
     }
     
     func generateUnit(for weekNumber: Int, prelim: PreliminaryCurriculumWeekInput) {

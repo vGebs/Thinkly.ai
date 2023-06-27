@@ -32,5 +32,5 @@ struct User {
     var uid: String
     var birthdate: Date
     
-    var courses: [CourseDefinition]?
+    var courses: [Course_selfLearn]?
 }

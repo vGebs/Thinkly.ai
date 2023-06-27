@@ -21,7 +21,7 @@ class CourseService_Firestore {
     
     private init() {  }
     
-    func addCourse(_ cls: CourseDefinition) -> AnyPublisher<String, Error> {
+    func addCourse(_ cls: Course_selfLearn) -> AnyPublisher<String, Error> {
         return firestore.create(collection: collection, data: cls)
     }
     
@@ -49,11 +49,11 @@ class CourseService_Firestore {
         return firestore.delete(collection: collection, documentId: docID)
     }
     
-    func listenOnCourse(with docID: String) -> AnyPublisher<(CourseDefinition, DocumentChangeType), Error> {
+    func listenOnCourse(with docID: String) -> AnyPublisher<(Course_selfLearn, DocumentChangeType), Error> {
         return firestore.listenByDocument(collection: collection, documentId: docID)
     }
     
-    func listenOnCourses(for teacherID: String) -> AnyPublisher<[(CourseDefinition, DocumentChangeType)], Error> {
+    func listenOnCourses(for teacherID: String) -> AnyPublisher<[(Course_selfLearn, DocumentChangeType)], Error> {
         let query: Query = db.collection(collection).whereField("teacherID", isEqualTo: teacherID)
         return firestore.listenByQuery(query: query)
     }

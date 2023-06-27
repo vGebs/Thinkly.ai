@@ -12,7 +12,7 @@ class CourseListViewModel: ObservableObject {
     
     private var cancellables: [AnyCancellable] = []
     
-    @Published var courses: [CourseDefinition]?
+    @Published var courses: [Course_selfLearn]?
     
     init() {
         AppState.shared.$user
@@ -23,7 +23,7 @@ class CourseListViewModel: ObservableObject {
             }.store(in: &cancellables)
     }
     
-    func addCourse(course: CourseDefinition) {
+    func addCourse(course: Course_selfLearn) {
         
         CourseService_Firestore.shared.addCourse(course)
             .sink { completion in
@@ -60,4 +60,14 @@ class CourseListViewModel: ObservableObject {
             self.cancellables[i].cancel()
         }
     }
+}
+
+import FirebaseFirestoreSwift
+
+struct Course_selfLearn: Encodable, FirestoreProtocol {
+    @DocumentID var documentID: String?
+    var learningObjectives: [LearningObjective]
+    var courseOverview: CourseOverview
+    var sfSymbol: String
+    var teacherID: String
 }

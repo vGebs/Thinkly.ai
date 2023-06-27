@@ -30,7 +30,7 @@ class SelfLearnCourseDefinitionViewModel: ObservableObject {
 //    CourseOverview(courseTitle: "Building High-Performance Scalable Systems", courseDescription: "Understand the principles of excellent software design and learn how to create reliable and scalable system architectures that can handle increased demand for resources.")
     
     @Published var selectedCourseIndex = -1
-    
+    @Published var selectedClassType = ClassType(id: "Computer Science", sfSymbol: "desktopcomputer")
     var courseDefService: CourseDefinitionService
     @Published var loading = false 
     
