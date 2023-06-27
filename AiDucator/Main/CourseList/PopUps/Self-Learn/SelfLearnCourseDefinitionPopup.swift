@@ -35,6 +35,14 @@ struct SelfLearnCourseDefinitionPopup: View {
                         Divider()
                         learningObjectivesView
                         
+                        Divider()
+                        
+                        if viewModel.loading {
+                            LoadingView()
+                        } else {
+                            generateCourseOverviewButton
+                        }
+                        
                         if viewModel.courseOverviewSuggestions.count > 0 {
                             Divider()
                             courseOverviewView

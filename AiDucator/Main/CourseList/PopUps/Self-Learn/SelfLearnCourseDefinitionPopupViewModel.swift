@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 class SelfLearnCourseDefinitionViewModel: ObservableObject {
     @Published var userPrompt = "I want to learn about software architecture, especially to do with high volume applications and system design"
@@ -63,7 +64,28 @@ class SelfLearnCourseDefinitionViewModel: ObservableObject {
     }
     
     func getCourseTitleSuggestion() {
-        
+        self.loading = true
+        courseDefService.getCourseTitleSuggestion(learningObjectives: self.learningObjectives)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                switch completion {
+                case .failure(let e):
+                    print("SelfLearnCourseDefinitionViewModel: Failed to get course title suggestions")
+                    print("SelfLearnCourseDefinitionViewModel: \(e)")
+                    
+                    withAnimation {
+//                        self?.errorOcurred = true
+                        self?.loading = false
+                    }
+                case .finished:
+                    print("SelfLearnCourseDefinitionViewModel: Finished getting course title suggestions")
+                }
+            } receiveValue: { [weak self] suggestions in
+                withAnimation {
+                    self?.courseOverviewSuggestions = suggestions.courseOverview
+                    self?.loading = false
+                }
+            }.store(in: &cancellables)
     }
     
     func resetAll() {

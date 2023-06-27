@@ -306,11 +306,10 @@
 		FA9CFAB32A18265C000BDE95 /* PopUps */ = {
 			isa = PBXGroup;
 			children = (
+				FADA71322A4A3628009FF5E6 /* Self-Learn */,
 				FA9CFAAF2A171236000BDE95 /* CourseDefinitionPopup.swift */,
 				FA9CFAB42A182672000BDE95 /* AddCourseStudentPopup.swift */,
 				FA9CFAB12A171270000BDE95 /* AddCoursePopUpViewModel.swift */,
-				FA5115082A491AFF004AA1D9 /* SelfLearnCourseDefinitionPopup.swift */,
-				FA51150A2A492B56004AA1D9 /* SelfLearnCourseDefinitionPopupViewModel.swift */,
 			);
 			path = PopUps;
 			sourceTree = "<group>";
@@ -393,6 +392,15 @@
 				FA070DEE2A0E0A7E008EF241 /* LandingView.swift */,
 			);
 			path = LandingPage;
+			sourceTree = "<group>";
+		};
+		FADA71322A4A3628009FF5E6 /* Self-Learn */ = {
+			isa = PBXGroup;
+			children = (
+				FA5115082A491AFF004AA1D9 /* SelfLearnCourseDefinitionPopup.swift */,
+				FA51150A2A492B56004AA1D9 /* SelfLearnCourseDefinitionPopupViewModel.swift */,
+			);
+			path = "Self-Learn";
 			sourceTree = "<group>";
 		};
 		FAEC5D122A0EF1C900A48F05 /* SigninSignup */ = {
