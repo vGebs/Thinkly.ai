@@ -16,14 +16,14 @@ struct CourseDefinition: Codable, FirestoreProtocol {
 }
 
 struct CourseFull: Codable {
-    let courseAssessments: [Assessment]
-    let courseTimingStructure: TimingStructure
-    let gradeLevel: String
+    var courseAssessments: [Assessment]? = nil
+    var courseTimingStructure: TimingStructure? = nil
+    var gradeLevel: String? = nil
     let textbooks: [Textbook]
     let learningObjectives: [LearningObjective]
     let courseOverview: CourseOverview
-    let prerequisites: [Prerequisite]
-    var weeklyContents: [WeeklyContent]
+    var prerequisites: [Prerequisite]? = nil 
+    var weeklyContents: [WeeklyContent]? = nil
 }
 
 struct Assessment: Codable {

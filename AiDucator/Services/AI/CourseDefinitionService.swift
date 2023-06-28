@@ -25,6 +25,15 @@ class CourseDefinitionService {
         return request
     }
     
+    func generateTextbooksFromUserPrompt(userPrompt: String) -> AnyPublisher<Textbooks, Error> {
+        let url = baseURL.appendingPathComponent("/generateTextbooksFromUserPrompt")
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = try? JSONEncoder().encode(userPrompt)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        return networkWrapper.request(with: request, timeout: 120, pingURLRequest: bundlePingRequest(), pingTimeout: 3)
+    }
+    
     func generateLearningObjectiveFromUserPrompt(userPrompt: String) -> AnyPublisher<LearningObjectives, Error> {
         let url = baseURL.appendingPathComponent("/generateLearningObjectiveFromUserPrompt")
         var request = URLRequest(url: url)
@@ -92,4 +101,8 @@ struct PrerequisitesInput: Codable {
     let textbooks: [Textbook]
     let learningObjectives: [LearningObjective]
     let courseOverview: CourseOverview
+}
+
+struct Textbooks: Codable {
+    let textbooks: [Textbook]
 }

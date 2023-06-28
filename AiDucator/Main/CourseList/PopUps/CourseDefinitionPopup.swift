@@ -46,26 +46,26 @@ struct CourseDefinitionPopup: View {
                             header
                                 .id(0)
                             
-                            if !userInputPageComplete {
-                                gradeLevelView
-                                Divider()
-                                timingStructureView
-                                Divider()
-                                assessmentsView
-                                Divider()
-                                addSymbol
-                            } else {
+//                            if !userInputPageComplete {
+//                                gradeLevelView
+//                                Divider()
+//                                timingStructureView
+//                                Divider()
+//                                assessmentsView
+//                                Divider()
+//                                addSymbol
+//                            } else {
                                 aiGeneratedPage
-                            }
+//                            }
                             
-                            Divider()
-                            if !userInputPageComplete {
-                                actionButtonUserInput
-                            } else {
+//                            Divider()
+//                            if !userInputPageComplete {
+//                                actionButtonUserInput
+//                            } else {
                                 actionButtonAIGenerated
-                            }
+//                            }
                             
-                            if viewModel.concepts.count > 0 || viewModel.learningObjectives.count > 0 || viewModel.courseOverviewSuggestions.count > 0 || viewModel.prerequisites.count > 0 || (!userInputPageComplete && viewModel.gradeLevelValid){
+                            if viewModel.concepts.count > 0 || viewModel.learningObjectives.count > 0 || viewModel.courseOverviewSuggestions.count > 0 { // || viewModel.prerequisites.count > 0 || (!userInputPageComplete && viewModel.gradeLevelValid)
                                 Divider()
                                 if !areYouSure {
                                     resetAllButton
@@ -144,18 +144,101 @@ struct CourseDefinitionPopup: View {
         }
     }
     
+    var userPrompt: some View {
+        VStack {
+            HStack {
+                Image(systemName: "questionmark.square")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundColor(.accent)
+                
+                Text("What would you like to learn about?")
+                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .foregroundColor(.primary)
+                Spacer()
+            }
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(lineWidth: 3)
+                    .foregroundColor(.buttonPrimary)
+                
+                if viewModel.textbooks.count == 0 {
+                    GrowingTextView(text: $viewModel.userPrompt)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.all)
+                } else {
+                    Text(viewModel.userPrompt)
+                        .font(.system(size: 16, weight: .regular, design: .rounded))
+                        .foregroundColor(.primary)
+                        .padding()
+                }
+            }
+        }.padding()
+    }
+    
+    var generateTextbooksButton: some View {
+        VStack {
+            Button(action: {
+                viewModel.generateRelevantTextbooks()
+            }) {
+                HStack {
+                    Image(systemName: "terminal")
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .foregroundColor(.accent)
+                    if viewModel.textbooks.count == 0 {
+                        Text("Generate Relevant Textbooks")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                    } else {
+                        Text("Regenerate")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                    }
+                }
+                .padding()
+                .background(content: {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundColor(.black)
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(lineWidth: 4)
+                            .foregroundColor(.buttonPrimary)
+                    }
+                })
+                .foregroundColor(.white)
+                .cornerRadius(8)
+            }
+            .opacity(viewModel.userPrompt.count < 15 ? 0.4 : 1)
+            .disabled(viewModel.userPrompt.count < 15)
+        }
+    }
+    
     var aiGeneratedPage: some View {
         VStack {
-            if overlapPressed {
-                hardCodedTextbooks
-            } else {
-                addTextbooks
+            userPrompt
+            if viewModel.loading && viewModel.textbooks.count == 0 {
+                LoadingView()
+            } else if viewModel.textbooks.count == 0 {
+                generateTextbooksButton
             }
+            
+            if viewModel.textbooks.count > 0 {
+                Divider()
+                hardCodedTextbooks
+                if !overlapPressed {
+                    generateTextbooksButton
+                        .padding(.horizontal)
+                }
+            }
+//            if overlapPressed {
+//                hardCodedTextbooks
+//            } else {
+//                addTextbooks
+//            }
             
             
             if !overlapPressed {
                 Divider()
                 overlapButton
+                    .padding(.bottom)
             } else if viewModel.loading && !learningObjectivePressed && !courseOverviewPressed && !prerequisitePressed{
                 Divider()
                 conceptTitleView
@@ -226,17 +309,7 @@ struct CourseDefinitionPopup: View {
                 
                 courseOverviewView
                 
-                if !prerequisitePressed && viewModel.prerequisites.count == 0 {
-                    Divider()
-                    generatePrerequisitesButton
-                } else if viewModel.loading {
-                    Divider()
-                    prerequisitesTitleView
-                    LoadingView()
-                } else if viewModel.errorOcurred {
-                    Divider()
-                    prerequisitesTitleView
-                    
+                if viewModel.errorOcurred {
                     ErrorPopup {
                         withAnimation {
                             viewModel.errorOcurred = false
@@ -244,6 +317,24 @@ struct CourseDefinitionPopup: View {
                         }
                     }
                 }
+//                if !prerequisitePressed && viewModel.prerequisites.count == 0 {
+//                    Divider()
+//                    generatePrerequisitesButton
+//                } else if viewModel.loading {
+//                    Divider()
+//                    prerequisitesTitleView
+//                    LoadingView()
+//                } else if viewModel.errorOcurred {
+//                    Divider()
+//                    prerequisitesTitleView
+//
+//                    ErrorPopup {
+//                        withAnimation {
+//                            viewModel.errorOcurred = false
+//                            prerequisitePressed = false
+//                        }
+//                    }
+//                }
             }
             
             VStack {
@@ -1321,14 +1412,9 @@ struct CourseDefinitionPopup: View {
                 classListViewModel.addCourse(
                     course: CourseDefinition(
                         courseFull: CourseFull(
-                            courseAssessments: viewModel.courseAssessments,
-                            courseTimingStructure: viewModel.timingStructure,
-                            gradeLevel: viewModel.gradeLevel,
                             textbooks: viewModel.textbooks,
                             learningObjectives: viewModel.learningObjectives,
-                            courseOverview: viewModel.courseOverviewSuggestions[0],
-                            prerequisites: viewModel.prerequisites,
-                            weeklyContents: []),
+                            courseOverview: viewModel.courseOverviewSuggestions[0]),
                         teacherID: AppState.shared.user!.uid,
                         sfSymbol: viewModel.selectedClassType.sfSymbol
                     )
@@ -1373,8 +1459,10 @@ struct CourseDefinitionPopup: View {
                 }
             }
             .padding()
-            .disabled(viewModel.prerequisites.count == 0)
-            .opacity(viewModel.prerequisites.count > 0 ? 1 : 0.4)
+            .disabled(viewModel.selectedCourseIndex < 0)
+            .opacity(viewModel.selectedCourseIndex > -1 ? 1 : 0.4)
+//            .disabled(viewModel.prerequisites.count == 0)
+//            .opacity(viewModel.prerequisites.count > 0 ? 1 : 0.4)
         }
     }
     

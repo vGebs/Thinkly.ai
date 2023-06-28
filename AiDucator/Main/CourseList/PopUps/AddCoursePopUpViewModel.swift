@@ -21,8 +21,10 @@ class AddCoursePopUpViewModel: ObservableObject {
     
     private var cancellables: [AnyCancellable] = []
     
+    @Published var userPrompt = "I want to learn about software systems, especially to do with high volume applications and system design"
+    
     @Published var textbooks: [Textbook] = [
-        Textbook(title: "", author: "")
+        
     ]
     
 //    Textbook(
@@ -112,6 +114,25 @@ class AddCoursePopUpViewModel: ObservableObject {
                 } else {
                     self?.gradeLevelValid = false
                 }
+            }.store(in: &cancellables)
+    }
+    
+    func generateRelevantTextbooks() {
+        self.loading = true
+        courseDef.generateTextbooksFromUserPrompt(userPrompt: self.userPrompt)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                switch completion {
+                case .failure(let e):
+                    print("AddCoursePopUpViewModel: Failed to generate textbooks")
+                    print("AddCoursePopUpViewModel-err: \(e)")
+                    self?.loading = false
+                case .finished:
+                    print("AddCoursePopUpViewModel: Finished to generating textbooks")
+                }
+            } receiveValue: {[weak self] textbooks in
+                self?.textbooks = textbooks.textbooks
+                self?.loading = false
             }.store(in: &cancellables)
     }
     

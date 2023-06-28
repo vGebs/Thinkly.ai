@@ -22,7 +22,7 @@ struct NotesView: View {
                         
                         Divider()
                         if let cDef = viewModel.courseDef {
-                            if cDef.courseFull.courseTimingStructure.courseDurationInWeeks == viewModel.preliminaryCurriculum.count {
+                            if viewModel.preliminaryCurriculum.count == 15 {
                                 HStack {
                                     if !viewModel.allLocked() {
                                         ZStack {

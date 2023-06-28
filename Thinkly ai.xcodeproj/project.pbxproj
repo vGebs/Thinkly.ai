@@ -51,7 +51,6 @@
 		FA9CFABC2A194335000BDE95 /* NoteSectionService_Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFABB2A194335000BDE95 /* NoteSectionService_Firestore.swift */; };
 		FA9E0B022A35561C0096BCCF /* CourseDefinitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9E0B012A35561C0096BCCF /* CourseDefinitionService.swift */; };
 		FA9E0B042A3556930096BCCF /* CourseCreationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9E0B032A3556930096BCCF /* CourseCreationService.swift */; };
-		FA9E0B062A35572D0096BCCF /* assignmentCreationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9E0B052A35572D0096BCCF /* assignmentCreationService.swift */; };
 		FA9E0B082A3558E80096BCCF /* NetworkWrapperCombine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9E0B072A3558E80096BCCF /* NetworkWrapperCombine.swift */; };
 		FABD79B12A098CA100201145 /* AiDucatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79B02A098CA100201145 /* AiDucatorApp.swift */; };
 		FABD79B32A098CA100201145 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79B22A098CA100201145 /* ContentView.swift */; };
@@ -119,7 +118,6 @@
 		FA9CFABB2A194335000BDE95 /* NoteSectionService_Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteSectionService_Firestore.swift; sourceTree = "<group>"; };
 		FA9E0B012A35561C0096BCCF /* CourseDefinitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDefinitionService.swift; sourceTree = "<group>"; };
 		FA9E0B032A3556930096BCCF /* CourseCreationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseCreationService.swift; sourceTree = "<group>"; };
-		FA9E0B052A35572D0096BCCF /* assignmentCreationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = assignmentCreationService.swift; sourceTree = "<group>"; };
 		FA9E0B072A3558E80096BCCF /* NetworkWrapperCombine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkWrapperCombine.swift; sourceTree = "<group>"; };
 		FABD79AD2A098CA100201145 /* Thinkly ai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Thinkly ai.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FABD79B02A098CA100201145 /* AiDucatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiDucatorApp.swift; sourceTree = "<group>"; };
@@ -328,7 +326,6 @@
 			children = (
 				FA9E0B012A35561C0096BCCF /* CourseDefinitionService.swift */,
 				FA9E0B032A3556930096BCCF /* CourseCreationService.swift */,
-				FA9E0B052A35572D0096BCCF /* assignmentCreationService.swift */,
 			);
 			path = AI;
 			sourceTree = "<group>";
@@ -540,7 +537,6 @@
 				FA9CFAB02A171236000BDE95 /* CourseDefinitionPopup.swift in Sources */,
 				FAEC5D162A0EF21900A48F05 /* SigninSignupViewModel.swift in Sources */,
 				FA9CFAB52A182672000BDE95 /* AddCourseStudentPopup.swift in Sources */,
-				FA9E0B062A35572D0096BCCF /* assignmentCreationService.swift in Sources */,
 				FA9CFAAC2A16B390000BDE95 /* GradesView.swift in Sources */,
 				FA0CDC482A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld in Sources */,
 				FAEC5D322A0EFD9500A48F05 /* CourseList.swift in Sources */,
