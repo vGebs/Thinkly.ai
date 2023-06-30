@@ -17,12 +17,12 @@ struct NotesView: View {
                 Spacer()
                 ScrollView {
                     
-                    if viewModel.preliminaryCurriculum.count > 0 && !viewModel.preliminaryCurriculumLocked{
+                    if viewModel.preliminaryCurriculumWeekInput[0].course.weeklyTopic.count > 0 && !viewModel.preliminaryCurriculumLocked{
                         warnings
                         
                         Divider()
                         if let cDef = viewModel.courseDef {
-                            if viewModel.preliminaryCurriculum.count == 15 {
+                            if viewModel.preliminaryCurriculumWeekInput[0].course.weeklyTopic.count == 15 {
                                 HStack {
                                     
                                     ZStack {
@@ -33,7 +33,7 @@ struct NotesView: View {
                                             .foregroundColor(.buttonPrimary)
                                         
                                         Button(action: {
-                                            viewModel.generatePreliminaryCurriculum()
+                                            viewModel.generatePreliminaryCurriculum(selectedVersion: 0)
                                         }) {
                                             HStack {
                                                 Image(systemName: "terminal")
@@ -61,15 +61,15 @@ struct NotesView: View {
 //                    }
                     
 //                    if viewModel.weeklyContent.count == 0 {
-                        ForEach(viewModel.preliminaryCurriculum.indices, id: \.self) { index in
-                            WeeklyTopicDropDown(topic: $viewModel.preliminaryCurriculum[index])
-                        }
-                        .padding(.top, screenHeight * 0.01)
-//                    }
+                    ForEach(viewModel.preliminaryCurriculumWeekInput[0].course.weeklyTopic.indices, id: \.self) { index in
+                        WeeklyTopicDropDown(topic: $viewModel.preliminaryCurriculumWeekInput[0].course.weeklyTopic[index])
+                    }
+                    .padding(.top, screenHeight * 0.01)
+                    //                    }
                     
                     if let user = AppState.shared.user {
                         if user.role == "teacher" {
-                            if viewModel.preliminaryCurriculum.count == 0 {
+                            if viewModel.preliminaryCurriculumWeekInput[0].course.weeklyTopic.count == 0 {
                                 
                                 preWarning
                                 if viewModel.loading {
@@ -204,7 +204,7 @@ struct NotesView: View {
     var generatePreliminaryCurriculumButton: some View {
         Button(action: {
             withAnimation {
-                viewModel.generatePreliminaryCurriculum()
+                viewModel.generatePreliminaryCurriculum(selectedVersion: 0)
             }
         }) {
             ZStack {
