@@ -120,11 +120,6 @@ struct WeeklyTopic: Codable {
     var topicTitle: String
 }
 
-struct WeeklyTopicLocked: Codable {
-    var weeklyTopic: WeeklyTopic
-    var lockedin: Bool = false
-}
-
 struct PreliminaryCurriculumOutput: Codable {
     var curriculum: [WeeklyTopic]
 }

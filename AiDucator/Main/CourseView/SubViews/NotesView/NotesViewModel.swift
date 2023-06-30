@@ -13,7 +13,7 @@ import Combine
 
 class NotesViewModel: ObservableObject {
     
-    @Published var preliminaryCurriculum: [WeeklyTopicLocked] = [
+    @Published var preliminaryCurriculum: [WeeklyTopic] = [
         
     ]
     //WeeklyTopicLocked(weeklyTopic: WeeklyTopic(weekNumber: 1, topicDescription: "Description awe f awe fa wef a we fa we fa we f awe f awe f awe fa wef ", topicTitle: "Intro to shittin"))
@@ -51,8 +51,9 @@ class NotesViewModel: ObservableObject {
     func generatePreliminaryCurriculum() {
         
         self.loading = true
-            
+        
         self.preliminaryCurriculumWeekInput.course.weeklyTopic = []
+        self.preliminaryCurriculum = []
         self.preliminaryCurriculumWeekInput.weekNumber = 1
         generatePreliminaryCurriculum(withInput: self.preliminaryCurriculumWeekInput)
     }
@@ -60,17 +61,17 @@ class NotesViewModel: ObservableObject {
     private func generatePreliminaryCurriculum(withInput: PreliminaryCurriculumWeekInput) {
         courseCreation.generatePreliminaryCurriculum(data: withInput)
             .receive(on: DispatchQueue.main)
-            .sink { completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .failure(let e):
                     print("NotesViewModel: Failed to get weekly topic")
                     print("NotesViewModel-err: \(e)")
+                    self?.loading = false
                 case .finished:
                     print("NotesViewModel: Finished getting weekly topic for week: \(withInput.weekNumber)")
                 }
             } receiveValue: { [weak self] topic in
-                let newTopic = WeeklyTopicLocked(weeklyTopic: topic)
-                self?.preliminaryCurriculum.append(newTopic)
+                self?.preliminaryCurriculum.append(topic)
                 self?.preliminaryCurriculumWeekInput.course.weeklyTopic.append(topic)
                 self?.preliminaryCurriculumWeekInput.weekNumber += 1
 
@@ -83,54 +84,6 @@ class NotesViewModel: ObservableObject {
                 }
             }.store(in: &cancellables)
 
-    }
-    
-    func lockAllUnits() {
-        for i in 0..<preliminaryCurriculum.count {
-            preliminaryCurriculum[i].lockedin = true
-        }
-    }
-    
-    func regenerateUnlocked() {
-        let weeksToFetch = preliminaryCurriculum.filter { !$0.lockedin }.map { $0.weeklyTopic.weekNumber }
-        preliminaryCurriculum = preliminaryCurriculum.filter { $0.lockedin }
-        
-        let topics = preliminaryCurriculum.map { $0.weeklyTopic }
-        
-        for week in weeksToFetch {
-            generateUnit(for: week, prelim: PreliminaryCurriculumWeekInput(weekNumber: week, totalWeeks: 15, course: PreliminaryCurriculumInput(textBooks: courseDef!.courseFull.textbooks, learningObjectives: courseDef!.courseFull.learningObjectives,courseOverview: courseDef!.courseFull.courseOverview, weeklyTopic: topics)))
-        }
-    }
-    
-    func generateUnit(for weekNumber: Int, prelim: PreliminaryCurriculumWeekInput) {
-        courseCreation.generatePreliminaryCurriculum(data: prelim)
-            .receive(on: DispatchQueue.main)
-            .sink { completion in
-                switch completion {
-                case .failure(let e):
-                    print("NotesViewModel: Failed to generate unit")
-                    print("NotesViewModel-err: \(e)")
-                case .finished:
-                    print("NotesViewModel: Finished generating unit")
-                }
-            } receiveValue: { [weak self] topic in
-                self?.preliminaryCurriculum.append(WeeklyTopicLocked(weeklyTopic: topic))
-            }.store(in: &cancellables)
-    }
-    
-    func allLocked() -> Bool {
-        for topic in preliminaryCurriculum {
-            if !topic.lockedin {
-                return false
-            }
-        }
-        return true
-    }
-    
-    func unlockAll() {
-        for i in 0..<preliminaryCurriculum.count {
-            preliminaryCurriculum[i].lockedin = false
-        }
     }
 }
 
@@ -146,7 +99,7 @@ extension NotesViewModel {
     private func sortPreliminaryCurriculum() {
         DispatchQueue.main.async {
             if self.preliminaryCurriculum.count > 1 {
-                self.preliminaryCurriculum.sort { $0.weeklyTopic.weekNumber < $1.weeklyTopic.weekNumber }
+                self.preliminaryCurriculum.sort { $0.weekNumber < $1.weekNumber }
             }
         }
     }
