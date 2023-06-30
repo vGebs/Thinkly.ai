@@ -100,11 +100,11 @@ public class CourseCreationService {
 }
 
 struct PreliminaryCurriculumInput: Codable {
-    var gradeLevel: String
+    var gradeLevel: String?
     var textBooks: [Textbook]
     var learningObjectives: [LearningObjective]
     var courseOverview: CourseOverview
-    var prerequisites: [Prerequisite]
+    var prerequisites: [Prerequisite]?
     var weeklyTopic: [WeeklyTopic]
 }
 

@@ -28,7 +28,7 @@ struct WeeklyTopicDropDown: View {
                         Image(systemName: "number.square")
                             .font(.system(size: 14, weight: .bold, design: .rounded))
                             .foregroundColor(.accent)
-                        Text("Week: \(String(topic.weeklyTopic.weekNumber))")
+                        Text("Unit: \(String(topic.weeklyTopic.weekNumber))")
                             .font(.system(size: 16, weight: .bold, design: .rounded))
                             .foregroundColor(.primary)
                     }.padding(2).background(RoundedRectangle(cornerRadius: 5).foregroundColor(.black))

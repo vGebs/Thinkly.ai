@@ -19,7 +19,7 @@ class NotesViewModel: ObservableObject {
     //WeeklyTopicLocked(weeklyTopic: WeeklyTopic(weekNumber: 1, topicDescription: "Description awe f awe fa wef a we fa we fa we f awe f awe f awe fa wef ", topicTitle: "Intro to shittin"))
     @Published var preliminaryCurriculumLocked = false
     
-//    @Published var preliminaryCurriculumWeekInput: PreliminaryCurriculumWeekInput
+    @Published var preliminaryCurriculumWeekInput: PreliminaryCurriculumWeekInput
     
     var cancellables: [AnyCancellable] = []
     
@@ -33,21 +33,15 @@ class NotesViewModel: ObservableObject {
         self.courseDef = courseDef
         self.courseCreation = CourseCreationService()
         
-//        if let courseDef = courseDef {
-//            self.preliminaryCurriculumWeekInput = PreliminaryCurriculumWeekInput(
-//                weekNumber: 1,
-//                totalWeeks: courseDef.courseFull.courseTimingStructure?.courseDurationInWeeks ?? nil,
-//                course: PreliminaryCurriculumInput(gradeLevel: courseDef.courseFull.gradeLevel,
-//                                                   textBooks: courseDef.courseFull.textbooks,
-//                                                   learningObjectives: courseDef.courseFull.learningObjectives,
-//                                                   courseOverview: courseDef.courseFull.courseOverview,
-//                                                   prerequisites: courseDef.courseFull.prerequisites,
-//                                                   weeklyTopic: [])
-//
-//            )
-//        } else {
-//            self.preliminaryCurriculumWeekInput = PreliminaryCurriculumWeekInput(weekNumber: 0, totalWeeks: 0, course: PreliminaryCurriculumInput(gradeLevel: "", textBooks: [], learningObjectives: [], courseOverview: CourseOverview(courseTitle: "", courseDescription: ""), prerequisites: [], weeklyTopic: []))
-//        }
+        if let courseDef = courseDef {
+            self.preliminaryCurriculumWeekInput = PreliminaryCurriculumWeekInput(
+                weekNumber: 1,
+                totalWeeks: 15,
+                course: PreliminaryCurriculumInput(textBooks: courseDef.courseFull.textbooks, learningObjectives: courseDef.courseFull.learningObjectives, courseOverview: courseDef.courseFull.courseOverview, weeklyTopic: [])
+            )
+        } else {
+            self.preliminaryCurriculumWeekInput = PreliminaryCurriculumWeekInput(weekNumber: 0, totalWeeks: 0, course: PreliminaryCurriculumInput(textBooks: [], learningObjectives: [], courseOverview: CourseOverview(courseTitle: "", courseDescription: ""), weeklyTopic: []))
+        }
         
         self.observePreliminaryCurriculum()
     }
@@ -58,7 +52,9 @@ class NotesViewModel: ObservableObject {
         
         self.loading = true
             
-//        generatePreliminaryCurriculum(withInput: self.preliminaryCurriculumWeekInput)
+        self.preliminaryCurriculumWeekInput.course.weeklyTopic = []
+        self.preliminaryCurriculumWeekInput.weekNumber = 1
+        generatePreliminaryCurriculum(withInput: self.preliminaryCurriculumWeekInput)
     }
     
     private func generatePreliminaryCurriculum(withInput: PreliminaryCurriculumWeekInput) {
@@ -74,17 +70,17 @@ class NotesViewModel: ObservableObject {
                 }
             } receiveValue: { [weak self] topic in
                 let newTopic = WeeklyTopicLocked(weeklyTopic: topic)
-//                self?.preliminaryCurriculum.append(newTopic)
-//                self?.preliminaryCurriculumWeekInput.course.weeklyTopic.append(topic)
-//                self?.preliminaryCurriculumWeekInput.weekNumber += 1
-//
-//                if self!.courseDef!.courseFull.courseTimingStructure.courseDurationInWeeks >= self!.preliminaryCurriculumWeekInput.weekNumber {
-//                    self?.generatePreliminaryCurriculum(withInput: self!.preliminaryCurriculumWeekInput)
-//                }
-//
-//                if self!.courseDef!.courseFull.courseTimingStructure.courseDurationInWeeks == self!.preliminaryCurriculumWeekInput.weekNumber {
-//                    self?.loading = false
-//                }
+                self?.preliminaryCurriculum.append(newTopic)
+                self?.preliminaryCurriculumWeekInput.course.weeklyTopic.append(topic)
+                self?.preliminaryCurriculumWeekInput.weekNumber += 1
+
+                if self!.preliminaryCurriculumWeekInput.weekNumber <= 15 {
+                    self?.generatePreliminaryCurriculum(withInput: self!.preliminaryCurriculumWeekInput)
+                }
+
+                if self!.preliminaryCurriculumWeekInput.weekNumber == 15 {
+                    self?.loading = false
+                }
             }.store(in: &cancellables)
 
     }
@@ -101,9 +97,9 @@ class NotesViewModel: ObservableObject {
         
         let topics = preliminaryCurriculum.map { $0.weeklyTopic }
         
-//        for week in weeksToFetch {
-//            generateUnit(for: week, prelim: PreliminaryCurriculumWeekInput(weekNumber: week, totalWeeks: courseDef!.courseFull.courseTimingStructure.courseDurationInWeeks, course: PreliminaryCurriculumInput(gradeLevel: courseDef!.courseFull.gradeLevel, textBooks: courseDef!.courseFull.textbooks, learningObjectives: courseDef!.courseFull.learningObjectives,courseOverview: courseDef!.courseFull.courseOverview, prerequisites: courseDef!.courseFull.prerequisites, weeklyTopic: topics)))
-//        }
+        for week in weeksToFetch {
+            generateUnit(for: week, prelim: PreliminaryCurriculumWeekInput(weekNumber: week, totalWeeks: 15, course: PreliminaryCurriculumInput(textBooks: courseDef!.courseFull.textbooks, learningObjectives: courseDef!.courseFull.learningObjectives,courseOverview: courseDef!.courseFull.courseOverview, weeklyTopic: topics)))
+        }
     }
     
     func generateUnit(for weekNumber: Int, prelim: PreliminaryCurriculumWeekInput) {

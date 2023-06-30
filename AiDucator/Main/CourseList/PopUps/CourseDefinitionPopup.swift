@@ -308,6 +308,9 @@ struct CourseDefinitionPopup: View {
                 Divider()
                 
                 courseOverviewView
+                Divider()
+                addSymbol
+                Divider()
                 
                 if viewModel.errorOcurred {
                     ErrorPopup {

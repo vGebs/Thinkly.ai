@@ -33,7 +33,7 @@ struct NotesView: View {
                                                 .foregroundColor(.buttonPrimary)
                                             
                                             Button(action: {
-                                                viewModel.regenerateUnlocked()
+                                                viewModel.generatePreliminaryCurriculum()
                                             }) {
                                                 HStack {
                                                     Image(systemName: "terminal")
