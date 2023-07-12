@@ -10,6 +10,7 @@ import SwiftUI
 struct NotesView: View {
     
     @ObservedObject var viewModel: NotesViewModel
+    @State var selectedVersion = 0
     
     var body: some View {
         ZStack {
@@ -17,13 +18,85 @@ struct NotesView: View {
                 Spacer()
                 ScrollView {
                     
-                    if viewModel.preliminaryCurriculumWeekInput[0].course.weeklyTopic.count > 0 && !viewModel.preliminaryCurriculumLocked{
-                        warnings
-                        
-                        Divider()
-                        if let cDef = viewModel.courseDef {
-                            if viewModel.preliminaryCurriculumWeekInput[0].course.weeklyTopic.count == 15 {
-                                HStack {
+//                    if viewModel.preliminaryCurriculumWeekInput.count > 0 {
+                        if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count > 0 && !viewModel.preliminaryCurriculumLocked{
+                            warnings
+                            
+                            Divider()
+                            
+                            if let _ = viewModel.courseDef {
+                                if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count == 15 {
+                                    
+                                    Button(action: {
+                                        
+                                    }) {
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .foregroundColor(.black)
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .stroke(lineWidth: 3)
+                                                .foregroundColor(.buttonPrimary)
+                                            
+                                            HStack {
+                                                Spacer()
+                                                Image(systemName: "checkmark.seal")
+                                                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                    .foregroundColor(.accent)
+                                                Text("Submit V-\(selectedVersion + 1)")
+                                                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                                                    .foregroundColor(.primary)
+                                                Spacer()
+                                            }.padding()
+                                        }
+                                    }.padding(.horizontal)
+                                    
+                                    HStack {
+                                        
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .foregroundColor(.black)
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .stroke(lineWidth: 3)
+                                                .foregroundColor(.buttonPrimary)
+                                            
+                                            Button(action: {
+                                                viewModel.generatePreliminaryCurriculum(selectedVersion: selectedVersion)
+                                            }) {
+                                                HStack {
+                                                    Image(systemName: "terminal")
+                                                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                        .foregroundColor(.accent)
+                                                    Text("Regenerate V-\(selectedVersion + 1)")
+                                                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                        .foregroundColor(.primary)
+                                                }.padding()
+                                            }
+                                        }.padding(.horizontal)
+                                        
+                                        if viewModel.preliminaryCurriculumWeekInput.count <= 2 {
+                                            Spacer()
+                                            ZStack {
+                                                RoundedRectangle(cornerRadius: 15)
+                                                    .foregroundColor(.black)
+                                                RoundedRectangle(cornerRadius: 15)
+                                                    .stroke(lineWidth: 3)
+                                                    .foregroundColor(.buttonPrimary)
+                                                
+                                                Button(action: {
+                                                    viewModel.generatePreliminaryCurriculum(selectedVersion: viewModel.preliminaryCurriculumWeekInput.count)
+                                                }) {
+                                                    HStack {
+                                                        Image(systemName: "terminal")
+                                                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                            .foregroundColor(.accent)
+                                                        Text("Generate V-\(viewModel.preliminaryCurriculumWeekInput.count + 1)")
+                                                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                            .foregroundColor(.primary)
+                                                    }.padding()
+                                                }
+                                            }.padding(.trailing)
+                                        }
+                                    }
                                     
                                     ZStack {
                                         RoundedRectangle(cornerRadius: 15)
@@ -33,25 +106,60 @@ struct NotesView: View {
                                             .foregroundColor(.buttonPrimary)
                                         
                                         Button(action: {
-                                            viewModel.generatePreliminaryCurriculum(selectedVersion: 0)
+                                            if selectedVersion != 0 {
+                                                withAnimation {
+                                                    selectedVersion -= 1
+                                                }
+                                            }
+                                            viewModel.trashVersion(number: selectedVersion)
                                         }) {
                                             HStack {
-                                                Image(systemName: "terminal")
-                                                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                                                Image(systemName: "trash")
+                                                    .font(.system(size: 14, weight: .bold, design: .rounded))
                                                     .foregroundColor(.accent)
-                                                Text("Regenerate")
+                                                Text("Trash V-\(selectedVersion + 1)")
                                                     .font(.system(size: 14, weight: .bold, design: .rounded))
                                                     .foregroundColor(.primary)
                                             }.padding()
                                         }
                                     }.padding(.horizontal)
-                                    
-                                    Spacer()
                                 }
                             }
                         }
-                    }
+//                    }
                     
+                    if viewModel.preliminaryCurriculumWeekInput.count > 1 {
+                        HStack {
+                            ForEach(viewModel.preliminaryCurriculumWeekInput.indices, id: \.self) { index in
+                                Button(action: {
+                                    withAnimation {
+                                        selectedVersion = index
+                                    }
+                                }) {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .foregroundColor(.black)
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .stroke(lineWidth: 3)
+                                            .foregroundColor(.buttonPrimary)
+                                        
+                                        HStack {
+                                            Spacer()
+                                            if selectedVersion == index {
+                                                Image(systemName: "smallcircle.filled.circle.fill")
+                                                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                    .foregroundColor(.accent)
+                                            }
+                                            Text("V-\(index + 1)")
+                                                .font(.system(size: 16, weight: selectedVersion == index ? .bold : .regular, design: .rounded))
+                                                .foregroundColor(.primary)
+                                            Spacer()
+                                        }.padding()
+                                    }
+                                }
+                            }
+                        }.padding(.horizontal)
+                    }
 //                    if viewModel.weeklyContent.count > 0 {
 //                        ForEach(viewModel.weeklyContent) { content in
 //                            MyUnitsDropDown(thisWeeksContent: content)
@@ -60,28 +168,30 @@ struct NotesView: View {
 //                        .padding(.top, screenHeight * 0.01)
 //                    }
                     
-//                    if viewModel.weeklyContent.count == 0 {
-                    ForEach(viewModel.preliminaryCurriculumWeekInput[0].course.weeklyTopic.indices, id: \.self) { index in
-                        WeeklyTopicDropDown(topic: $viewModel.preliminaryCurriculumWeekInput[0].course.weeklyTopic[index])
-                    }
-                    .padding(.top, screenHeight * 0.01)
-                    //                    }
+//                    if viewModel.preliminaryCurriculumWeekInput.count > 0 {
+                        ForEach(viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.indices, id: \.self) { index in
+                            WeeklyTopicDropDown(topic: $viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic[index])
+                        }
+                        .padding(.top, screenHeight * 0.01)
+//                    }
                     
                     if let user = AppState.shared.user {
                         if user.role == "teacher" {
-                            if viewModel.preliminaryCurriculumWeekInput[0].course.weeklyTopic.count == 0 {
-                                
-                                preWarning
-                                if viewModel.loading {
-                                    LoadingView()
-                                } else {
-                                    HStack {
-                                        Spacer()
-                                        generatePreliminaryCurriculumButton
-                                        Spacer()
-                                    }.padding(.horizontal)
+//                            if viewModel.preliminaryCurriculumWeekInput.count > 0 {
+                                if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count == 0 {
+                                    
+                                    preWarning
+                                    if viewModel.loading {
+                                        LoadingView()
+                                    } else {
+                                        HStack {
+                                            Spacer()
+                                            generatePreliminaryCurriculumButton
+                                            Spacer()
+                                        }.padding(.horizontal)
+                                    }
                                 }
-                            }
+//                            }
                         }
                     }
                     
@@ -128,7 +238,7 @@ struct NotesView: View {
                         Spacer()
                     }
                     
-                    Text("You will then be tasked with selecting the units you wish to include in your course.")
+                    Text("You will then be tasked with selecting a suitable curriculum.")
                         .multilineTextAlignment(.leading)
                         .font(.system(size: 16, weight: .regular, design: .rounded))
                         .foregroundColor(.primary)
@@ -148,22 +258,6 @@ struct NotesView: View {
                 .stroke(lineWidth: 3)
                 .foregroundColor(.accent)
             VStack {
-                HStack {
-                    VStack {
-                        Image(systemName: "lock.open.trianglebadge.exclamationmark")
-                            .font(.system(size: 18, weight: .bold, design: .rounded))
-                            .foregroundColor(.accent)
-                        Spacer()
-                    }
-                    
-                    Text("Press 'Lock in Unit' to confirm the section you wish to have within your course.")
-                        .multilineTextAlignment(.leading)
-                        .font(.system(size: 16, weight: .regular, design: .rounded))
-                        .foregroundColor(.primary)
-                        .fixedSize(horizontal: false, vertical: true)
-                    
-                    Spacer()
-                }.padding(.bottom)
                 
                 HStack {
                     VStack {
@@ -190,13 +284,32 @@ struct NotesView: View {
                         Spacer()
                     }
                     
-                    Text("When you have confirmed all units press 'Lock in Units'.")
+                    Text("You can create three curriculum versions before selecting your favorite.")
                         .multilineTextAlignment(.leading)
                         .font(.system(size: 16, weight: .regular, design: .rounded))
                         .foregroundColor(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
                     
                     Spacer()
-                }
+                }.padding(.bottom)
+                
+                HStack {
+                    VStack {
+                        Image(systemName: "lock.open.trianglebadge.exclamationmark")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .foregroundColor(.accent)
+                        Spacer()
+                    }
+                    
+                    Text("When you have chosen your version, press submit to continue.")
+                        .multilineTextAlignment(.leading)
+                        .font(.system(size: 16, weight: .regular, design: .rounded))
+                        .foregroundColor(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    
+                    Spacer()
+                }.padding(.bottom)
+                
             }.padding()
         }.padding()
     }
@@ -204,13 +317,13 @@ struct NotesView: View {
     var generatePreliminaryCurriculumButton: some View {
         Button(action: {
             withAnimation {
-                viewModel.generatePreliminaryCurriculum(selectedVersion: 0)
+                viewModel.generatePreliminaryCurriculum(selectedVersion: selectedVersion)
             }
         }) {
             ZStack {
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 15)
                     .foregroundColor(.black)
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 15)
                     .stroke(lineWidth: 3)
                     .foregroundColor(.buttonPrimary)
                 HStack {

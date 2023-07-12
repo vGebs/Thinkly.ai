@@ -50,9 +50,22 @@ class NotesViewModel: ObservableObject {
         
         self.loading = true
         
-        self.preliminaryCurriculumWeekInput[0].course.weeklyTopic = []
-        self.preliminaryCurriculumWeekInput[0].weekNumber = 1
-        generatePreliminaryCurriculum(selectedVersion: selectedVersion, withInput: self.preliminaryCurriculumWeekInput[selectedVersion])
+        if selectedVersion >= self.preliminaryCurriculumWeekInput.count {
+            if let courseDef = courseDef {
+                self.preliminaryCurriculumWeekInput.append(PreliminaryCurriculumWeekInput(
+                    weekNumber: 1,
+                    totalWeeks: 15,
+                    course: PreliminaryCurriculumInput(textBooks: courseDef.courseFull.textbooks, learningObjectives: courseDef.courseFull.learningObjectives, courseOverview: courseDef.courseFull.courseOverview, weeklyTopic: [])
+                ))
+            }
+        } else {
+            self.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic = []
+            self.preliminaryCurriculumWeekInput[selectedVersion].weekNumber = 1
+        }
+        
+        if selectedVersion <= self.preliminaryCurriculumWeekInput.count {
+            generatePreliminaryCurriculum(selectedVersion: selectedVersion, withInput: self.preliminaryCurriculumWeekInput[selectedVersion])
+        }
     }
     
     private func generatePreliminaryCurriculum(selectedVersion: Int, withInput: PreliminaryCurriculumWeekInput) {
@@ -80,6 +93,22 @@ class NotesViewModel: ObservableObject {
                 }
             }.store(in: &cancellables)
 
+    }
+    
+    func trashVersion(number: Int) {
+        if self.preliminaryCurriculumWeekInput.count == 1 {
+            if let courseDef = courseDef {
+                self.preliminaryCurriculumWeekInput.remove(at: number)
+                
+                self.preliminaryCurriculumWeekInput = [(PreliminaryCurriculumWeekInput(
+                    weekNumber: 1,
+                    totalWeeks: 15,
+                    course: PreliminaryCurriculumInput(textBooks: courseDef.courseFull.textbooks, learningObjectives: courseDef.courseFull.learningObjectives, courseOverview: courseDef.courseFull.courseOverview, weeklyTopic: [])
+                ))]
+            }
+        } else if self.preliminaryCurriculumWeekInput.count > 1 {
+            self.preliminaryCurriculumWeekInput.remove(at: number)
+        }
     }
 }
 
