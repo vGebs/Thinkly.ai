@@ -18,180 +18,77 @@ struct NotesView: View {
                 Spacer()
                 ScrollView {
                     
-//                    if viewModel.preliminaryCurriculumWeekInput.count > 0 {
-                        if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count > 0 && !viewModel.preliminaryCurriculumLocked{
-                            warnings
-                            
-                            Divider()
-                            
-                            if let _ = viewModel.courseDef {
-                                if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count == 15 {
+                    
+                    if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count > 0 && !viewModel.preliminaryCurriculumLocked{
+                        warnings
+                        
+                        Divider()
+                        
+                        if viewModel.errorOccurred == selectedVersion {
+                            errorWarning
+                            continueGeneratingButton
+                        }
+                        
+                        if let _ = viewModel.courseDef {
+                            if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count == 15 {
+                                
+                                submitUnitsButton
+                                
+                                HStack {
+                                    regenerateVersionButton
                                     
-                                    Button(action: {
-                                        
-                                    }) {
-                                        ZStack {
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .foregroundColor(.black)
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .stroke(lineWidth: 3)
-                                                .foregroundColor(.buttonPrimary)
-                                            
-                                            HStack {
-                                                Spacer()
-                                                Image(systemName: "checkmark.seal")
-                                                    .font(.system(size: 14, weight: .bold, design: .rounded))
-                                                    .foregroundColor(.accent)
-                                                Text("Submit V-\(selectedVersion + 1)")
-                                                    .font(.system(size: 16, weight: .bold, design: .rounded))
-                                                    .foregroundColor(.primary)
-                                                Spacer()
-                                            }.padding()
-                                        }
-                                    }.padding(.horizontal)
                                     
-                                    HStack {
-                                        
-                                        ZStack {
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .foregroundColor(.black)
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .stroke(lineWidth: 3)
-                                                .foregroundColor(.buttonPrimary)
-                                            
-                                            Button(action: {
-                                                viewModel.generatePreliminaryCurriculum(selectedVersion: selectedVersion)
-                                            }) {
-                                                HStack {
-                                                    Image(systemName: "terminal")
-                                                        .font(.system(size: 14, weight: .bold, design: .rounded))
-                                                        .foregroundColor(.accent)
-                                                    Text("Regenerate V-\(selectedVersion + 1)")
-                                                        .font(.system(size: 14, weight: .bold, design: .rounded))
-                                                        .foregroundColor(.primary)
-                                                }.padding()
-                                            }
-                                        }.padding(.horizontal)
-                                        
-                                        if viewModel.preliminaryCurriculumWeekInput.count <= 2 {
-                                            Spacer()
-                                            ZStack {
-                                                RoundedRectangle(cornerRadius: 15)
-                                                    .foregroundColor(.black)
-                                                RoundedRectangle(cornerRadius: 15)
-                                                    .stroke(lineWidth: 3)
-                                                    .foregroundColor(.buttonPrimary)
-                                                
-                                                Button(action: {
-                                                    viewModel.generatePreliminaryCurriculum(selectedVersion: viewModel.preliminaryCurriculumWeekInput.count)
-                                                }) {
-                                                    HStack {
-                                                        Image(systemName: "terminal")
-                                                            .font(.system(size: 14, weight: .bold, design: .rounded))
-                                                            .foregroundColor(.accent)
-                                                        Text("Generate V-\(viewModel.preliminaryCurriculumWeekInput.count + 1)")
-                                                            .font(.system(size: 14, weight: .bold, design: .rounded))
-                                                            .foregroundColor(.primary)
-                                                    }.padding()
-                                                }
-                                            }.padding(.trailing)
-                                        }
+                                    if viewModel.preliminaryCurriculumWeekInput.count <= 2 {
+                                        Spacer()
+                                        generateNewVersionButton
                                     }
-                                    
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .foregroundColor(.black)
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .stroke(lineWidth: 3)
-                                            .foregroundColor(.buttonPrimary)
-                                        
-                                        Button(action: {
-                                            if selectedVersion != 0 {
-                                                withAnimation {
-                                                    selectedVersion -= 1
-                                                }
-                                            }
-                                            viewModel.trashVersion(number: selectedVersion)
-                                        }) {
-                                            HStack {
-                                                Image(systemName: "trash")
-                                                    .font(.system(size: 14, weight: .bold, design: .rounded))
-                                                    .foregroundColor(.accent)
-                                                Text("Trash V-\(selectedVersion + 1)")
-                                                    .font(.system(size: 14, weight: .bold, design: .rounded))
-                                                    .foregroundColor(.primary)
-                                            }.padding()
-                                        }
-                                    }.padding(.horizontal)
                                 }
+                                
+                                trashVersionButton
                             }
                         }
-//                    }
+                    }
+                    
                     
                     if viewModel.preliminaryCurriculumWeekInput.count > 1 {
-                        HStack {
-                            ForEach(viewModel.preliminaryCurriculumWeekInput.indices, id: \.self) { index in
-                                Button(action: {
-                                    withAnimation {
-                                        selectedVersion = index
-                                    }
-                                }) {
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .foregroundColor(.black)
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .stroke(lineWidth: 3)
-                                            .foregroundColor(.buttonPrimary)
-                                        
-                                        HStack {
-                                            Spacer()
-                                            if selectedVersion == index {
-                                                Image(systemName: "smallcircle.filled.circle.fill")
-                                                    .font(.system(size: 14, weight: .bold, design: .rounded))
-                                                    .foregroundColor(.accent)
-                                            }
-                                            Text("V-\(index + 1)")
-                                                .font(.system(size: 16, weight: selectedVersion == index ? .bold : .regular, design: .rounded))
-                                                .foregroundColor(.primary)
-                                            Spacer()
-                                        }.padding()
-                                    }
-                                }
-                            }
-                        }.padding(.horizontal)
+                        versionSelectButton
                     }
-//                    if viewModel.weeklyContent.count > 0 {
-//                        ForEach(viewModel.weeklyContent) { content in
-//                            MyUnitsDropDown(thisWeeksContent: content)
-//                                .padding(.horizontal, 5)
-//                        }
-//                        .padding(.top, screenHeight * 0.01)
-//                    }
+                    //                    if viewModel.weeklyContent.count > 0 {
+                    //                        ForEach(viewModel.weeklyContent) { content in
+                    //                            MyUnitsDropDown(thisWeeksContent: content)
+                    //                                .padding(.horizontal, 5)
+                    //                        }
+                    //                        .padding(.top, screenHeight * 0.01)
+                    //                    }
                     
-//                    if viewModel.preliminaryCurriculumWeekInput.count > 0 {
-                        ForEach(viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.indices, id: \.self) { index in
-                            WeeklyTopicDropDown(topic: $viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic[index])
-                        }
-                        .padding(.top, screenHeight * 0.01)
-//                    }
+                    
+                    ForEach(viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.indices, id: \.self) { index in
+                        WeeklyTopicDropDown(topic: $viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic[index])
+                    }
+                    .padding(.top, screenHeight * 0.01)
+                    
                     
                     if let user = AppState.shared.user {
                         if user.role == "teacher" {
-//                            if viewModel.preliminaryCurriculumWeekInput.count > 0 {
-                                if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count == 0 {
-                                    
-                                    preWarning
-                                    if viewModel.loading {
-                                        LoadingView()
-                                    } else {
-                                        HStack {
-                                            Spacer()
-                                            generatePreliminaryCurriculumButton
-                                            Spacer()
-                                        }.padding(.horizontal)
-                                    }
+                            
+                            if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count == 0 {
+                                
+                                preWarning
+                                if viewModel.errorOccurred == selectedVersion {
+                                    errorWarning
                                 }
-//                            }
+                                
+                                if viewModel.loading {
+                                    LoadingView()
+                                } else {
+                                    HStack {
+                                        Spacer()
+                                        generatePreliminaryCurriculumButton
+                                        Spacer()
+                                    }.padding(.horizontal)
+                                }
+                            }
+                            
                         }
                     }
                     
@@ -202,6 +99,189 @@ struct NotesView: View {
         }
         .edgesIgnoringSafeArea(.all)
         .frame(width: screenWidth, height: screenHeight)
+    }
+    
+    var submitUnitsButton: some View {
+        Button(action: {
+            
+        }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 15)
+                    .foregroundColor(.black)
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(lineWidth: 3)
+                    .foregroundColor(.buttonPrimary)
+                
+                HStack {
+                    Spacer()
+                    Image(systemName: "checkmark.seal")
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .foregroundColor(.accent)
+                    Text("Submit V-\(selectedVersion + 1)")
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .foregroundColor(.primary)
+                    Spacer()
+                }.padding()
+            }
+        }.padding(.horizontal)
+    }
+    
+    var regenerateVersionButton: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .foregroundColor(.black)
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(lineWidth: 3)
+                .foregroundColor(.buttonPrimary)
+            
+            Button(action: {
+                viewModel.generatePreliminaryCurriculum(selectedVersion: selectedVersion)
+            }) {
+                HStack {
+                    Image(systemName: "terminal")
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .foregroundColor(.accent)
+                    Text("Regenerate V-\(selectedVersion + 1)")
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .foregroundColor(.primary)
+                }.padding()
+            }
+        }.padding(.horizontal)
+    }
+    
+    var generateNewVersionButton: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .foregroundColor(.black)
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(lineWidth: 3)
+                .foregroundColor(.buttonPrimary)
+            
+            Button(action: {
+                viewModel.generatePreliminaryCurriculum(selectedVersion: viewModel.preliminaryCurriculumWeekInput.count)
+            }) {
+                HStack {
+                    Image(systemName: "terminal")
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .foregroundColor(.accent)
+                    Text("Generate V-\(viewModel.preliminaryCurriculumWeekInput.count + 1)")
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .foregroundColor(.primary)
+                }.padding()
+            }
+        }.padding(.trailing)
+    }
+    
+    var trashVersionButton: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .foregroundColor(.black)
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(lineWidth: 3)
+                .foregroundColor(.buttonPrimary)
+            
+            Button(action: {
+                if selectedVersion != 0 {
+                    withAnimation {
+                        selectedVersion -= 1
+                    }
+                }
+                viewModel.trashVersion(number: selectedVersion)
+            }) {
+                HStack {
+                    Image(systemName: "trash")
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .foregroundColor(.accent)
+                    Text("Trash V-\(selectedVersion + 1)")
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .foregroundColor(.primary)
+                }.padding()
+            }
+        }.padding(.horizontal)
+    }
+    
+    var versionSelectButton: some View {
+        HStack {
+            ForEach(viewModel.preliminaryCurriculumWeekInput.indices, id: \.self) { index in
+                Button(action: {
+                    withAnimation {
+                        selectedVersion = index
+                    }
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 15)
+                            .foregroundColor(.black)
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(lineWidth: 3)
+                            .foregroundColor(.buttonPrimary)
+                        
+                        HStack {
+                            Spacer()
+                            if selectedVersion == index {
+                                Image(systemName: "smallcircle.filled.circle.fill")
+                                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                                    .foregroundColor(.accent)
+                            }
+                            Text("V-\(index + 1)")
+                                .font(.system(size: 16, weight: selectedVersion == index ? .bold : .regular, design: .rounded))
+                                .foregroundColor(.primary)
+                            Spacer()
+                        }.padding()
+                    }
+                }
+            }
+        }.padding(.horizontal)
+    }
+    
+    var errorWarning: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .foregroundColor(.black)
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(lineWidth: 3)
+                .foregroundColor(.accent)
+            
+            HStack {
+                Spacer()
+                
+                Image(systemName: "exclamationmark.circle")
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .foregroundColor(.accent)
+                
+                Text("An error occurred")
+                    .font(.system(size: 18, weight: .regular, design: .rounded))
+                    .foregroundColor(.primary)
+                
+                Spacer()
+            }.padding()
+        }.padding(.horizontal)
+    }
+    
+    var continueGeneratingButton: some View {
+        Button(action: {
+            withAnimation {
+                viewModel.errorOccurred = -1
+                viewModel.continueGeneratingPreliminaryCurriculum(selectedVersion: selectedVersion)
+            }
+        }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 15)
+                    .foregroundColor(.black)
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(lineWidth: 3)
+                    .foregroundColor(.buttonPrimary)
+                
+                HStack {
+                    Image(systemName: "arrow.uturn.right.square")
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .foregroundColor(.accent)
+                    
+                    Text("Continue Generating")
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .foregroundColor(.primary)
+                }.padding()
+            }
+        }.padding(.horizontal)
     }
     
     var preWarning: some View {
@@ -317,6 +397,7 @@ struct NotesView: View {
     var generatePreliminaryCurriculumButton: some View {
         Button(action: {
             withAnimation {
+                viewModel.errorOccurred = -1
                 viewModel.generatePreliminaryCurriculum(selectedVersion: selectedVersion)
             }
         }) {

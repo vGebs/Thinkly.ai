@@ -19,6 +19,8 @@ class NotesViewModel: ObservableObject {
     
     @Published var preliminaryCurriculumWeekInput: [PreliminaryCurriculumWeekInput] = []
     
+    @Published var errorOccurred = -1
+    
     var cancellables: [AnyCancellable] = []
     
     let courseCreation: CourseCreationService
@@ -68,6 +70,10 @@ class NotesViewModel: ObservableObject {
         }
     }
     
+    func continueGeneratingPreliminaryCurriculum(selectedVersion: Int) {
+        self.generatePreliminaryCurriculum(selectedVersion: selectedVersion, withInput: self.preliminaryCurriculumWeekInput[selectedVersion])
+    }
+    
     private func generatePreliminaryCurriculum(selectedVersion: Int, withInput: PreliminaryCurriculumWeekInput) {
         courseCreation.generatePreliminaryCurriculum(data: withInput)
             .receive(on: DispatchQueue.main)
@@ -77,6 +83,7 @@ class NotesViewModel: ObservableObject {
                     print("NotesViewModel: Failed to get weekly topic")
                     print("NotesViewModel-err: \(e)")
                     self?.loading = false
+                    self?.errorOccurred = selectedVersion
                 case .finished:
                     print("NotesViewModel: Finished getting weekly topic for week: \(withInput.weekNumber)")
                 }
@@ -92,7 +99,6 @@ class NotesViewModel: ObservableObject {
                     self?.loading = false
                 }
             }.store(in: &cancellables)
-
     }
     
     func trashVersion(number: Int) {
