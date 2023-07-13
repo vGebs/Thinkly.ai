@@ -322,6 +322,7 @@ struct CourseButton: View {
                 }.padding(.bottom,3)
                 
                 if showDescription {
+                    Divider()
                     HStack {
                         VStack {
                             Image(systemName: "doc.plaintext")

@@ -62,11 +62,28 @@ struct NotesView: View {
                     //                    }
                     
                     
-                    ForEach(viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.indices, id: \.self) { index in
-                        WeeklyTopicDropDown(topic: $viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic[index])
+                    if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count > 0 {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 15)
+                                .foregroundColor(.black)
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(lineWidth: 3)
+                                .foregroundColor(.buttonPrimary)
+                            
+                            VStack {
+                                ForEach(viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.indices, id: \.self) { index in
+                                    WeeklyTopicDropDown(topic: $viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic[index])
+                                        .padding(index == viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count - 1 ? .bottom : [])
+                                    
+                                    if index != viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count - 1 {
+                                        Divider()
+                                    }
+                                }
+                                .padding(.top, screenHeight * 0.01)
+                            }
+                        }
+                        .padding(.horizontal)
                     }
-                    .padding(.top, screenHeight * 0.01)
-                    
                     
                     if let user = AppState.shared.user {
                         if user.role == "teacher" {
@@ -181,12 +198,12 @@ struct NotesView: View {
                 .foregroundColor(.buttonPrimary)
             
             Button(action: {
-                if selectedVersion != 0 {
-                    withAnimation {
+                withAnimation {
+                    if selectedVersion != 0 {
                         selectedVersion -= 1
                     }
+                    viewModel.trashVersion(number: selectedVersion)
                 }
-                viewModel.trashVersion(number: selectedVersion)
             }) {
                 HStack {
                     Image(systemName: "trash")
@@ -301,24 +318,7 @@ struct NotesView: View {
                         Spacer()
                     }
                     
-                    Text("Press 'Generate' to get some preliminary units for your course.")
-                        .multilineTextAlignment(.leading)
-                        .font(.system(size: 16, weight: .regular, design: .rounded))
-                        .foregroundColor(.primary)
-                        .fixedSize(horizontal: false, vertical: true)
-                    
-                    Spacer()
-                }.padding(.bottom)
-                
-                HStack {
-                    VStack {
-                        Image(systemName: "lock.open.trianglebadge.exclamationmark")
-                            .font(.system(size: 18, weight: .bold, design: .rounded))
-                            .foregroundColor(.accent)
-                        Spacer()
-                    }
-                    
-                    Text("You will then be tasked with selecting a suitable curriculum.")
+                    Text("Press 'Generate' to create some initial units for your course.")
                         .multilineTextAlignment(.leading)
                         .font(.system(size: 16, weight: .regular, design: .rounded))
                         .foregroundColor(.primary)
@@ -326,6 +326,24 @@ struct NotesView: View {
                     
                     Spacer()
                 }
+//                .padding(.bottom)
+                
+//                HStack {
+//                    VStack {
+//                        Image(systemName: "lock.open.trianglebadge.exclamationmark")
+//                            .font(.system(size: 18, weight: .bold, design: .rounded))
+//                            .foregroundColor(.accent)
+//                        Spacer()
+//                    }
+//
+//                    Text("You will then be tasked with selecting a suitable curriculum.")
+//                        .multilineTextAlignment(.leading)
+//                        .font(.system(size: 16, weight: .regular, design: .rounded))
+//                        .foregroundColor(.primary)
+//                        .fixedSize(horizontal: false, vertical: true)
+//
+//                    Spacer()
+//                }
             }.padding()
         }.padding()
     }
@@ -347,7 +365,7 @@ struct NotesView: View {
                         Spacer()
                     }
                     
-                    Text("Press 'Regenerate Unlocked' to find other suitable units for those that are unlocked.")
+                    Text("Press 'Regenerate' to discover alternative appropriate units.")
                         .multilineTextAlignment(.leading)
                         .font(.system(size: 16, weight: .regular, design: .rounded))
                         .foregroundColor(.primary)
@@ -388,7 +406,8 @@ struct NotesView: View {
                         .fixedSize(horizontal: false, vertical: true)
                     
                     Spacer()
-                }.padding(.bottom)
+                }
+//                .padding(.bottom)
                 
             }.padding()
         }.padding()
