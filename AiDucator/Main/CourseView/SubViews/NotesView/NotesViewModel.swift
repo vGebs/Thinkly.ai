@@ -13,15 +13,12 @@ import Combine
 
 class NotesViewModel: ObservableObject {
     
-//    @Published var preliminaryCurriculum: [WeeklyTopic] = []
-    //WeeklyTopicLocked(weeklyTopic: WeeklyTopic(weekNumber: 1, topicDescription: "Description awe f awe fa wef a we fa we fa we f awe f awe f awe fa wef ", topicTitle: "Intro to shittin"))
-    @Published var preliminaryCurriculumLocked = false
-    
     @Published var preliminaryCurriculumWeekInput: [PreliminaryCurriculumWeekInput] = []
     
     @Published var errorOccurred = -1
+    @Published var stopped: [Int] = []
     
-    var cancellables: [AnyCancellable] = []
+    var cancellables: [Int: [AnyCancellable]] = [:]
     
     let courseCreation: CourseCreationService
     let courseDef: CourseDefinition?
@@ -71,11 +68,15 @@ class NotesViewModel: ObservableObject {
     }
     
     func continueGeneratingPreliminaryCurriculum(selectedVersion: Int) {
+        stopped.removeAll { int in
+            int == selectedVersion
+        }
+        errorOccurred = -1
         self.generatePreliminaryCurriculum(selectedVersion: selectedVersion, withInput: self.preliminaryCurriculumWeekInput[selectedVersion])
     }
     
     private func generatePreliminaryCurriculum(selectedVersion: Int, withInput: PreliminaryCurriculumWeekInput) {
-        courseCreation.generatePreliminaryCurriculum(data: withInput)
+        let cancellable = courseCreation.generatePreliminaryCurriculum(data: withInput)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 switch completion {
@@ -98,7 +99,26 @@ class NotesViewModel: ObservableObject {
                 if self!.preliminaryCurriculumWeekInput[selectedVersion].weekNumber == 15 {
                     self?.loading = false
                 }
-            }.store(in: &cancellables)
+            }
+        
+        if cancellables[selectedVersion] == nil {
+            cancellables[selectedVersion] = [cancellable]
+        } else {
+            cancellables[selectedVersion]?.append(cancellable)
+        }
+    }
+    
+    func stopGenerating(_ selectedVersion: Int) {
+        self.cancellables[selectedVersion] = []
+        self.stopped.append(selectedVersion)
+        self.loading = false
+    }
+    
+    func resetUnits(_ selectedVersion: Int) {
+        self.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic = []
+        self.stopped.removeAll { int in
+            int == selectedVersion
+        }
     }
     
     func trashVersion(number: Int) {

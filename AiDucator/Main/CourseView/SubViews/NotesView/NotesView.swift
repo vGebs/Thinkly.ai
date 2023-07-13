@@ -18,8 +18,7 @@ struct NotesView: View {
                 Spacer()
                 ScrollView {
                     
-                    
-                    if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count > 0 && !viewModel.preliminaryCurriculumLocked{
+                    if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count > 0{
                         warnings
                         
                         Divider()
@@ -27,6 +26,11 @@ struct NotesView: View {
                         if viewModel.errorOccurred == selectedVersion {
                             errorWarning
                             continueGeneratingButton
+                        }
+                        
+                        if viewModel.stopped.contains(selectedVersion) {
+                            continueGeneratingButton
+                            //resetButton
                         }
                         
                         if let _ = viewModel.courseDef {
@@ -49,6 +53,9 @@ struct NotesView: View {
                         }
                     }
                     
+                    if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count > 0 && !viewModel.stopped.contains(selectedVersion) && viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count != 15{
+                        stopGeneratingButton
+                    }
                     
                     if viewModel.preliminaryCurriculumWeekInput.count > 1 {
                         versionSelectButton
@@ -74,6 +81,7 @@ struct NotesView: View {
                                 ForEach(viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.indices, id: \.self) { index in
                                     WeeklyTopicDropDown(topic: $viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic[index])
                                         .padding(index == viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count - 1 ? .bottom : [])
+                                        .padding(index == 0 ? .top : [])
                                     
                                     if index != viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count - 1 {
                                         Divider()
@@ -116,6 +124,58 @@ struct NotesView: View {
         }
         .edgesIgnoringSafeArea(.all)
         .frame(width: screenWidth, height: screenHeight)
+    }
+    
+    var stopGeneratingButton: some View {
+        Button(action: {
+            viewModel.stopGenerating(selectedVersion)
+        }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 15)
+                    .foregroundColor(.black)
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(lineWidth: 3)
+                    .foregroundColor(.buttonPrimary)
+                
+                HStack {
+                    Spacer()
+                    Image(systemName: "stop.fill")
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .foregroundColor(.accent)
+                    Text("Stop Generating")
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .foregroundColor(.primary)
+                    Spacer()
+                }.padding()
+            }
+        }.padding(.horizontal)
+    }
+    
+    var resetButton: some View {
+        Button(action: {
+            withAnimation {
+                viewModel.resetUnits(selectedVersion)
+            }
+        }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 15)
+                    .foregroundColor(.black)
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(lineWidth: 3)
+                    .foregroundColor(.buttonPrimary)
+                
+                HStack {
+                    Spacer()
+                    Image(systemName: "arrow.clockwise")
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .foregroundColor(.accent)
+                    Text("Reset units")
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .foregroundColor(.primary)
+                    Spacer()
+                }.padding()
+            }
+        }.padding(.horizontal)
     }
     
     var submitUnitsButton: some View {
@@ -277,7 +337,6 @@ struct NotesView: View {
     var continueGeneratingButton: some View {
         Button(action: {
             withAnimation {
-                viewModel.errorOccurred = -1
                 viewModel.continueGeneratingPreliminaryCurriculum(selectedVersion: selectedVersion)
             }
         }) {
@@ -290,11 +349,11 @@ struct NotesView: View {
                 
                 HStack {
                     Image(systemName: "arrow.uturn.right.square")
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
                         .foregroundColor(.accent)
                     
                     Text("Continue Generating")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.primary)
                 }.padding()
             }
@@ -326,24 +385,6 @@ struct NotesView: View {
                     
                     Spacer()
                 }
-//                .padding(.bottom)
-                
-//                HStack {
-//                    VStack {
-//                        Image(systemName: "lock.open.trianglebadge.exclamationmark")
-//                            .font(.system(size: 18, weight: .bold, design: .rounded))
-//                            .foregroundColor(.accent)
-//                        Spacer()
-//                    }
-//
-//                    Text("You will then be tasked with selecting a suitable curriculum.")
-//                        .multilineTextAlignment(.leading)
-//                        .font(.system(size: 16, weight: .regular, design: .rounded))
-//                        .foregroundColor(.primary)
-//                        .fixedSize(horizontal: false, vertical: true)
-//
-//                    Spacer()
-//                }
             }.padding()
         }.padding()
     }
@@ -407,8 +448,6 @@ struct NotesView: View {
                     
                     Spacer()
                 }
-//                .padding(.bottom)
-                
             }.padding()
         }.padding()
     }

@@ -24,7 +24,8 @@ struct WeeklyTopicDropDown: View {
                     Text("Unit: \(String(topic.weekNumber))")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.primary)
-                }.padding(2)
+                }
+                .padding(.bottom, 2)
                 
                 Spacer()
             }
