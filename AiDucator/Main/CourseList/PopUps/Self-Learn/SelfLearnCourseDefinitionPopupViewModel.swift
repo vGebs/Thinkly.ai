@@ -10,7 +10,7 @@ import Combine
 import SwiftUI
 
 class SelfLearnCourseDefinitionViewModel: ObservableObject {
-    @Published var userPrompt = "I want to learn about software architecture, especially to do with high volume applications and system design"
+    @Published var userPrompt = "I want to learn about object oriented programming" //I want to learn about software architecture, especially to do with high volume applications and system design
     @Published var learningObjectives: [LearningObjective] = [
         
     ]
@@ -30,6 +30,8 @@ class SelfLearnCourseDefinitionViewModel: ObservableObject {
 //    CourseOverview(courseTitle: "Building High-Performance Scalable Systems", courseDescription: "Understand the principles of excellent software design and learn how to create reliable and scalable system architectures that can handle increased demand for resources.")
     
     @Published var selectedCourseIndex = -1
+    
+    @Published var selectedClassType = ClassType(id: "Computer Science", sfSymbol: "desktopcomputer")
     
     var courseDefService: CourseDefinitionService
     @Published var loading = false 

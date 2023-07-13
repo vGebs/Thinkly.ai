@@ -13,114 +13,123 @@ struct NotesView: View {
     @State var selectedVersion = 0
     
     var body: some View {
-        ZStack {
-            VStack {
-                Spacer()
-                ScrollView {
+        
+        VStack {
+            Spacer()
+            ScrollView {
+                
+                if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count > 0{
+                    warnings
                     
-                    if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count > 0{
-                        warnings
-                        
-                        Divider()
-                        
-                        if viewModel.errorOccurred == selectedVersion {
-                            errorWarning
-                            continueGeneratingButton
-                        }
-                        
-                        if viewModel.stopped.contains(selectedVersion) {
-                            continueGeneratingButton
-                            //resetButton
-                        }
-                        
-                        if let _ = viewModel.courseDef {
-                            if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count == 15 {
-                                
-                                submitUnitsButton
-                                
-                                HStack {
-                                    regenerateVersionButton
-                                    
-                                    
-                                    if viewModel.preliminaryCurriculumWeekInput.count <= 2 {
-                                        Spacer()
-                                        generateNewVersionButton
-                                    }
-                                }
-                                
-                                trashVersionButton
-                            }
-                        }
+                    Divider()
+                    
+                    if viewModel.errorOccurred == selectedVersion {
+                        errorWarning
+                        continueGeneratingButton
                     }
                     
-                    if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count > 0 && !viewModel.stopped.contains(selectedVersion) && viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count != 15{
-                        stopGeneratingButton
-                    }
-                    
-                    if viewModel.preliminaryCurriculumWeekInput.count > 1 {
-                        versionSelectButton
-                    }
-                    //                    if viewModel.weeklyContent.count > 0 {
-                    //                        ForEach(viewModel.weeklyContent) { content in
-                    //                            MyUnitsDropDown(thisWeeksContent: content)
-                    //                                .padding(.horizontal, 5)
-                    //                        }
-                    //                        .padding(.top, screenHeight * 0.01)
-                    //                    }
-                    
-                    
-                    if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count > 0 {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 15)
-                                .foregroundColor(.black)
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(lineWidth: 3)
-                                .foregroundColor(.buttonPrimary)
+                    if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count > 0 && viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count != 15{
+                        HStack {
+                            Text("\(viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count) / 15 units")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
                             
-                            VStack {
-                                ForEach(viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.indices, id: \.self) { index in
-                                    WeeklyTopicDropDown(topic: $viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic[index])
-                                        .padding(index == viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count - 1 ? .bottom : [])
-                                        .padding(index == 0 ? .top : [])
-                                    
-                                    if index != viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count - 1 {
-                                        Divider()
-                                    }
-                                }
-                                .padding(.top, screenHeight * 0.01)
-                            }
-                        }
-                        .padding(.horizontal)
+                            Spacer()
+                        }.padding(.horizontal)
                     }
                     
-                    if let user = AppState.shared.user {
-                        if user.role == "teacher" {
+                    if viewModel.stopped.contains(selectedVersion) {
+                        continueGeneratingButton
+                        //resetButton
+                    }
+                    
+                    if let _ = viewModel.courseDef {
+                        if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count == 15 {
                             
-                            if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.count == 0 {
+                            submitUnitsButton
+                            
+                            HStack {
+                                regenerateVersionButton
                                 
-                                preWarning
-                                if viewModel.errorOccurred == selectedVersion {
-                                    errorWarning
-                                }
                                 
-                                if viewModel.loading {
-                                    LoadingView()
-                                } else {
-                                    HStack {
-                                        Spacer()
-                                        generatePreliminaryCurriculumButton
-                                        Spacer()
-                                    }.padding(.horizontal)
+                                if viewModel.preliminaryCurriculumWeekInput.count <= 2 {
+                                    Spacer()
+                                    generateNewVersionButton
                                 }
                             }
                             
+                            trashVersionButton
                         }
                     }
-                    
-                    Spacer().padding(.bottom, screenHeight * 0.13)
                 }
-                .frame(width: screenWidth, height: screenHeight * (1 - 0.11))
+                
+                if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count > 0 && !viewModel.stopped.contains(selectedVersion) && viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count != 15{
+                    stopGeneratingButton
+                }
+                
+                if viewModel.preliminaryCurriculumWeekInput.count > 1 {
+                    versionSelectButton
+                }
+                //                    if viewModel.weeklyContent.count > 0 {
+                //                        ForEach(viewModel.weeklyContent) { content in
+                //                            MyUnitsDropDown(thisWeeksContent: content)
+                //                                .padding(.horizontal, 5)
+                //                        }
+                //                        .padding(.top, screenHeight * 0.01)
+                //                    }
+                
+                
+                if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count > 0 {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 15)
+                            .foregroundColor(.black)
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(lineWidth: 3)
+                            .foregroundColor(.buttonPrimary)
+                        
+                        VStack {
+                            ForEach(viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.indices, id: \.self) { index in
+                                WeeklyTopicDropDown(topic: $viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units[index])
+                                    .padding(index == viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count - 1 ? .bottom : [])
+                                    .padding(index == 0 ? .top : [])
+                                
+                                if index != viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count - 1 {
+                                    Divider()
+                                }
+                            }
+                            .padding(.top, screenHeight * 0.01)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+                
+                if let user = AppState.shared.user {
+                    if user.role == "teacher" {
+                        
+                        if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count == 0 {
+                            
+                            preWarning
+                            if viewModel.errorOccurred == selectedVersion {
+                                errorWarning
+                            }
+                            
+                            if viewModel.loading {
+                                LoadingView()
+                            } else {
+                                HStack {
+                                    Spacer()
+                                    generatePreliminaryCurriculumButton
+                                    Spacer()
+                                }.padding(.horizontal)
+                            }
+                        }
+                        
+                    }
+                }
+                
+                Spacer().padding(.bottom, screenHeight * 0.13)
             }
+            .frame(width: screenWidth, height: screenHeight * (1 - 0.11))
         }
         .edgesIgnoringSafeArea(.all)
         .frame(width: screenWidth, height: screenHeight)
@@ -180,7 +189,7 @@ struct NotesView: View {
     
     var submitUnitsButton: some View {
         Button(action: {
-            
+            viewModel.submitUnits(selectedVersion)
         }) {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)

@@ -19,9 +19,9 @@ struct CourseFull: Codable {
     var courseAssessments: [Assessment]? = nil
     var courseTimingStructure: TimingStructure? = nil
     var gradeLevel: String? = nil
-    let textbooks: [Textbook]
-    let learningObjectives: [LearningObjective]
-    let courseOverview: CourseOverview
+    var textbooks: [Textbook]? = nil
+    var learningObjectives: [LearningObjective]
+    var courseOverview: CourseOverview
     var prerequisites: [Prerequisite]? = nil 
     var weeklyContents: [WeeklyContent]? = nil
 }

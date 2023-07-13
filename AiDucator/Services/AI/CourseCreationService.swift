@@ -25,7 +25,7 @@ public class CourseCreationService {
         return request
     }
     
-    func generatePreliminaryCurriculum(data: PreliminaryCurriculumWeekInput) -> AnyPublisher<WeeklyTopic, Error> {
+    func generatePreliminaryCurriculum(data: PreliminaryCurriculumWeekInput) -> AnyPublisher<Unit, Error> {
         let url = baseURL.appendingPathComponent("/generatePreliminaryCurriculumForWeek")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -100,28 +100,28 @@ public class CourseCreationService {
 }
 
 struct PreliminaryCurriculumInput: Codable {
-    var gradeLevel: String?
-    var textBooks: [Textbook]
+    var gradeLevel: String? = nil 
+    var textBooks: [Textbook]? = nil
     var learningObjectives: [LearningObjective]
     var courseOverview: CourseOverview
-    var prerequisites: [Prerequisite]?
-    var weeklyTopic: [WeeklyTopic]
+    var prerequisites: [Prerequisite]? = nil
+    var units: [Unit]
 }
 
 struct PreliminaryCurriculumWeekInput: Codable {
-    var weekNumber: Int
-    var totalWeeks: Int
+    var unitNumber: Int
+    var totalUnits: Int
     var course: PreliminaryCurriculumInput
 }
 
-struct WeeklyTopic: Codable {
-    var weekNumber: Int
-    var topicDescription: String
-    var topicTitle: String
+struct Unit: Codable {
+    var unitNumber: Int
+    var unitDescription: String
+    var unitTitle: String
 }
 
 struct PreliminaryCurriculumOutput: Codable {
-    var curriculum: [WeeklyTopic]
+    var curriculum: [Unit]
 }
 
 struct NotesOutlineInput: Codable {

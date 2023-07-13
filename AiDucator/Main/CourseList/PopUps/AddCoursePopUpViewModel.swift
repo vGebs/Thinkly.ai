@@ -21,7 +21,7 @@ class AddCoursePopUpViewModel: ObservableObject {
     
     private var cancellables: [AnyCancellable] = []
     
-    @Published var userPrompt = "I want to learn about software systems, especially to do with high volume applications and system design"
+    @Published var userPrompt = "" //I want to learn about software systems, especially to do with high volume applications and system design
     
     @Published var textbooks: [Textbook] = [
         

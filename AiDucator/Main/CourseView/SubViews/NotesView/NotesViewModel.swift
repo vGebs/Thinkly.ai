@@ -32,12 +32,12 @@ class NotesViewModel: ObservableObject {
         
         if let courseDef = courseDef {
             self.preliminaryCurriculumWeekInput.append(PreliminaryCurriculumWeekInput(
-                weekNumber: 1,
-                totalWeeks: 15,
-                course: PreliminaryCurriculumInput(textBooks: courseDef.courseFull.textbooks, learningObjectives: courseDef.courseFull.learningObjectives, courseOverview: courseDef.courseFull.courseOverview, weeklyTopic: [])
+                unitNumber: 1,
+                totalUnits: 15,
+                course: PreliminaryCurriculumInput(learningObjectives: courseDef.courseFull.learningObjectives, courseOverview: courseDef.courseFull.courseOverview, units: [])
             ))
         } else {
-            self.preliminaryCurriculumWeekInput.append(PreliminaryCurriculumWeekInput(weekNumber: 0, totalWeeks: 0, course: PreliminaryCurriculumInput(textBooks: [], learningObjectives: [], courseOverview: CourseOverview(courseTitle: "", courseDescription: ""), weeklyTopic: [])))
+            self.preliminaryCurriculumWeekInput.append(PreliminaryCurriculumWeekInput(unitNumber: 0, totalUnits: 0, course: PreliminaryCurriculumInput(learningObjectives: [], courseOverview: CourseOverview(courseTitle: "", courseDescription: ""), units: [])))
         }
         
 //        self.observePreliminaryCurriculum()
@@ -52,14 +52,14 @@ class NotesViewModel: ObservableObject {
         if selectedVersion >= self.preliminaryCurriculumWeekInput.count {
             if let courseDef = courseDef {
                 self.preliminaryCurriculumWeekInput.append(PreliminaryCurriculumWeekInput(
-                    weekNumber: 1,
-                    totalWeeks: 15,
-                    course: PreliminaryCurriculumInput(textBooks: courseDef.courseFull.textbooks, learningObjectives: courseDef.courseFull.learningObjectives, courseOverview: courseDef.courseFull.courseOverview, weeklyTopic: [])
+                    unitNumber: 1,
+                    totalUnits: 15,
+                    course: PreliminaryCurriculumInput(textBooks: courseDef.courseFull.textbooks, learningObjectives: courseDef.courseFull.learningObjectives, courseOverview: courseDef.courseFull.courseOverview, units: [])
                 ))
             }
         } else {
-            self.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic = []
-            self.preliminaryCurriculumWeekInput[selectedVersion].weekNumber = 1
+            self.preliminaryCurriculumWeekInput[selectedVersion].course.units = []
+            self.preliminaryCurriculumWeekInput[selectedVersion].unitNumber = 1
         }
         
         if selectedVersion <= self.preliminaryCurriculumWeekInput.count {
@@ -86,17 +86,17 @@ class NotesViewModel: ObservableObject {
                     self?.loading = false
                     self?.errorOccurred = selectedVersion
                 case .finished:
-                    print("NotesViewModel: Finished getting weekly topic for week: \(withInput.weekNumber)")
+                    print("NotesViewModel: Finished getting weekly topic for week: \(withInput.unitNumber)")
                 }
             } receiveValue: { [weak self] topic in
-                self?.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic.append(topic)
-                self?.preliminaryCurriculumWeekInput[selectedVersion].weekNumber += 1
+                self?.preliminaryCurriculumWeekInput[selectedVersion].course.units.append(topic)
+                self?.preliminaryCurriculumWeekInput[selectedVersion].unitNumber += 1
 
-                if self!.preliminaryCurriculumWeekInput[selectedVersion].weekNumber <= 15 {
+                if self!.preliminaryCurriculumWeekInput[selectedVersion].unitNumber <= 15 {
                     self?.generatePreliminaryCurriculum(selectedVersion: selectedVersion, withInput: self!.preliminaryCurriculumWeekInput[selectedVersion])
                 }
 
-                if self!.preliminaryCurriculumWeekInput[selectedVersion].weekNumber == 15 {
+                if self!.preliminaryCurriculumWeekInput[selectedVersion].unitNumber == 15 {
                     self?.loading = false
                 }
             }
@@ -115,7 +115,7 @@ class NotesViewModel: ObservableObject {
     }
     
     func resetUnits(_ selectedVersion: Int) {
-        self.preliminaryCurriculumWeekInput[selectedVersion].course.weeklyTopic = []
+        self.preliminaryCurriculumWeekInput[selectedVersion].course.units = []
         self.stopped.removeAll { int in
             int == selectedVersion
         }
@@ -127,14 +127,30 @@ class NotesViewModel: ObservableObject {
                 self.preliminaryCurriculumWeekInput.remove(at: number)
                 
                 self.preliminaryCurriculumWeekInput = [(PreliminaryCurriculumWeekInput(
-                    weekNumber: 1,
-                    totalWeeks: 15,
-                    course: PreliminaryCurriculumInput(textBooks: courseDef.courseFull.textbooks, learningObjectives: courseDef.courseFull.learningObjectives, courseOverview: courseDef.courseFull.courseOverview, weeklyTopic: [])
+                    unitNumber: 1,
+                    totalUnits: 15,
+                    course: PreliminaryCurriculumInput(textBooks: courseDef.courseFull.textbooks, learningObjectives: courseDef.courseFull.learningObjectives, courseOverview: courseDef.courseFull.courseOverview, units: [])
                 ))]
             }
         } else if self.preliminaryCurriculumWeekInput.count > 1 {
             self.preliminaryCurriculumWeekInput.remove(at: number)
         }
+    }
+    
+    private var submitCancellable: AnyCancellable?
+    
+    func submitUnits(_ selectedVersion: Int) {
+        self.submitCancellable = UnitService_firestore.shared.pushUnits(units: self.preliminaryCurriculumWeekInput[selectedVersion].course.units, uid: AppState.shared.user!.uid, courseID: courseDef!.documentID!)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .failure(let e):
+                    print("NotesViewModel: Failed to push units")
+                    print("NotesViewModel-err: \(e)")
+                case .finished:
+                    print("NotesViewModel: Finished pushing units to firestore")
+                }
+            } receiveValue: { docID in }
     }
 }
 

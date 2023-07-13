@@ -10,7 +10,7 @@ import SwiftUI
 
 struct WeeklyTopicDropDown: View {
     
-    @Binding var topic: WeeklyTopic
+    @Binding var topic: Unit
     @State var droppedDown = false
     
     var body: some View {
@@ -21,7 +21,7 @@ struct WeeklyTopicDropDown: View {
                     Image(systemName: "number.square")
                         .font(.system(size: 14, weight: .bold, design: .rounded))
                         .foregroundColor(.accent)
-                    Text("Unit: \(String(topic.weekNumber))")
+                    Text("Unit: \(String(topic.unitNumber))")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.primary)
                 }
@@ -47,7 +47,7 @@ struct WeeklyTopicDropDown: View {
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.accent)
                     
-                    Text(topic.topicTitle)
+                    Text(topic.unitTitle)
                         .multilineTextAlignment(.leading)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .foregroundColor(.primary)
@@ -76,7 +76,7 @@ struct WeeklyTopicDropDown: View {
                         Spacer()
                     }
                     
-                    Text(topic.topicDescription)
+                    Text(topic.unitDescription)
                         .font(.system(size: 18, weight: .regular, design: .rounded))
                         .foregroundColor(.primary)
                     

@@ -22,7 +22,7 @@ struct SelfLearnCourseDefinitionPopup: View {
                     header
                     userPrompt
                     
-                    if viewModel.userPrompt.count > 15 && viewModel.learningObjectives.count == 0 {
+                    if viewModel.userPrompt.count > 4 && viewModel.learningObjectives.count == 0 {
                         if viewModel.loading {
                             LoadingView()
                         } else {
@@ -30,22 +30,23 @@ struct SelfLearnCourseDefinitionPopup: View {
                         }
                     }
                     
-                    
                     if viewModel.learningObjectives.count > 0 {
                         Divider()
                         learningObjectivesView
                         
-                        Divider()
-                        
                         if viewModel.loading {
+                            Divider()
                             LoadingView()
-                        } else {
+                        } else if viewModel.courseOverviewSuggestions.count == 0 {
+                            Divider()
                             generateCourseOverviewButton
                         }
                         
                         if viewModel.courseOverviewSuggestions.count > 0 {
                             Divider()
                             courseOverviewView
+                            Divider()
+                            addSymbol
                         }
                     }
                     
@@ -195,7 +196,7 @@ struct SelfLearnCourseDefinitionPopup: View {
                             
                             Spacer()
                             
-                            if viewModel.courseOverviewSuggestions.count == 0 {
+                            if viewModel.courseOverviewSuggestions.count == 0 && !viewModel.loading{
                                 Button(action: {
                                     withAnimation {
                                         var temp = viewModel.learningObjectives
@@ -239,7 +240,7 @@ struct SelfLearnCourseDefinitionPopup: View {
                     .padding()
                 }.padding(.horizontal)
             }
-            if viewModel.courseOverviewSuggestions.count == 0 {
+            if viewModel.courseOverviewSuggestions.count == 0 && !viewModel.loading{
                 HStack {
                     regenerateLearningObjectivesButton
                     removeAllLearningObjectivesButton
@@ -501,26 +502,47 @@ struct SelfLearnCourseDefinitionPopup: View {
         }
     }
     
+    var addSymbol: some View {
+        HStack {
+            Image(systemName: "brain")
+                .font(.system(size: 14, weight: .semibold, design: .rounded))
+                .foregroundColor(.accent)
+                .padding(.leading)
+            Text("Course Symbol")
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundColor(.primary)
+            
+            Spacer()
+            
+            Picker("Course Symbol", selection: $viewModel.selectedClassType) {
+                ForEach(classTypes) { classType in
+                    HStack {
+                        Image(systemName: classType.sfSymbol)
+                    }
+                    .tag(classType)
+                }
+            }
+            .frame(height: screenHeight / 10)
+            .pickerStyle(WheelPickerStyle())
+        }
+        .padding(.top, 2)
+    }
+    
     var addCourseButton: some View{
         VStack{
             Button(action: {
                 hideKeyboard()
                 
-//                classListViewModel.addCourse(
-//                    course: CourseDefinition(
-//                        courseFull: CourseFull(
-//                            courseAssessments: viewModel.courseAssessments,
-//                            courseTimingStructure: viewModel.timingStructure,
-//                            gradeLevel: viewModel.gradeLevel,
-//                            textbooks: viewModel.textbooks,
-//                            learningObjectives: viewModel.learningObjectives,
-//                            courseOverview: viewModel.courseOverviewSuggestions[0],
-//                            prerequisites: viewModel.prerequisites,
-//                            weeklyContents: []),
-//                        teacherID: AppState.shared.user!.uid,
-//                        sfSymbol: viewModel.selectedClassType.sfSymbol
-//                    )
-//                )
+                classListViewModel.addCourse(
+                    course: CourseDefinition(
+                        courseFull: CourseFull(
+                            learningObjectives: viewModel.learningObjectives,
+                            courseOverview: viewModel.courseOverviewSuggestions[0],
+                            weeklyContents: []),
+                        teacherID: AppState.shared.user!.uid,
+                        sfSymbol: viewModel.selectedClassType.sfSymbol
+                    )
+                )
                 
                 withAnimation {
                     addCoursePressed = false
@@ -582,9 +604,8 @@ final class ContentSizedTextView: UITextView {
 }
 
 struct GrowingTextView: UIViewRepresentable {
-
     @Binding var text: String
-
+    
     func makeUIView(context: Context) -> ContentSizedTextView {
         let textView = ContentSizedTextView()
         textView.isScrollEnabled = true
@@ -592,10 +613,28 @@ struct GrowingTextView: UIViewRepresentable {
         textView.textContainerInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         textView.backgroundColor = UIColor(white: 0.0, alpha: 0.05)
         textView.font = UIFont.preferredFont(forTextStyle: .body)
+        textView.delegate = context.coordinator
         return textView
     }
-
+    
     func updateUIView(_ uiView: ContentSizedTextView, context: Context) {
         uiView.text = text
     }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    class Coordinator: NSObject, UITextViewDelegate {
+        var parent: GrowingTextView
+        
+        init(_ parent: GrowingTextView) {
+            self.parent = parent
+        }
+        
+        func textViewDidChange(_ textView: UITextView) {
+            parent.text = textView.text
+        }
+    }
 }
+
