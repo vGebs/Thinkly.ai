@@ -61,6 +61,15 @@ class CourseDefinitionService {
         return networkWrapper.request(with: request, timeout: 120, pingURLRequest: bundlePingRequest(), pingTimeout: 3)
     }
     
+    public func getCourseTitleSuggestionsFromCurriculum(from curriculum: Curriculum) -> AnyPublisher<CourseOverviewSuggestions, Error> {
+        let url = baseURL.appendingPathComponent("/getCourseTitleSuggestionFromCurriculum")
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = try? JSONEncoder().encode(curriculum)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        return networkWrapper.request(with: request, timeout: 120, pingURLRequest: bundlePingRequest(), pingTimeout: 3)
+    }
+    
     public func getCourseTitleSuggestion(learningObjectives: [LearningObjective]) -> AnyPublisher<CourseOverviewSuggestions, Error> {
         let url = baseURL.appendingPathComponent("/getCourseTitleSuggestion")
         var request = URLRequest(url: url)
@@ -90,7 +99,12 @@ struct LearningObjectives: Codable {
 }
 
 struct CourseOverviewSuggestions: Codable {
-    let courseOverview: [CourseOverview]
+    let courseOverview: [CourseOverviewGenerated]
+}
+
+struct CourseOverviewGenerated: Codable {
+    let courseTitle: String
+    let courseDescription: String
 }
 
 struct Prerequisites: Codable {

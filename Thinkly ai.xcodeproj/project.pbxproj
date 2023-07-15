@@ -59,6 +59,8 @@
 		FABD79C32A098CEF00201145 /* LandingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79C22A098CEF00201145 /* LandingViewModel.swift */; };
 		FABD79C52A098DD800201145 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD79C42A098DD800201145 /* AppState.swift */; };
 		FACADAAA2A609B9700FC9F06 /* UnitService_firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACADAA92A609B9700FC9F06 /* UnitService_firestore.swift */; };
+		FACADAAC2A62580E00FC9F06 /* SelfLearnCourseDefinitionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACADAAB2A62580E00FC9F06 /* SelfLearnCourseDefinitionSheet.swift */; };
+		FACADAAE2A625AE600FC9F06 /* SelfLearnCourseDefinitionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACADAAD2A625AE600FC9F06 /* SelfLearnCourseDefinitionSheetViewModel.swift */; };
 		FAE0BEE22A327944003BF2CB /* CourseDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0BEE12A327944003BF2CB /* CourseDefinition.swift */; };
 		FAEC5D142A0EF1DD00A48F05 /* SigninSignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEC5D132A0EF1DD00A48F05 /* SigninSignupView.swift */; };
 		FAEC5D162A0EF21900A48F05 /* SigninSignupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEC5D152A0EF21900A48F05 /* SigninSignupViewModel.swift */; };
@@ -129,6 +131,8 @@
 		FABD79C22A098CEF00201145 /* LandingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingViewModel.swift; sourceTree = "<group>"; };
 		FABD79C42A098DD800201145 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		FACADAA92A609B9700FC9F06 /* UnitService_firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitService_firestore.swift; sourceTree = "<group>"; };
+		FACADAAB2A62580E00FC9F06 /* SelfLearnCourseDefinitionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfLearnCourseDefinitionSheet.swift; sourceTree = "<group>"; };
+		FACADAAD2A625AE600FC9F06 /* SelfLearnCourseDefinitionSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfLearnCourseDefinitionSheetViewModel.swift; sourceTree = "<group>"; };
 		FAE0BEE12A327944003BF2CB /* CourseDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDefinition.swift; sourceTree = "<group>"; };
 		FAEC5D132A0EF1DD00A48F05 /* SigninSignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninSignupView.swift; sourceTree = "<group>"; };
 		FAEC5D152A0EF21900A48F05 /* SigninSignupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninSignupViewModel.swift; sourceTree = "<group>"; };
@@ -406,6 +410,8 @@
 			children = (
 				FA5115082A491AFF004AA1D9 /* SelfLearnCourseDefinitionPopup.swift */,
 				FA51150A2A492B56004AA1D9 /* SelfLearnCourseDefinitionPopupViewModel.swift */,
+				FACADAAB2A62580E00FC9F06 /* SelfLearnCourseDefinitionSheet.swift */,
+				FACADAAD2A625AE600FC9F06 /* SelfLearnCourseDefinitionSheetViewModel.swift */,
 			);
 			path = "Self-Learn";
 			sourceTree = "<group>";
@@ -547,6 +553,7 @@
 				FA9CFAA82A16B355000BDE95 /* FeedView.swift in Sources */,
 				FA9CFAB02A171236000BDE95 /* CourseDefinitionPopup.swift in Sources */,
 				FAEC5D162A0EF21900A48F05 /* SigninSignupViewModel.swift in Sources */,
+				FACADAAE2A625AE600FC9F06 /* SelfLearnCourseDefinitionSheetViewModel.swift in Sources */,
 				FA9CFAB52A182672000BDE95 /* AddCourseStudentPopup.swift in Sources */,
 				FA9CFAAC2A16B390000BDE95 /* GradesView.swift in Sources */,
 				FA0CDC482A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld in Sources */,
@@ -586,6 +593,7 @@
 				FA9CFAA12A16AFD0000BDE95 /* Pager.swift in Sources */,
 				FA9CFAA62A16B337000BDE95 /* AssignmentsView.swift in Sources */,
 				FA9E0B022A35561C0096BCCF /* CourseDefinitionService.swift in Sources */,
+				FACADAAC2A62580E00FC9F06 /* SelfLearnCourseDefinitionSheet.swift in Sources */,
 				FA9CFABC2A194335000BDE95 /* NoteSectionService_Firestore.swift in Sources */,
 				FAEC5D182A0EF27B00A48F05 /* SigninSignupValidation.swift in Sources */,
 				FA9CFA832A0FAB43000BDE95 /* Notepad.swift in Sources */,

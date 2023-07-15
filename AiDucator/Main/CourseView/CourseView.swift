@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct CourseView: View {
-    @Binding var course: CourseDefinition?
+    @Binding var course: CourseOverview?
 
     @ObservedObject var offsetManager = OffsetManager.shared
     
@@ -30,11 +30,11 @@ struct CourseView: View {
                 if course != nil {
                     HStack {
                         
-                        Image(systemName: course!.sfSymbol)
+                        Image(systemName: course!.sfSymbol!)
                             .font(.system(size: 12, weight: .black, design: .rounded))
                             .foregroundColor(.black)
                             
-                        Text(course!.courseFull.courseOverview.courseTitle)
+                        Text(course!.courseTitle)
                             .font(.system(size: 14, weight: .black, design: .rounded))
                             .foregroundColor(.buttonPrimary)
                     }

@@ -533,17 +533,17 @@ struct SelfLearnCourseDefinitionPopup: View {
             Button(action: {
                 hideKeyboard()
                 
-                classListViewModel.addCourse(
-                    course: CourseDefinition(
-                        courseFull: CourseFull(
-                            textbooks: [Textbook(title: "Head First Object-Oriented Analysis and Design", author: "Brett D. McLaughlin, Gary Pollice, and David West"), Textbook(title: "Object-Oriented Thought Process, The (4th Edition)", author: "Matt Weisfeld")],
-                            learningObjectives: viewModel.learningObjectives,
-                            courseOverview: viewModel.courseOverviewSuggestions[0],
-                            weeklyContents: []),
-                        teacherID: AppState.shared.user!.uid,
-                        sfSymbol: viewModel.selectedClassType.sfSymbol
-                    )
-                )
+//                classListViewModel.addCourse(
+//                    course: CourseDefinition(
+//                        courseFull: CourseFull(
+//                            textbooks: [Textbook(title: "Head First Object-Oriented Analysis and Design", author: "Brett D. McLaughlin, Gary Pollice, and David West"), Textbook(title: "Object-Oriented Thought Process, The (4th Edition)", author: "Matt Weisfeld")],
+//                            learningObjectives: viewModel.learningObjectives,
+//                            courseOverview: viewModel.courseOverviewSuggestions[0],
+//                            weeklyContents: []),
+//                        teacherID: AppState.shared.user!.uid,
+//                        sfSymbol: viewModel.selectedClassType.sfSymbol
+//                    )
+//                )
                 
                 withAnimation {
                     addCoursePressed = false

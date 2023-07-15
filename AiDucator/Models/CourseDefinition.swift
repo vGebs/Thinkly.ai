@@ -49,9 +49,12 @@ struct LearningObjective: Codable {
     let objectiveTitle: String
 }
 
-struct CourseOverview: Codable {
+struct CourseOverview: Codable, FirestoreProtocol {
+    @DocumentID var documentID: String? = nil 
     let courseTitle: String
     let courseDescription: String
+    var sfSymbol: String? = nil
+    var teacherID: String? = nil 
 }
 
 struct Prerequisite: Codable {

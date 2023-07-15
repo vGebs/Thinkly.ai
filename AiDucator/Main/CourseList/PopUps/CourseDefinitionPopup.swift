@@ -1412,16 +1412,16 @@ struct CourseDefinitionPopup: View {
             Button(action: {
                 hideKeyboard()
                 
-                classListViewModel.addCourse(
-                    course: CourseDefinition(
-                        courseFull: CourseFull(
-                            textbooks: viewModel.textbooks,
-                            learningObjectives: viewModel.learningObjectives,
-                            courseOverview: viewModel.courseOverviewSuggestions[0]),
-                        teacherID: AppState.shared.user!.uid,
-                        sfSymbol: viewModel.selectedClassType.sfSymbol
-                    )
-                )
+//                classListViewModel.addCourse(
+//                    course: CourseDefinition(
+//                        courseFull: CourseFull(
+//                            textbooks: viewModel.textbooks,
+//                            learningObjectives: viewModel.learningObjectives,
+//                            courseOverview: viewModel.courseOverviewSuggestions[0]),
+//                        teacherID: AppState.shared.user!.uid,
+//                        sfSymbol: viewModel.selectedClassType.sfSymbol
+//                    )
+//                )
                 
                 withAnimation {
                     overlapPressed = false

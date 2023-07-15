@@ -1,35 +1,36 @@
 //
-//  NotesViewModel.swift
+//  SelfLearnCourseDefinitionSheetViewModel.swift
 //  Thinkly ai
 //
-//  Created by Vaughn on 2023-06-18.
+//  Created by Vaughn on 2023-07-14.
 //
 
 import Foundation
 import Combine
 
-//for this class we need to fetch all of the notes for that class.
-//So for the course they are in, fetch all of the notes,
-
-class NotesViewModel: ObservableObject {
+class SelfLearnCourseDefinitionSheetViewModel: ObservableObject {
     
     @Published var curriculums: [Curriculum] = [Curriculum(units: [])]
     
     @Published var errorOccurred = -1
     @Published var stopped: [Int] = []
     
+    @Published var selectedCurriculum: Curriculum?
+    
     var cancellables: [AnyCancellable] = []
     
+    @Published var userPrompt = "I want to learn about object oriented programming"
+    
     let courseCreation: CourseCreationService
-    let courseDef: CourseOverview?
+    
+    @Published private var courseDef: CourseDefinition? = nil
     
     @Published var doneGenerating = [false, false, false]
     
-    init(courseDef: CourseOverview?) {
+    init() {
         //on init we need to fetch the weekly content
         //we will not store all of weeks in the same document (faster fetching)
         //Once we get the CourseDefinition,
-        self.courseDef = courseDef
         self.courseCreation = CourseCreationService()
     }
     
@@ -59,7 +60,7 @@ class NotesViewModel: ObservableObject {
     private func getCurriculum(selectedVersion: Int) {
         self.loading = true
         
-        courseCreation.getCurriculum(prompt: "I want to learn about object oriented programming")
+        courseCreation.getCurriculum(prompt: userPrompt)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 switch completion {
@@ -119,5 +120,9 @@ class NotesViewModel: ObservableObject {
                     print("NotesViewModel: Finished pushing units to firestore")
                 }
             } receiveValue: { docID in }
+    }
+    
+    func selectCurriculum(selectedVersion: Int) {
+        self.selectedCurriculum = self.curriculums[selectedVersion]
     }
 }

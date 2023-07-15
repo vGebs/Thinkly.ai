@@ -12,7 +12,7 @@ class CourseListViewModel: ObservableObject {
     
     private var cancellables: [AnyCancellable] = []
     
-    @Published var courses: [CourseDefinition]?
+    @Published var courses: [CourseOverview]?
     
     init() {
         AppState.shared.$user
@@ -22,21 +22,21 @@ class CourseListViewModel: ObservableObject {
                 }
             }.store(in: &cancellables)
     }
-    
-    func addCourse(course: CourseDefinition) {
-        
-        CourseService_Firestore.shared.addCourse(course)
-            .sink { completion in
-                switch completion {
-                case .failure(let e):
-                    print("ClassListViewModel: Failed to add a new class for user")
-                    print("ClassListViewModel-err: \(e)")
-                case .finished:
-                    print("ClassListViewModel: Finished adding new class for user")
-                }
-            } receiveValue: { _ in }
-            .store(in: &cancellables)
-    }
+
+//    func addCourse(course: Course) {
+//
+//        CourseService_Firestore.shared.addCourse(course)
+//            .sink { completion in
+//                switch completion {
+//                case .failure(let e):
+//                    print("ClassListViewModel: Failed to add a new class for user")
+//                    print("ClassListViewModel-err: \(e)")
+//                case .finished:
+//                    print("ClassListViewModel: Finished adding new class for user")
+//                }
+//            } receiveValue: { _ in }
+//            .store(in: &cancellables)
+//    }
     
     func enrollInCourse(id: String) {
         CourseRegistrationService_Firestore.shared.joinCourse(courseReg: CourseRegristration(courseID: id, userID: AuthService.shared.user!.uid))

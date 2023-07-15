@@ -25,7 +25,9 @@ import Combine
 struct CourseList: View {
 
     @StateObject var viewModel = CourseListViewModel()
-    @Binding var currentCourse: CourseDefinition?
+    @StateObject var selfLearnCourseDefinitionSheetViewModel = SelfLearnCourseDefinitionSheetViewModel()
+    
+    @Binding var currentCourse: CourseOverview?
     
     @State var addClassPopUpPressed = false
     
@@ -69,7 +71,7 @@ struct CourseList: View {
                             Spacer()
                         } else {
                             ScrollView(showsIndicators: false) {
-                                ForEach(viewModel.courses!, id: \.courseFull.courseOverview.courseTitle) { course in
+                                ForEach(viewModel.courses!, id: \.courseTitle) { course in
                                     Button(action: {
                                         withAnimation {
                                             self.currentCourse = course
@@ -85,7 +87,7 @@ struct CourseList: View {
                     }
                 }
             }
-            .blur(radius: addClassPopUpPressed ? 10 : 0)
+            //.blur(radius: addClassPopUpPressed ? 10 : 0)
             .disabled(addClassPopUpPressed)
             .onTapGesture {
                 if addClassPopUpPressed {
@@ -96,16 +98,18 @@ struct CourseList: View {
                 }
             }
             
-            if AppState.shared.user != nil {
-                if AppState.shared.user!.role == "teacher" {
-                    SelfLearnCourseDefinitionPopup(addCoursePressed: $addClassPopUpPressed, classListViewModel: viewModel)
-//                    CourseDefinitionPopup(classListViewModel: viewModel, addClassPressed: $addClassPopUpPressed)
-                        .opacity(addClassPopUpPressed ? 1 : 0)
-                } else {
-                    AddCourseStudentPopup(classListViewModel: viewModel, addClassPressed: $addClassPopUpPressed)
-                        .opacity(addClassPopUpPressed ? 1 : 0)
-                }
-            }
+//            if AppState.shared.user != nil {
+//                if AppState.shared.user!.role == "teacher" {
+//                    SelfLearnCourseDefinitionPopup(addCoursePressed: $addClassPopUpPressed, classListViewModel: viewModel)
+////                    CourseDefinitionPopup(classListViewModel: viewModel, addClassPressed: $addClassPopUpPressed)
+//                        .opacity(addClassPopUpPressed ? 1 : 0)
+//                } else {
+//                    AddCourseStudentPopup(classListViewModel: viewModel, addClassPressed: $addClassPopUpPressed)
+//                        .opacity(addClassPopUpPressed ? 1 : 0)
+//                }
+//            }
+        }.sheet(isPresented: $addClassPopUpPressed) {
+            SelfLearnCourseDefinitionSheet(selfLearnCourseDefinitionSheetViewModel: selfLearnCourseDefinitionSheetViewModel)
         }
     }
     
@@ -271,7 +275,7 @@ struct CourseList: View {
 
 struct CourseButton: View {
     
-    var course: CourseDefinition
+    var course: CourseOverview
     @State var showDescription = false
     
     var body: some View {
@@ -286,13 +290,13 @@ struct CourseButton: View {
             
             VStack {
                 HStack {
-                    Image(systemName: course.sfSymbol)
+                    Image(systemName: course.sfSymbol!)
                         .font(.system(size: 22, weight: .bold, design: .rounded))
                         .foregroundColor(.accent)
                     
                     Spacer()
                     
-                    Text(course.courseFull.courseOverview.courseTitle)
+                    Text(course.courseTitle)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .foregroundColor(.primary)
                     
@@ -331,7 +335,7 @@ struct CourseButton: View {
                             Spacer()
                         }
                         
-                        Text(course.courseFull.courseOverview.courseDescription)
+                        Text(course.courseDescription)
                             .multilineTextAlignment(.leading)
                             .font(.system(size: 16, weight: .light, design: .rounded))
                             .foregroundColor(.primary)

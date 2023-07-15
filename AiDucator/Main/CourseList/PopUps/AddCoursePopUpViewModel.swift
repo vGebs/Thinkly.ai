@@ -193,33 +193,33 @@ class AddCoursePopUpViewModel: ObservableObject {
     
     func getCourseTitleSuggestion() {
             
-        if self.learningObjectives.count != 0 {
-            self.loading = true
-            courseDef.getCourseTitleSuggestion(learningObjectives: self.learningObjectives)
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] completion in
-                    switch completion {
-                    case .failure(let e):
-                        print("courseDef.getCourseTitleSuggestion: Failed")
-                        print("courseDef.getCourseTitleSuggestion: \(e)")
-                        
-                        withAnimation {
-                            self?.errorOcurred = true
-                            self?.loading = false
-                        }
-                    case .finished:
-                        print("courseDef.getCourseTitleSuggestion: Success")
-                    }
-                } receiveValue: { [weak self] suggestions in
-                    withAnimation {
-                        self?.courseOverviewSuggestions = suggestions.courseOverview
-                        self?.loading = false
-                    }
-                }.store(in: &cancellables)
-            
-        } else {
-            print("Get learning objectives first")
-        }
+//        if self.learningObjectives.count != 0 {
+//            self.loading = true
+//            courseDef.getCourseTitleSuggestion(learningObjectives: self.learningObjectives)
+//                .receive(on: DispatchQueue.main)
+//                .sink { [weak self] completion in
+//                    switch completion {
+//                    case .failure(let e):
+//                        print("courseDef.getCourseTitleSuggestion: Failed")
+//                        print("courseDef.getCourseTitleSuggestion: \(e)")
+//                        
+//                        withAnimation {
+//                            self?.errorOcurred = true
+//                            self?.loading = false
+//                        }
+//                    case .finished:
+//                        print("courseDef.getCourseTitleSuggestion: Success")
+//                    }
+//                } receiveValue: { [weak self] suggestions in
+//                    withAnimation {
+//                        self?.courseOverviewSuggestions = suggestions.courseOverview
+//                        self?.loading = false
+//                    }
+//                }.store(in: &cancellables)
+//            
+//        } else {
+//            print("Get learning objectives first")
+//        }
     }
     
     func getPrerequisites() {

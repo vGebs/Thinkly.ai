@@ -21,22 +21,22 @@ class CourseService_Firestore {
     
     private init() {  }
     
-    func addCourse(_ cls: CourseDefinition) -> AnyPublisher<String, Error> {
-        return firestore.create(collection: collection, data: cls)
+    func addCourse(_ overview: CourseOverview) -> AnyPublisher<String, Error> {
+        return firestore.create(collection: collection, data: overview)
     }
     
-    func getCourse(with docID: String) -> AnyPublisher<CourseDefinition, Error> {
+    func getCourse(with docID: String) -> AnyPublisher<CourseOverview, Error> {
         return firestore.read(collection: collection, documentId: docID)
     }
     
-    func getCourses(for teacherID: String) -> AnyPublisher<[CourseDefinition], Error> {
+    func getCourses(for teacherID: String) -> AnyPublisher<[CourseOverview], Error> {
         
         let query: Query = db.collection(collection).whereField("teacherID", isEqualTo: teacherID)
         
         return firestore.read(query: query)
     }
     
-    func updateCourse(course: CourseDefinition) -> AnyPublisher<Void, Error> {
+    func updateCourse(course: CourseOverview) -> AnyPublisher<Void, Error> {
         if let docID = course.documentID {
             return firestore.update(collection: collection, documentId: docID, data: course)
         } else {
@@ -49,11 +49,11 @@ class CourseService_Firestore {
         return firestore.delete(collection: collection, documentId: docID)
     }
     
-    func listenOnCourse(with docID: String) -> AnyPublisher<(CourseDefinition, DocumentChangeType), Error> {
+    func listenOnCourse(with docID: String) -> AnyPublisher<(CourseOverview, DocumentChangeType), Error> {
         return firestore.listenByDocument(collection: collection, documentId: docID)
     }
     
-    func listenOnCourses(for teacherID: String) -> AnyPublisher<[(CourseDefinition, DocumentChangeType)], Error> {
+    func listenOnCourses(for teacherID: String) -> AnyPublisher<[(CourseOverview, DocumentChangeType)], Error> {
         let query: Query = db.collection(collection).whereField("teacherID", isEqualTo: teacherID)
         return firestore.listenByQuery(query: query)
     }
