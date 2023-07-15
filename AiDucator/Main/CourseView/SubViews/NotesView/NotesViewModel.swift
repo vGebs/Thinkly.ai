@@ -108,16 +108,16 @@ class NotesViewModel: ObservableObject {
     private var submitCancellable: AnyCancellable?
     
     func submitUnits(_ selectedVersion: Int) {
-        self.submitCancellable = UnitService_firestore.shared.pushUnits(units: self.curriculums[selectedVersion].units, uid: AppState.shared.user!.uid, courseID: courseDef!.documentID!)
-            .receive(on: DispatchQueue.main)
-            .sink { completion in
-                switch completion {
-                case .failure(let e):
-                    print("NotesViewModel: Failed to push units")
-                    print("NotesViewModel-err: \(e)")
-                case .finished:
-                    print("NotesViewModel: Finished pushing units to firestore")
-                }
-            } receiveValue: { docID in }
+//        self.submitCancellable = UnitService_firestore.shared.pushUnits(units: self.curriculums[selectedVersion].units, uid: AppState.shared.user!.uid, courseID: courseDef!.documentID!)
+//            .receive(on: DispatchQueue.main)
+//            .sink { completion in
+//                switch completion {
+//                case .failure(let e):
+//                    print("NotesViewModel: Failed to push units")
+//                    print("NotesViewModel-err: \(e)")
+//                case .finished:
+//                    print("NotesViewModel: Finished pushing units to firestore")
+//                }
+//            } receiveValue: { docID in }
     }
 }

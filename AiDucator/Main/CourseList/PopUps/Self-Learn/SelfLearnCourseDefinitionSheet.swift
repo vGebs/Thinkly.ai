@@ -85,6 +85,9 @@ class CourseNameViewModel: ObservableObject {
         title.sfSymbol = selectedClassType.sfSymbol
         title.teacherID = AppState.shared.user!.uid
         CourseService_Firestore.shared.addCourse(title)
+            .flatMap { [weak self] docID in
+                UnitService_firestore.shared.pushUnits(units: self!.curriculum.units, courseID: docID)
+            }
             .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
@@ -94,9 +97,8 @@ class CourseNameViewModel: ObservableObject {
                 case .finished:
                     print("CourseNameViewModel: Finished pushing new course")
                 }
-            } receiveValue: { _ in
-                
-            }.store(in: &cancellables)
+            } receiveValue: { _ in }
+            .store(in: &cancellables)
     }
 }
 
