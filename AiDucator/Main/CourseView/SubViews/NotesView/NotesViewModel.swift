@@ -13,15 +13,17 @@ import Combine
 
 class NotesViewModel: ObservableObject {
     
-    @Published var preliminaryCurriculumWeekInput: [PreliminaryCurriculumWeekInput] = []
+    @Published var curriculums: [Curriculum] = [Curriculum(units: [])]
     
     @Published var errorOccurred = -1
     @Published var stopped: [Int] = []
     
-    var cancellables: [Int: [AnyCancellable]] = [:]
+    var cancellables: [AnyCancellable] = []
     
     let courseCreation: CourseCreationService
     let courseDef: CourseDefinition?
+    
+    @Published var doneGenerating = [false, false, false]
     
     init(courseDef: CourseDefinition?) {
         //on init we need to fetch the weekly content
@@ -29,118 +31,84 @@ class NotesViewModel: ObservableObject {
         //Once we get the CourseDefinition,
         self.courseDef = courseDef
         self.courseCreation = CourseCreationService()
-        
-        if let courseDef = courseDef {
-            self.preliminaryCurriculumWeekInput.append(PreliminaryCurriculumWeekInput(
-                unitNumber: 1,
-                totalUnits: 15,
-                course: PreliminaryCurriculumInput(learningObjectives: courseDef.courseFull.learningObjectives, courseOverview: courseDef.courseFull.courseOverview, units: [])
-            ))
-        } else {
-            self.preliminaryCurriculumWeekInput.append(PreliminaryCurriculumWeekInput(unitNumber: 0, totalUnits: 0, course: PreliminaryCurriculumInput(learningObjectives: [], courseOverview: CourseOverview(courseTitle: "", courseDescription: ""), units: [])))
-        }
-        
-//        self.observePreliminaryCurriculum()
     }
     
     @Published var loading = false
     
-    func generatePreliminaryCurriculum(selectedVersion: Int) {
-        
-        self.loading = true
-        
-        if selectedVersion >= self.preliminaryCurriculumWeekInput.count {
-            if let courseDef = courseDef {
-                self.preliminaryCurriculumWeekInput.append(PreliminaryCurriculumWeekInput(
-                    unitNumber: 1,
-                    totalUnits: 15,
-                    course: PreliminaryCurriculumInput(textBooks: courseDef.courseFull.textbooks, learningObjectives: courseDef.courseFull.learningObjectives, courseOverview: courseDef.courseFull.courseOverview, units: [])
-                ))
-            }
-        } else {
-            self.preliminaryCurriculumWeekInput[selectedVersion].course.units = []
-            self.preliminaryCurriculumWeekInput[selectedVersion].unitNumber = 1
+    func generateNewCurriculum(_ selectedVersion: Int) {
+        if self.curriculums[0].units.count > 0 {
+            self.curriculums.append(Curriculum(units: []))
         }
         
-        if selectedVersion <= self.preliminaryCurriculumWeekInput.count {
-            generatePreliminaryCurriculum(selectedVersion: selectedVersion, withInput: self.preliminaryCurriculumWeekInput[selectedVersion])
-        }
+        self.getCurriculum(selectedVersion: selectedVersion)
     }
     
-    func continueGeneratingPreliminaryCurriculum(selectedVersion: Int) {
+    func regenerateVersion(_ selectedVersion: Int) {
+        self.resetUnits(selectedVersion)
+        self.getCurriculum(selectedVersion: selectedVersion)
+    }
+    
+    func continueGeneratingCurriculum(selectedVersion: Int) {
         stopped.removeAll { int in
             int == selectedVersion
         }
         errorOccurred = -1
-        self.generatePreliminaryCurriculum(selectedVersion: selectedVersion, withInput: self.preliminaryCurriculumWeekInput[selectedVersion])
+        self.getCurriculum(selectedVersion: selectedVersion)
     }
     
-    private func generatePreliminaryCurriculum(selectedVersion: Int, withInput: PreliminaryCurriculumWeekInput) {
-        let cancellable = courseCreation.generatePreliminaryCurriculum(data: withInput)
+    private func getCurriculum(selectedVersion: Int) {
+        self.loading = true
+        
+        courseCreation.getCurriculum(prompt: "I want to learn about object oriented programming")
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 switch completion {
                 case .failure(let e):
-                    print("NotesViewModel: Failed to get weekly topic")
+                    print("NotesViewModel: Failed to get curriculum")
                     print("NotesViewModel-err: \(e)")
                     self?.loading = false
                     self?.errorOccurred = selectedVersion
                 case .finished:
-                    print("NotesViewModel: Finished getting weekly topic for week: \(withInput.unitNumber)")
+                    print("NotesViewModel: Finished generating curriculum")
                 }
-            } receiveValue: { [weak self] topic in
-                self?.preliminaryCurriculumWeekInput[selectedVersion].course.units.append(topic)
-                self?.preliminaryCurriculumWeekInput[selectedVersion].unitNumber += 1
+            } receiveValue: { [weak self] curriculum in
+                self?.loading = false
+                self?.curriculums[selectedVersion].units = curriculum.units
+                self?.doneGenerating[selectedVersion].toggle()
+                
+                self?.stopped.removeAll { int in
+                    int == selectedVersion
+                }
+            }.store(in: &cancellables)
 
-                if self!.preliminaryCurriculumWeekInput[selectedVersion].unitNumber <= 15 {
-                    self?.generatePreliminaryCurriculum(selectedVersion: selectedVersion, withInput: self!.preliminaryCurriculumWeekInput[selectedVersion])
-                }
-
-                if self!.preliminaryCurriculumWeekInput[selectedVersion].unitNumber == 15 {
-                    self?.loading = false
-                }
-            }
-        
-        if cancellables[selectedVersion] == nil {
-            cancellables[selectedVersion] = [cancellable]
-        } else {
-            cancellables[selectedVersion]?.append(cancellable)
-        }
     }
     
     func stopGenerating(_ selectedVersion: Int) {
-        self.cancellables[selectedVersion] = []
+        self.cancellables = []
         self.stopped.append(selectedVersion)
         self.loading = false
     }
     
     func resetUnits(_ selectedVersion: Int) {
-        self.preliminaryCurriculumWeekInput[selectedVersion].course.units = []
+        self.curriculums[selectedVersion].units = []
         self.stopped.removeAll { int in
             int == selectedVersion
         }
+        self.doneGenerating[selectedVersion] = false
     }
     
     func trashVersion(number: Int) {
-        if self.preliminaryCurriculumWeekInput.count == 1 {
-            if let courseDef = courseDef {
-                self.preliminaryCurriculumWeekInput.remove(at: number)
-                
-                self.preliminaryCurriculumWeekInput = [(PreliminaryCurriculumWeekInput(
-                    unitNumber: 1,
-                    totalUnits: 15,
-                    course: PreliminaryCurriculumInput(textBooks: courseDef.courseFull.textbooks, learningObjectives: courseDef.courseFull.learningObjectives, courseOverview: courseDef.courseFull.courseOverview, units: [])
-                ))]
-            }
-        } else if self.preliminaryCurriculumWeekInput.count > 1 {
-            self.preliminaryCurriculumWeekInput.remove(at: number)
+        if curriculums.count > 1 {
+            curriculums.remove(at: number)
+        } else {
+            curriculums[number].units = []
         }
     }
     
     private var submitCancellable: AnyCancellable?
     
     func submitUnits(_ selectedVersion: Int) {
-        self.submitCancellable = UnitService_firestore.shared.pushUnits(units: self.preliminaryCurriculumWeekInput[selectedVersion].course.units, uid: AppState.shared.user!.uid, courseID: courseDef!.documentID!)
+        self.submitCancellable = UnitService_firestore.shared.pushUnits(units: self.curriculums[selectedVersion].units, uid: AppState.shared.user!.uid, courseID: courseDef!.documentID!)
             .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
@@ -153,21 +121,3 @@ class NotesViewModel: ObservableObject {
             } receiveValue: { docID in }
     }
 }
-
-//extension NotesViewModel {
-//    private func observePreliminaryCurriculum() {
-//        $preliminaryCurriculum
-//            .sink { [weak self] _ in
-//                self?.sortPreliminaryCurriculum()
-//            }
-//            .store(in: &cancellables)
-//    }
-//
-//    private func sortPreliminaryCurriculum() {
-//        DispatchQueue.main.async {
-//            if self.preliminaryCurriculum.count > 1 {
-//                self.preliminaryCurriculum.sort { $0.weekNumber < $1.weekNumber }
-//            }
-//        }
-//    }
-//}

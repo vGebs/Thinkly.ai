@@ -18,7 +18,7 @@ struct NotesView: View {
             Spacer()
             ScrollView {
                 
-                if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count > 0{
+                if viewModel.curriculums[0].units.count > 0{
                     warnings
                     
                     Divider()
@@ -28,46 +28,35 @@ struct NotesView: View {
                         continueGeneratingButton
                     }
                     
-                    if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count > 0 && viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count != 15{
-                        HStack {
-                            Text("\(viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count) / 15 units")
-                                .font(.system(size: 18, weight: .bold, design: .rounded))
-                                .foregroundColor(.primary)
-                            
-                            Spacer()
-                        }.padding(.horizontal)
-                    }
-                    
                     if viewModel.stopped.contains(selectedVersion) {
                         continueGeneratingButton
                         //resetButton
                     }
                     
-                    if let _ = viewModel.courseDef {
-                        if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count == 15 {
+                    if viewModel.doneGenerating[selectedVersion] {
+                    
+                        submitUnitsButton
+                        
+                        HStack {
+                            regenerateVersionButton
                             
-                            submitUnitsButton
                             
-                            HStack {
-                                regenerateVersionButton
-                                
-                                
-                                if viewModel.preliminaryCurriculumWeekInput.count <= 2 {
-                                    Spacer()
-                                    generateNewVersionButton
-                                }
+                            if viewModel.curriculums.count <= 2 {
+                                Spacer()
+                                generateNewVersionButton
                             }
-                            
-                            trashVersionButton
                         }
+                        
+                        trashVersionButton
+                        
+                    } else if !viewModel.doneGenerating[selectedVersion] && viewModel.loading {
+                        LoadingView()
+                            .padding(.vertical)
+                        stopGeneratingButton
                     }
                 }
                 
-                if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count > 0 && !viewModel.stopped.contains(selectedVersion) && viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count != 15{
-                    stopGeneratingButton
-                }
-                
-                if viewModel.preliminaryCurriculumWeekInput.count > 1 {
+                if viewModel.curriculums.count > 1 {
                     versionSelectButton
                 }
                 //                    if viewModel.weeklyContent.count > 0 {
@@ -79,7 +68,7 @@ struct NotesView: View {
                 //                    }
                 
                 
-                if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count > 0 {
+                if viewModel.curriculums[selectedVersion].units.count > 0 {
                     ZStack {
                         RoundedRectangle(cornerRadius: 15)
                             .foregroundColor(.black)
@@ -88,12 +77,12 @@ struct NotesView: View {
                             .foregroundColor(.buttonPrimary)
                         
                         VStack {
-                            ForEach(viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.indices, id: \.self) { index in
-                                WeeklyTopicDropDown(topic: $viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units[index])
-                                    .padding(index == viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count - 1 ? .bottom : [])
+                            ForEach(viewModel.curriculums[selectedVersion].units.indices, id: \.self) { index in
+                                WeeklyTopicDropDown(topic: $viewModel.curriculums[selectedVersion].units[index])
+                                    .padding(index == viewModel.curriculums[selectedVersion].units.count - 1 ? .bottom : [])
                                     .padding(index == 0 ? .top : [])
                                 
-                                if index != viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count - 1 {
+                                if index != viewModel.curriculums[selectedVersion].units.count - 1 {
                                     Divider()
                                 }
                             }
@@ -106,7 +95,7 @@ struct NotesView: View {
                 if let user = AppState.shared.user {
                     if user.role == "teacher" {
                         
-                        if viewModel.preliminaryCurriculumWeekInput[selectedVersion].course.units.count == 0 {
+                        if viewModel.curriculums[0].units.count == 0 {
                             
                             preWarning
                             if viewModel.errorOccurred == selectedVersion {
@@ -115,6 +104,8 @@ struct NotesView: View {
                             
                             if viewModel.loading {
                                 LoadingView()
+                                    .padding(.bottom)
+                                stopGeneratingButton
                             } else {
                                 HStack {
                                     Spacer()
@@ -201,7 +192,7 @@ struct NotesView: View {
                 HStack {
                     Spacer()
                     Image(systemName: "checkmark.seal")
-                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.accent)
                     Text("Submit V-\(selectedVersion + 1)")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
@@ -221,7 +212,7 @@ struct NotesView: View {
                 .foregroundColor(.buttonPrimary)
             
             Button(action: {
-                viewModel.generatePreliminaryCurriculum(selectedVersion: selectedVersion)
+                viewModel.regenerateVersion(selectedVersion)
             }) {
                 HStack {
                     Image(systemName: "terminal")
@@ -244,13 +235,13 @@ struct NotesView: View {
                 .foregroundColor(.buttonPrimary)
             
             Button(action: {
-                viewModel.generatePreliminaryCurriculum(selectedVersion: viewModel.preliminaryCurriculumWeekInput.count)
+                viewModel.generateNewCurriculum(viewModel.curriculums.count)
             }) {
                 HStack {
                     Image(systemName: "terminal")
                         .font(.system(size: 14, weight: .bold, design: .rounded))
                         .foregroundColor(.accent)
-                    Text("Generate V-\(viewModel.preliminaryCurriculumWeekInput.count + 1)")
+                    Text("Generate V-\(viewModel.curriculums.count + 1)")
                         .font(.system(size: 14, weight: .bold, design: .rounded))
                         .foregroundColor(.primary)
                 }.padding()
@@ -288,7 +279,7 @@ struct NotesView: View {
     
     var versionSelectButton: some View {
         HStack {
-            ForEach(viewModel.preliminaryCurriculumWeekInput.indices, id: \.self) { index in
+            ForEach(viewModel.curriculums.indices, id: \.self) { index in
                 Button(action: {
                     withAnimation {
                         selectedVersion = index
@@ -346,7 +337,7 @@ struct NotesView: View {
     var continueGeneratingButton: some View {
         Button(action: {
             withAnimation {
-                viewModel.continueGeneratingPreliminaryCurriculum(selectedVersion: selectedVersion)
+                viewModel.continueGeneratingCurriculum(selectedVersion: selectedVersion)
             }
         }) {
             ZStack {
@@ -465,7 +456,7 @@ struct NotesView: View {
         Button(action: {
             withAnimation {
                 viewModel.errorOccurred = -1
-                viewModel.generatePreliminaryCurriculum(selectedVersion: selectedVersion)
+                viewModel.generateNewCurriculum(selectedVersion)
             }
         }) {
             ZStack {

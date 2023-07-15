@@ -25,11 +25,11 @@ public class CourseCreationService {
         return request
     }
     
-    func generatePreliminaryCurriculum(data: PreliminaryCurriculumWeekInput) -> AnyPublisher<Unit, Error> {
-        let url = baseURL.appendingPathComponent("/generatePreliminaryCurriculumForWeek")
+    func getCurriculum(prompt: String) -> AnyPublisher<Curriculum, Error> {
+        let url = baseURL.appendingPathComponent("/generateCurriculum")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.httpBody = try? JSONEncoder().encode(data)
+        request.httpBody = try? JSONEncoder().encode(prompt)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         return networkWrapper.request(with: request, timeout: 120, pingURLRequest: bundlePingRequest(), pingTimeout: 3)
     }
@@ -101,10 +101,10 @@ public class CourseCreationService {
 
 struct PreliminaryCurriculumInput: Codable {
     var gradeLevel: String? = nil 
-    var textBooks: [Textbook]? = nil
+    var textBooks: [Textbook]
     var learningObjectives: [LearningObjective]
     var courseOverview: CourseOverview
-    var prerequisites: [Prerequisite]? = nil
+    var prerequisites: [Prerequisite]
     var units: [Unit]
 }
 
@@ -120,8 +120,8 @@ struct Unit: Codable {
     var unitTitle: String
 }
 
-struct PreliminaryCurriculumOutput: Codable {
-    var curriculum: [Unit]
+struct Curriculum: Codable {
+    var units: [Unit]
 }
 
 struct NotesOutlineInput: Codable {

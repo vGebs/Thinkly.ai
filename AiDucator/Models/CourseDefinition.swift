@@ -19,7 +19,7 @@ struct CourseFull: Codable {
     var courseAssessments: [Assessment]? = nil
     var courseTimingStructure: TimingStructure? = nil
     var gradeLevel: String? = nil
-    var textbooks: [Textbook]? = nil
+    var textbooks: [Textbook]? = nil 
     var learningObjectives: [LearningObjective]
     var courseOverview: CourseOverview
     var prerequisites: [Prerequisite]? = nil 
