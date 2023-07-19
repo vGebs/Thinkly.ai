@@ -18,13 +18,10 @@
 		FA0CDC412A0F25D4007AF6E7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC402A0F25D4007AF6E7 /* User.swift */; };
 		FA0CDC452A0F281B007AF6E7 /* CoreDataWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC442A0F281B007AF6E7 /* CoreDataWrapper.swift */; };
 		FA0CDC482A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC462A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld */; };
+		FA149CC22A687700001E28C7 /* GrowingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA149CC12A687700001E28C7 /* GrowingTextView.swift */; };
+		FA149CC42A687754001E28C7 /* ClassType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA149CC32A687754001E28C7 /* ClassType.swift */; };
 		FA5115012A3FE6F8004AA1D9 /* NotesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5115002A3FE6F8004AA1D9 /* NotesViewModel.swift */; };
-		FA5115032A3FE737004AA1D9 /* UnitDropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5115022A3FE737004AA1D9 /* UnitDropDown.swift */; };
-		FA5115052A42428A004AA1D9 /* ReadingsDropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5115042A42428A004AA1D9 /* ReadingsDropDown.swift */; };
 		FA5115072A44F689004AA1D9 /* WeeklyTopicDropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5115062A44F689004AA1D9 /* WeeklyTopicDropDown.swift */; };
-		FA5115092A491AFF004AA1D9 /* SelfLearnCourseDefinitionPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5115082A491AFF004AA1D9 /* SelfLearnCourseDefinitionPopup.swift */; };
-		FA51150B2A492B56004AA1D9 /* SelfLearnCourseDefinitionPopupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA51150A2A492B56004AA1D9 /* SelfLearnCourseDefinitionPopupViewModel.swift */; };
-		FA9CFA832A0FAB43000BDE95 /* Notepad.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA822A0FAB43000BDE95 /* Notepad.swift */; };
 		FA9CFA882A107893000BDE95 /* CourseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA872A107893000BDE95 /* CourseService.swift */; };
 		FA9CFA8A2A10789C000BDE95 /* CourseService_CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA892A10789C000BDE95 /* CourseService_CoreData.swift */; };
 		FA9CFA8C2A10789F000BDE95 /* CourseService_Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA8B2A10789F000BDE95 /* CourseService_Firestore.swift */; };
@@ -43,8 +40,6 @@
 		FA9CFAAA2A16B37C000BDE95 /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAA92A16B37C000BDE95 /* QuizView.swift */; };
 		FA9CFAAC2A16B390000BDE95 /* GradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAAB2A16B390000BDE95 /* GradesView.swift */; };
 		FA9CFAAE2A16D709000BDE95 /* SineWave.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAAD2A16D709000BDE95 /* SineWave.swift */; };
-		FA9CFAB02A171236000BDE95 /* CourseDefinitionPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAAF2A171236000BDE95 /* CourseDefinitionPopup.swift */; };
-		FA9CFAB22A171270000BDE95 /* AddCoursePopUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAB12A171270000BDE95 /* AddCoursePopUpViewModel.swift */; };
 		FA9CFAB52A182672000BDE95 /* AddCourseStudentPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAB42A182672000BDE95 /* AddCourseStudentPopup.swift */; };
 		FA9CFAB82A193D87000BDE95 /* NotesService_Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAB72A193D87000BDE95 /* NotesService_Firestore.swift */; };
 		FA9CFABA2A193FA4000BDE95 /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFAB92A193FA4000BDE95 /* Notes.swift */; };
@@ -88,13 +83,10 @@
 		FA0CDC402A0F25D4007AF6E7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		FA0CDC442A0F281B007AF6E7 /* CoreDataWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataWrapper.swift; sourceTree = "<group>"; };
 		FA0CDC472A0F71BC007AF6E7 /* ThinklyModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ThinklyModel.xcdatamodel; sourceTree = "<group>"; };
+		FA149CC12A687700001E28C7 /* GrowingTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowingTextView.swift; sourceTree = "<group>"; };
+		FA149CC32A687754001E28C7 /* ClassType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassType.swift; sourceTree = "<group>"; };
 		FA5115002A3FE6F8004AA1D9 /* NotesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewModel.swift; sourceTree = "<group>"; };
-		FA5115022A3FE737004AA1D9 /* UnitDropDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitDropDown.swift; sourceTree = "<group>"; };
-		FA5115042A42428A004AA1D9 /* ReadingsDropDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingsDropDown.swift; sourceTree = "<group>"; };
 		FA5115062A44F689004AA1D9 /* WeeklyTopicDropDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyTopicDropDown.swift; sourceTree = "<group>"; };
-		FA5115082A491AFF004AA1D9 /* SelfLearnCourseDefinitionPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfLearnCourseDefinitionPopup.swift; sourceTree = "<group>"; };
-		FA51150A2A492B56004AA1D9 /* SelfLearnCourseDefinitionPopupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfLearnCourseDefinitionPopupViewModel.swift; sourceTree = "<group>"; };
-		FA9CFA822A0FAB43000BDE95 /* Notepad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notepad.swift; sourceTree = "<group>"; };
 		FA9CFA872A107893000BDE95 /* CourseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseService.swift; sourceTree = "<group>"; };
 		FA9CFA892A10789C000BDE95 /* CourseService_CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseService_CoreData.swift; sourceTree = "<group>"; };
 		FA9CFA8B2A10789F000BDE95 /* CourseService_Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseService_Firestore.swift; sourceTree = "<group>"; };
@@ -113,8 +105,6 @@
 		FA9CFAA92A16B37C000BDE95 /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
 		FA9CFAAB2A16B390000BDE95 /* GradesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradesView.swift; sourceTree = "<group>"; };
 		FA9CFAAD2A16D709000BDE95 /* SineWave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SineWave.swift; sourceTree = "<group>"; };
-		FA9CFAAF2A171236000BDE95 /* CourseDefinitionPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDefinitionPopup.swift; sourceTree = "<group>"; };
-		FA9CFAB12A171270000BDE95 /* AddCoursePopUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCoursePopUpViewModel.swift; sourceTree = "<group>"; };
 		FA9CFAB42A182672000BDE95 /* AddCourseStudentPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCourseStudentPopup.swift; sourceTree = "<group>"; };
 		FA9CFAB72A193D87000BDE95 /* NotesService_Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesService_Firestore.swift; sourceTree = "<group>"; };
 		FA9CFAB92A193FA4000BDE95 /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
@@ -214,6 +204,7 @@
 				FA9CFA8F2A157C42000BDE95 /* CourseRegristration.swift */,
 				FA9CFAB92A193FA4000BDE95 /* Notes.swift */,
 				FA0CDC462A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld */,
+				FA149CC32A687754001E28C7 /* ClassType.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -249,8 +240,6 @@
 		FA5114FF2A3FE5F6004AA1D9 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
-				FA5115022A3FE737004AA1D9 /* UnitDropDown.swift */,
-				FA5115042A42428A004AA1D9 /* ReadingsDropDown.swift */,
 				FA5115062A44F689004AA1D9 /* WeeklyTopicDropDown.swift */,
 			);
 			path = SubViews;
@@ -311,9 +300,7 @@
 			isa = PBXGroup;
 			children = (
 				FADA71322A4A3628009FF5E6 /* Self-Learn */,
-				FA9CFAAF2A171236000BDE95 /* CourseDefinitionPopup.swift */,
 				FA9CFAB42A182672000BDE95 /* AddCourseStudentPopup.swift */,
-				FA9CFAB12A171270000BDE95 /* AddCoursePopUpViewModel.swift */,
 			);
 			path = PopUps;
 			sourceTree = "<group>";
@@ -408,8 +395,6 @@
 		FADA71322A4A3628009FF5E6 /* Self-Learn */ = {
 			isa = PBXGroup;
 			children = (
-				FA5115082A491AFF004AA1D9 /* SelfLearnCourseDefinitionPopup.swift */,
-				FA51150A2A492B56004AA1D9 /* SelfLearnCourseDefinitionPopupViewModel.swift */,
 				FACADAAB2A62580E00FC9F06 /* SelfLearnCourseDefinitionSheet.swift */,
 				FACADAAD2A625AE600FC9F06 /* SelfLearnCourseDefinitionSheetViewModel.swift */,
 			);
@@ -432,6 +417,7 @@
 				FAEC5D1E2A0EF37900A48F05 /* LoadingView.swift */,
 				FA9CFAA02A16AFD0000BDE95 /* Pager.swift */,
 				FA9CFAAD2A16D709000BDE95 /* SineWave.swift */,
+				FA149CC12A687700001E28C7 /* GrowingTextView.swift */,
 			);
 			path = ReuseableView;
 			sourceTree = "<group>";
@@ -466,7 +452,6 @@
 				FA9CFA992A15DF68000BDE95 /* MainView.swift */,
 				FA9CFA962A158312000BDE95 /* CourseList */,
 				FA9CFA9B2A15E2D2000BDE95 /* CourseView */,
-				FA9CFA822A0FAB43000BDE95 /* Notepad.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -551,7 +536,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA9CFAA82A16B355000BDE95 /* FeedView.swift in Sources */,
-				FA9CFAB02A171236000BDE95 /* CourseDefinitionPopup.swift in Sources */,
+				FA149CC22A687700001E28C7 /* GrowingTextView.swift in Sources */,
 				FAEC5D162A0EF21900A48F05 /* SigninSignupViewModel.swift in Sources */,
 				FACADAAE2A625AE600FC9F06 /* SelfLearnCourseDefinitionSheetViewModel.swift in Sources */,
 				FA9CFAB52A182672000BDE95 /* AddCourseStudentPopup.swift in Sources */,
@@ -561,7 +546,6 @@
 				FA0CDC392A0F24E3007AF6E7 /* UserService.swift in Sources */,
 				FA9CFA882A107893000BDE95 /* CourseService.swift in Sources */,
 				FAEC5D142A0EF1DD00A48F05 /* SigninSignupView.swift in Sources */,
-				FA5115052A42428A004AA1D9 /* ReadingsDropDown.swift in Sources */,
 				FA9CFA952A157D66000BDE95 /* CourseRegistrationService_Firestore.swift in Sources */,
 				FA0CDC3C2A0F2517007AF6E7 /* UserService_CoreData.swift in Sources */,
 				FA0CDC372A0F241A007AF6E7 /* QuerySnapshotPublisher.swift in Sources */,
@@ -574,12 +558,10 @@
 				FA5115072A44F689004AA1D9 /* WeeklyTopicDropDown.swift in Sources */,
 				FA9CFAAA2A16B37C000BDE95 /* QuizView.swift in Sources */,
 				FAEC5D1A2A0EF2E800A48F05 /* View.swift in Sources */,
-				FA9CFAB22A171270000BDE95 /* AddCoursePopUpViewModel.swift in Sources */,
 				FAEC5D222A0EF3D900A48F05 /* AuthService.swift in Sources */,
 				FAEC5D1F2A0EF37900A48F05 /* LoadingView.swift in Sources */,
 				FA0CDC352A0F23FD007AF6E7 /* DocumentSnapshotPublisher.swift in Sources */,
 				FA070DF22A0E0AF5008EF241 /* Colors.swift in Sources */,
-				FA51150B2A492B56004AA1D9 /* SelfLearnCourseDefinitionPopupViewModel.swift in Sources */,
 				FA9CFA982A158322000BDE95 /* CourseListViewModel.swift in Sources */,
 				FA0CDC3E2A0F2521007AF6E7 /* UserService_Firestore.swift in Sources */,
 				FA9CFA8E2A11CF8E000BDE95 /* ThinklyModel.swift in Sources */,
@@ -596,16 +578,14 @@
 				FACADAAC2A62580E00FC9F06 /* SelfLearnCourseDefinitionSheet.swift in Sources */,
 				FA9CFABC2A194335000BDE95 /* NoteSectionService_Firestore.swift in Sources */,
 				FAEC5D182A0EF27B00A48F05 /* SigninSignupValidation.swift in Sources */,
-				FA9CFA832A0FAB43000BDE95 /* Notepad.swift in Sources */,
 				FA9CFA9F2A16AD36000BDE95 /* NavBar.swift in Sources */,
+				FA149CC42A687754001E28C7 /* ClassType.swift in Sources */,
 				FA0CDC452A0F281B007AF6E7 /* CoreDataWrapper.swift in Sources */,
 				FA9CFAA42A16B31E000BDE95 /* NotesView.swift in Sources */,
-				FA5115092A491AFF004AA1D9 /* SelfLearnCourseDefinitionPopup.swift in Sources */,
 				FABD79B12A098CA100201145 /* AiDucatorApp.swift in Sources */,
 				FA9CFA932A157D44000BDE95 /* CourseRegistrationService.swift in Sources */,
 				FA0CDC322A0F237D007AF6E7 /* FirestoreWrapper.swift in Sources */,
 				FAE0BEE22A327944003BF2CB /* CourseDefinition.swift in Sources */,
-				FA5115032A3FE737004AA1D9 /* UnitDropDown.swift in Sources */,
 				FA9CFAAE2A16D709000BDE95 /* SineWave.swift in Sources */,
 				FA0CDC412A0F25D4007AF6E7 /* User.swift in Sources */,
 				FA9E0B042A3556930096BCCF /* CourseCreationService.swift in Sources */,
