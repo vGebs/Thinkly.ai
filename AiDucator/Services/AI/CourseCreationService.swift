@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import FirebaseFirestoreSwift
 
 public class CourseCreationService {
     private let networkWrapper: NetworkWrapperCombine
@@ -120,7 +121,9 @@ struct Unit: Codable {
     var unitTitle: String
 }
 
-struct Curriculum: Codable {
+struct Curriculum: Codable, FirestoreProtocol {
+    @DocumentID var documentID: String?
+    var courseID: String? = nil
     var units: [Unit]
 }
 
