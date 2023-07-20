@@ -25,22 +25,27 @@ struct CourseView: View {
                 Divider()
                     .foregroundColor(.primary)
                 
-                Spacer()
+                //Spacer()
                 
                 if course != nil {
                     HStack {
                         
                         Image(systemName: course!.sfSymbol!)
                             .font(.system(size: 12, weight: .black, design: .rounded))
-                            .foregroundColor(.black)
+                            .foregroundColor(.buttonPrimary)
                             
                         Text(course!.courseTitle)
                             .font(.system(size: 14, weight: .black, design: .rounded))
-                            .foregroundColor(.buttonPrimary)
+                            .foregroundColor(.primary)
                     }
-                    .frame(width: screenWidth, height: 40)
-                    .padding(.bottom, screenHeight * 0.065)
+                    .frame(width: screenWidth)
+                    //.padding(.bottom, screenHeight * 0.065)
+                    
+                    Divider()
+                        .foregroundColor(.primary)
                 }
+                
+                Spacer()
             }
         }
     }

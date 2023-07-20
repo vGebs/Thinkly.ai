@@ -14,6 +14,8 @@ class NotesViewModel: ObservableObject {
     
     private var cancellables: [AnyCancellable] = []
     
+    @Published var loadingIndexes: Set<Int> = []
+    
     init(courseDef: CourseOverview?) {
         if let c = courseDef {
             self.fetchCurriculum(courseID: c.documentID!)
@@ -25,6 +27,7 @@ class NotesViewModel: ObservableObject {
     }
     
     func generateSubUnits(with index: Int) {
+        self.loadingIndexes.insert(index)
         CourseCreationService().getSubUnits(GetSubUnits(unitNumber: index + 1, curriculum: curriculum.units))
             .receive(on: DispatchQueue.main)
             .sink { completion in
@@ -36,8 +39,8 @@ class NotesViewModel: ObservableObject {
                     print("NotesViewModel: Finished generating sub units for unit index: \(index)")
                 }
             } receiveValue: { [weak self] subUnits in
-                print(subUnits)
                 self?.curriculum.units[index].subUnits = subUnits.subUnits
+                self?.loadingIndexes.remove(index)
             }.store(in: &cancellables)
     }
 }

@@ -14,7 +14,7 @@ struct NotesView: View {
     var body: some View {
         ZStack {
             VStack {
-                ScrollView {
+                ScrollView(showsIndicators: false) {
                     
                     note
                         .padding()
@@ -22,7 +22,7 @@ struct NotesView: View {
                     units
                         .padding(.bottom, screenHeight * 0.14)
                 }
-                .padding(.top, screenHeight * 0.113)
+                .padding(.top, screenHeight * 0.155)
             }
         }
         .edgesIgnoringSafeArea(.all)
@@ -59,13 +59,15 @@ struct NotesView: View {
             
             VStack {
                 ForEach(viewModel.curriculum.units.indices, id: \.self) { index in
-                    UnitDropDown(unit: $viewModel.curriculum.units[index], subunitsActive: true, generateSubUnits: {
+                    UnitDropDown(unit: $viewModel.curriculum.units[index], subunitsActive: true, loadingIndexes: $viewModel.loadingIndexes, generateSubUnits: {
                         viewModel.generateSubUnits(with: index)
                     })
                     .padding(index == viewModel.curriculum.units.count - 1 ? .bottom : [])
-                    
+                    .padding(.top, index == 0 ? 5 : 0)
                     if index != viewModel.curriculum.units.count - 1 {
-                        Divider()
+                        RoundedRectangle(cornerRadius: 5)
+                            .frame(height: 2)
+                            .foregroundColor(.buttonPrimary)
                     }
                 }
                 .padding(.top, screenHeight * 0.01)

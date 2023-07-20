@@ -42,7 +42,7 @@ class CourseNameViewModel: ObservableObject {
     
     func getCourseTitleSuggestion() {
         self.loading = true
-        courseDefService.getCourseTitleSuggestionsFromCurriculum(from: curriculum)
+        courseDefService.getCourseTitleSuggestionsFromCurriculum(from: curriculum.units)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 switch completion {
@@ -555,7 +555,7 @@ struct CurriciulumSelectView: View {
                             
                             VStack {
                                 ForEach(viewModel.curriculums[selectedVersion].units.indices, id: \.self) { index in
-                                    UnitDropDown(unit: $viewModel.curriculums[selectedVersion].units[index], subunitsActive: false)
+                                    UnitDropDown(unit: $viewModel.curriculums[selectedVersion].units[index], subunitsActive: false, loadingIndexes: .constant([]))
                                         .padding(index == viewModel.curriculums[selectedVersion].units.count - 1 ? .bottom : [])
                                         .padding(index == 0 ? .top : [])
                                     

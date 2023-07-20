@@ -26,7 +26,7 @@ public class CourseCreationService {
         return request
     }
     
-    func getCurriculum(prompt: String) -> AnyPublisher<Curriculum, Error> {
+    func getCurriculum(prompt: String) -> AnyPublisher<CurriculumOutput, Error> {
         let url = baseURL.appendingPathComponent("/generateCurriculum")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -36,7 +36,6 @@ public class CourseCreationService {
     }
     
     func getSubUnits(_ input: GetSubUnits) -> AnyPublisher<SubUnits, Error> {
-        print(input)
         let url = baseURL.appendingPathComponent("/generateSubTopicsForUnit")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -82,6 +81,10 @@ struct SubUnit: Codable {
     var unitDescription: String
     var unitTitle: String
     var subUnits: [SubUnit]? = nil
+}
+
+struct CurriculumOutput: Codable {
+    var units: [Unit]
 }
 
 struct Curriculum: Codable, FirestoreProtocol {
