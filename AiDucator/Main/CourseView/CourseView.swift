@@ -29,14 +29,15 @@ struct CourseView: View {
                 
                 if course != nil {
                     HStack {
-                        
                         Image(systemName: course!.sfSymbol!)
                             .font(.system(size: 12, weight: .black, design: .rounded))
                             .foregroundColor(.buttonPrimary)
-                            
+                        
                         Text(course!.courseTitle)
                             .font(.system(size: 14, weight: .black, design: .rounded))
                             .foregroundColor(.primary)
+                            .lineLimit(1) // Limit text to a single line
+                            .minimumScaleFactor(0.5) // Allow the font to scale down to half its original size
                     }
                     .frame(width: screenWidth)
                     //.padding(.bottom, screenHeight * 0.065)
