@@ -15,8 +15,11 @@ struct UnitDropDown: View {
     let subunitsActive: Bool 
     
     @Binding var loadingIndexes: Set<Int>
+    @Binding var submittedSubUnits: Set<Int>
     
     var generateSubUnits: (() -> Void)?
+    var submitUnits: (() -> Void)?
+    var trashSubUnits: (() -> Void)?
     
     var body: some View {
         
@@ -103,7 +106,9 @@ struct UnitDropDown: View {
                         
                         HStack {
                             regenerateButton
-                            submitButton
+                            if !self.submittedSubUnits.contains(unit.unitNumber - 1) {
+                                submitButton
+                            }
                         }.padding(.leading, screenWidth * 0.05)
                     } else {
                         if loadingIndexes.contains(unit.unitNumber - 1) {
@@ -144,7 +149,7 @@ struct UnitDropDown: View {
     
     var submitButton: some View {
         Button(action: {
-            
+            self.submitUnits?()
         }){
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
@@ -185,6 +190,7 @@ struct UnitDropDown: View {
                                 Button(action: {
                                     withAnimation {
                                         self.unit.subUnits = nil
+                                        self.trashSubUnits?()
                                     }
                                 }) {
                                     Image(systemName: "trash")

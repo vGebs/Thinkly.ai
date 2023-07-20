@@ -28,6 +28,11 @@ class UnitService_firestore {
         let query = db.collection(collection).whereField("courseID", isEqualTo: courseID)
         return FirestoreWrapper.shared.read(query: query)
     }
+    
+    func pushSubUnits(units: [Unit], courseID: String, docID: String) -> AnyPublisher<Void, Error> {
+        let units = Units_firestore(units: units, courseID: courseID)
+        return FirestoreWrapper.shared.update(collection: collection, documentId: docID, data: units)
+    }
 }
 
 import FirebaseFirestoreSwift

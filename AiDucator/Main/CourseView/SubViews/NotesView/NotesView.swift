@@ -59,8 +59,12 @@ struct NotesView: View {
             
             VStack {
                 ForEach(viewModel.curriculum.units.indices, id: \.self) { index in
-                    UnitDropDown(unit: $viewModel.curriculum.units[index], subunitsActive: true, loadingIndexes: $viewModel.loadingIndexes, generateSubUnits: {
+                    UnitDropDown(unit: $viewModel.curriculum.units[index], subunitsActive: true, loadingIndexes: $viewModel.loadingIndexes, submittedSubUnits: $viewModel.submittedSubUnits, generateSubUnits: {
                         viewModel.generateSubUnits(with: index)
+                    }, submitUnits: {
+                        viewModel.submitUnits(with: index)
+                    }, trashSubUnits: {
+                        viewModel.trashSubUnits(with: index)
                     })
                     .padding(index == viewModel.curriculum.units.count - 1 ? .bottom : [])
                     .padding(.top, index == 0 ? 5 : 0)

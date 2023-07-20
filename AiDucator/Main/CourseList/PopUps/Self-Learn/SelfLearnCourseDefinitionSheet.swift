@@ -555,7 +555,7 @@ struct CurriciulumSelectView: View {
                             
                             VStack {
                                 ForEach(viewModel.curriculums[selectedVersion].units.indices, id: \.self) { index in
-                                    UnitDropDown(unit: $viewModel.curriculums[selectedVersion].units[index], subunitsActive: false, loadingIndexes: .constant([]))
+                                    UnitDropDown(unit: $viewModel.curriculums[selectedVersion].units[index], subunitsActive: false, loadingIndexes: .constant([]), submittedSubUnits: .constant([]))
                                         .padding(index == viewModel.curriculums[selectedVersion].units.count - 1 ? .bottom : [])
                                         .padding(index == 0 ? .top : [])
                                     
