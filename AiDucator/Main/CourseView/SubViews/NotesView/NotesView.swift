@@ -14,42 +14,15 @@ struct NotesView: View {
     var body: some View {
         ZStack {
             VStack {
-                RoundedRectangle(cornerRadius: 5)
-                    .frame(width: 1, height: 1)
-                    .opacity(0)
-                    .padding(.top, screenHeight * 0.1)
-                
                 ScrollView {
                     
                     note
                         .padding()
                     
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 15)
-                            .foregroundColor(.black)
-                        RoundedRectangle(cornerRadius: 15)
-                            .stroke(lineWidth: 3)
-                            .foregroundColor(.buttonPrimary)
-                        
-                        VStack {
-                            ForEach(viewModel.curriculum.units.indices, id: \.self) { index in
-                                WeeklyTopicDropDown(topic: $viewModel.curriculum.units[index])
-                                    .padding(index == viewModel.curriculum.units.count - 1 ? .bottom : [])
-                                
-                                if index != viewModel.curriculum.units.count - 1 {
-                                    Divider()
-                                }
-                            }
-                            .padding(.top, screenHeight * 0.01)
-                        }
-                    }
-                    .padding(.horizontal)
-                    
-                    RoundedRectangle(cornerRadius: 5)
-                        .frame(width: 1, height: 1)
-                        .opacity(0)
-                        .padding(.bottom, screenHeight * 0.12)
+                    units
+                        .padding(.bottom, screenHeight * 0.14)
                 }
+                .padding(.top, screenHeight * 0.113)
             }
         }
         .edgesIgnoringSafeArea(.all)
@@ -74,5 +47,30 @@ struct NotesView: View {
                     .foregroundColor(.primary)
             }.padding(.vertical)
         }
+    }
+    
+    var units: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .foregroundColor(.black)
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(lineWidth: 3)
+                .foregroundColor(.buttonPrimary)
+            
+            VStack {
+                ForEach(viewModel.curriculum.units.indices, id: \.self) { index in
+                    UnitDropDown(unit: $viewModel.curriculum.units[index], subunitsActive: true, generateSubUnits: {
+                        viewModel.generateSubUnits(with: index)
+                    })
+                    .padding(index == viewModel.curriculum.units.count - 1 ? .bottom : [])
+                    
+                    if index != viewModel.curriculum.units.count - 1 {
+                        Divider()
+                    }
+                }
+                .padding(.top, screenHeight * 0.01)
+            }
+        }
+        .padding(.horizontal)
     }
 }

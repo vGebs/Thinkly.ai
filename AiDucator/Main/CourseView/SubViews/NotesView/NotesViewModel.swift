@@ -23,6 +23,23 @@ class NotesViewModel: ObservableObject {
     deinit {
         print("NotesViewModel: Deinitialized")
     }
+    
+    func generateSubUnits(with index: Int) {
+        CourseCreationService().getSubUnits(GetSubUnits(unitNumber: index + 1, curriculum: curriculum.units))
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .failure(let e):
+                    print("NotesViewModel: Failed to get subunits")
+                    print("NotesViewModel-err: \(e)")
+                case .finished:
+                    print("NotesViewModel: Finished generating sub units for unit index: \(index)")
+                }
+            } receiveValue: { [weak self] subUnits in
+                print(subUnits)
+                self?.curriculum.units[index].subUnits = subUnits.subUnits
+            }.store(in: &cancellables)
+    }
 }
 
 extension NotesViewModel {

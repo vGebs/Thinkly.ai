@@ -8,10 +8,13 @@
 import Foundation
 import SwiftUI
 
-struct WeeklyTopicDropDown: View {
+struct UnitDropDown: View {
     
-    @Binding var topic: Unit
+    @Binding var unit: Unit
     @State var droppedDown = false
+    let subunitsActive: Bool 
+    
+    var generateSubUnits: (() -> Void)?
     
     var body: some View {
         
@@ -21,7 +24,7 @@ struct WeeklyTopicDropDown: View {
                     Image(systemName: "number.square")
                         .font(.system(size: 14, weight: .bold, design: .rounded))
                         .foregroundColor(.accent)
-                    Text("Unit: \(String(topic.unitNumber))")
+                    Text("Unit: \(String(unit.unitNumber))")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.primary)
                 }
@@ -47,7 +50,7 @@ struct WeeklyTopicDropDown: View {
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.accent)
                     
-                    Text(topic.unitTitle)
+                    Text(unit.unitTitle)
                         .multilineTextAlignment(.leading)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .foregroundColor(.primary)
@@ -76,14 +79,44 @@ struct WeeklyTopicDropDown: View {
                         Spacer()
                     }
                     
-                    Text(topic.unitDescription)
+                    Text(unit.unitDescription)
                         .font(.system(size: 18, weight: .regular, design: .rounded))
                         .foregroundColor(.primary)
                     
                     Spacer()
                 }
+                
+                if subunitsActive {
+                    Divider()
+                    
+                    generateSubunitsButton
+                }
             }
         }.padding(.horizontal)
         
+    }
+    
+    var generateSubunitsButton: some View {
+        Button(action: {
+            self.generateSubUnits?()
+        }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundColor(.black)
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(lineWidth: 3)
+                    .foregroundColor(.buttonPrimary)
+                
+                HStack {
+                    Image(systemName: "terminal")
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .foregroundColor(.accent)
+                    
+                    Text("Generate Sub-Units")
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .foregroundColor(.primary)
+                }
+            }
+        }
     }
 }

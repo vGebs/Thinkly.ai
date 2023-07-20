@@ -35,69 +35,24 @@ public class CourseCreationService {
         return networkWrapper.request(with: request, timeout: 120, pingURLRequest: bundlePingRequest(), pingTimeout: 3)
     }
     
-    func getWeeklyContent(data: WeeklyContentInput) -> AnyPublisher<WeeklyContent, Error> {
-        let url = URL(string: "/courseCreation/getWeeklyContent")! // Replace with your server URL
+    func getSubUnits(_ input: GetSubUnits) -> AnyPublisher<SubUnits, Error> {
+        print(input)
+        let url = baseURL.appendingPathComponent("/generateSubTopicsForUnit")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.httpBody = try? JSONSerialization.data(withJSONObject: data, options: [])
-        return networkWrapper.request(with: request, timeout: 120)
+        request.httpBody = try? JSONEncoder().encode(input)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        return networkWrapper.request(with: request, timeout: 120, pingURLRequest: bundlePingRequest(), pingTimeout: 3)
     }
-    
-    func updateWeekContent(data: WeeklyContentInput) -> AnyPublisher<WeeklyContent, Error> {
-        let url = URL(string: "/courseCreation/updateWeekContent")! // Replace with your server URL
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = try? JSONSerialization.data(withJSONObject: data, options: [])
-        return networkWrapper.request(with: request, timeout: 120)
-    }
-    
-    func getClassOutline(data: WeeklyContentInput) -> AnyPublisher<ClassOutline, Error> {
-        let url = URL(string: "/courseCreation/getClassOutline")! // Replace with your server URL
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = try? JSONSerialization.data(withJSONObject: data, options: [])
-        return networkWrapper.request(with: request, timeout: 120)
-    }
-    
-    func getNotesOutlineForTopic(data: NotesOutlineInput) -> AnyPublisher<[NoteOutline], Error> {
-        let url = URL(string: "/courseCreation/getNotesOutlineForTopic")! // Replace with your server URL
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = try? JSONSerialization.data(withJSONObject: data, options: [])
-        return networkWrapper.request(with: request, timeout: 120)
-    }
-    
-    func getOutlineForSubtopic(data: OutlineForSubtopicInput) -> AnyPublisher<Subtopic, Error> {
-        let url = URL(string: "/courseCreation/getOutlineForSubtopic")! // Replace with your server URL
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = try? JSONSerialization.data(withJSONObject: data, options: [])
-        return networkWrapper.request(with: request, timeout: 120)
-    }
-    
-//    public func getOutlineForSubSubtopic(data: [String: Any]) -> AnyPublisher<[String: Any], Error> {
-//        let url = URL(string: "/courseCreation/getOutlineForSubSubtopic")! // Replace with your server URL
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "POST"
-//        request.httpBody = try? JSONSerialization.data(withJSONObject: data, options: [])
-//        return networkWrapper.request(with: request)
-//    }
-//
-//    public func writeContentForSubtopic(data: [String: Any]) -> AnyPublisher<[String: Any], Error> {
-//        let url = URL(string: "/courseCreation/writeContentForSubtopic")! // Replace with your server URL
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "POST"
-//        request.httpBody = try? JSONSerialization.data(withJSONObject: data, options: [])
-//        return networkWrapper.request(with: request)
-//    }
-//
-//    public func addDepth(data: [String: Any]) -> AnyPublisher<[String: Any], Error> {
-//        let url = URL(string: "/courseCreation/addDepth")! // Replace with your server URL
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "POST"
-//        request.httpBody = try? JSONSerialization.data(withJSONObject: data, options: [])
-//        return networkWrapper.request(with: request)
-//    }
+}
+
+struct GetSubUnits: Codable {
+    var unitNumber: Int
+    var curriculum: [Unit]
+}
+
+struct SubUnits: Codable {
+    var subUnits: [SubUnit]
 }
 
 struct PreliminaryCurriculumInput: Codable {
@@ -119,6 +74,14 @@ struct Unit: Codable {
     var unitNumber: Int
     var unitDescription: String
     var unitTitle: String
+    var subUnits: [SubUnit]? = nil
+}
+
+struct SubUnit: Codable {
+    var unitNumber: Double
+    var unitDescription: String
+    var unitTitle: String
+    var subUnits: [SubUnit]? = nil
 }
 
 struct Curriculum: Codable, FirestoreProtocol {
