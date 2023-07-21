@@ -233,7 +233,7 @@ struct UnitDropDown: View {
                         
                         HStack {
                             Button(action: {
-                                
+                                notesViewModel.generateLessons(subunitNumber: unit.subUnits![index].unitNumber)
                             }) {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)

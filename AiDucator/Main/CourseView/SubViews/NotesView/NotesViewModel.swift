@@ -57,6 +57,30 @@ class NotesViewModel: ObservableObject {
             }.store(in: &cancellables)
     }
     
+    func generateLessons(subunitNumber: Double) {
+        CourseCreationService().generateLessonsForSubunit(GetLessons(curriculum: self.curriculum.units, subunitNumber: subunitNumber))
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .failure(let e):
+                    print("NotesViewModel: failed to generate lessons")
+                    print("NotesViewModel-err: \(e)")
+                case .finished:
+                    print("NotesViewModel: Finished generating lessons")
+                }
+            } receiveValue: { [weak self] lessons in
+                print("lessons: \(lessons.lessons)")
+                for i in 0..<self!.curriculum.units.count {
+                    for j in 0..<self!.curriculum.units[i].subUnits!.count {
+                        if self!.curriculum.units[i].subUnits![j].unitNumber == subunitNumber {
+                            self!.curriculum.units[i].subUnits![j].lessons = lessons.lessons
+                            break
+                        }
+                    }
+                }
+            }.store(in: &cancellables)
+    }
+    
     func submitUnits(with index: Int) {
         UnitService_firestore.shared.pushSubUnits(units: curriculum.units, courseID: curriculum.courseID!, docID: curriculum.documentID!)
             .receive(on: DispatchQueue.main)
