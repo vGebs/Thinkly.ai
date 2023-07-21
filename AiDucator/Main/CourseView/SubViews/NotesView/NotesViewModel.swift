@@ -17,9 +17,11 @@ class NotesViewModel: ObservableObject {
     
     @Published var loadingIndexes: Set<Int> = []
     
-    init(courseDef: CourseOverview?) {
-        if let c = courseDef {
-            self.fetchCurriculum(courseID: c.documentID!)
+    init(courseDef: CourseOverview? = nil, dummyClass: Bool = false) {
+        if !dummyClass {
+            if let c = courseDef {
+                self.fetchCurriculum(courseID: c.documentID!)
+            }
         }
     }
     

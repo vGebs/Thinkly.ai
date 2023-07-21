@@ -14,12 +14,7 @@ struct UnitDropDown: View {
     @State var droppedDown = false
     let subunitsActive: Bool 
     
-    @Binding var loadingIndexes: Set<Int>
-    @Binding var submittedSubUnits: Set<Int>
-    
-    var generateSubUnits: (() -> Void)?
-    var submitUnits: (() -> Void)?
-    var trashSubUnits: (() -> Void)?
+    @ObservedObject var notesViewModel: NotesViewModel
     
     var body: some View {
         
@@ -94,24 +89,22 @@ struct UnitDropDown: View {
                 }.fixedSize(horizontal: false, vertical: true)
                 
                 if subunitsActive {
-//                    Divider()
                     
                     RoundedRectangle(cornerRadius: 5)
                         .frame(height: 1)
                         .foregroundColor(.buttonPrimary)
-//                        .padding(.leading, screenWidth * 0.035)
                     
-                    if unit.subUnits != nil && !loadingIndexes.contains(unit.unitNumber - 1){
+                    if unit.subUnits != nil && !notesViewModel.loadingIndexes.contains(unit.unitNumber - 1){
                         subUnitsDropDown
                         
                         HStack {
                             regenerateButton
-                            if !self.submittedSubUnits.contains(unit.unitNumber - 1) {
+                            if !self.notesViewModel.submittedSubUnits.contains(unit.unitNumber - 1) {
                                 submitButton
                             }
                         }.padding(.leading, screenWidth * 0.05)
                     } else {
-                        if loadingIndexes.contains(unit.unitNumber - 1) {
+                        if notesViewModel.loadingIndexes.contains(unit.unitNumber - 1) {
                             LoadingView()
                         } else {
                             generateSubunitsButton
@@ -125,7 +118,7 @@ struct UnitDropDown: View {
     
     var regenerateButton: some View {
         Button(action: {
-            self.generateSubUnits?()
+            notesViewModel.generateSubUnits(with: unit.unitNumber - 1)
         }){
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
@@ -149,7 +142,7 @@ struct UnitDropDown: View {
     
     var submitButton: some View {
         Button(action: {
-            self.submitUnits?()
+            notesViewModel.submitUnits(with: unit.unitNumber - 1)
         }){
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
@@ -189,8 +182,7 @@ struct UnitDropDown: View {
                             if index == 0 {
                                 Button(action: {
                                     withAnimation {
-                                        self.unit.subUnits = nil
-                                        self.trashSubUnits?()
+                                        notesViewModel.trashSubUnits(with: unit.unitNumber - 1)
                                     }
                                 }) {
                                     Image(systemName: "trash")
@@ -217,8 +209,6 @@ struct UnitDropDown: View {
                                 .foregroundColor(.primary)
                             Spacer()
                         }
-//                        .padding(.top)
-//                        .padding(.top, screenHeight * 0.02)
                         .padding(.leading, screenWidth * 0.05)
                         .fixedSize(horizontal: false, vertical: true)
                         
@@ -241,6 +231,32 @@ struct UnitDropDown: View {
                         .padding(.leading, screenWidth * 0.05)
                         .fixedSize(horizontal: false, vertical: true)
                         
+                        HStack {
+                            Button(action: {
+                                
+                            }) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundColor(.black)
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(lineWidth: 3)
+                                        .foregroundColor(.buttonPrimary)
+                                    
+                                    HStack {
+                                        Image(systemName: "terminal")
+                                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                                            .foregroundColor(.buttonPrimary)
+                                        
+                                        Text("Generate Lessons")
+                                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                                            .foregroundColor(.primary)
+                                    }.padding()
+                                }
+                            }
+                        }
+                        .padding(.leading, screenWidth * 0.05)
+                        .fixedSize(horizontal: false, vertical: true)
+                        
                         RoundedRectangle(cornerRadius: 5)
                             .frame(height: 1)
                             .foregroundColor(.buttonPrimary)
@@ -253,7 +269,7 @@ struct UnitDropDown: View {
     
     var generateSubunitsButton: some View {
         Button(action: {
-            self.generateSubUnits?()
+            notesViewModel.generateSubUnits(with: unit.unitNumber - 1)
         }) {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
