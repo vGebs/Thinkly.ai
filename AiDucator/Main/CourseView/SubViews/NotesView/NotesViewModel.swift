@@ -7,11 +7,15 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 class NotesViewModel: ObservableObject {
     
     @Published var curriculum: Curriculum = Curriculum(units: [])
     @Published var submittedSubUnits: Set<Int> = []
+    @Published var submittedLessons: Set<Double> = []
+    
+    @Published var showRegenerateSubUnits: Set<Int> = []
     
     private var cancellables: [AnyCancellable] = []
     
@@ -57,23 +61,45 @@ class NotesViewModel: ObservableObject {
             }.store(in: &cancellables)
     }
     
+    @Published var loadingIndexes_lessons: Set<Double> = []
+    
     func generateLessons(subunitNumber: Double) {
+        loadingIndexes_lessons.insert(subunitNumber)
+        showRegenerateSubUnits.insert(Int(subunitNumber))
+        
+        for i in 0..<self.curriculum.units.count {
+            for j in 0..<self.curriculum.units[i].subUnits!.count {
+                if self.curriculum.units[i].subUnits![j].unitNumber == subunitNumber {
+                    if self.curriculum.units[i].subUnits![j].lessons != nil {
+                        withAnimation {
+                            self.curriculum.units[i].subUnits![j].lessons = nil
+                            self.trashLessons(with: i, and: j)
+                        }
+                    }
+                    break
+                }
+            }
+        }
+        
         CourseCreationService().generateLessonsForSubunit(GetLessons(curriculum: self.curriculum.units, subunitNumber: subunitNumber))
             .receive(on: DispatchQueue.main)
-            .sink { completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .failure(let e):
                     print("NotesViewModel: failed to generate lessons")
                     print("NotesViewModel-err: \(e)")
+                    self?.loadingIndexes_lessons.remove(subunitNumber)
+                    self?.showRegenerateSubUnits.remove(Int(subunitNumber))
                 case .finished:
                     print("NotesViewModel: Finished generating lessons")
                 }
             } receiveValue: { [weak self] lessons in
-                print("lessons: \(lessons.lessons)")
                 for i in 0..<self!.curriculum.units.count {
                     for j in 0..<self!.curriculum.units[i].subUnits!.count {
                         if self!.curriculum.units[i].subUnits![j].unitNumber == subunitNumber {
                             self!.curriculum.units[i].subUnits![j].lessons = lessons.lessons
+                            print("Lessons: \(lessons.lessons)")
+                            self?.loadingIndexes_lessons.remove(subunitNumber)
                             break
                         }
                     }
@@ -94,6 +120,23 @@ class NotesViewModel: ObservableObject {
                 }
             } receiveValue: { [weak self] _ in
                 self?.submittedSubUnits.insert(index)
+            }
+            .store(in: &cancellables)
+    }
+    
+    func submitLessons(with index: Double) {
+        UnitService_firestore.shared.pushSubUnits(units: curriculum.units, courseID: curriculum.courseID!, docID: curriculum.documentID!)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .failure(let e):
+                    print("NotesViewModel: Failed to push lessons")
+                    print("NotesViewModel-err: \(e)")
+                case .finished:
+                    print("NotesViewModel: Finished pushing lessons")
+                }
+            } receiveValue: { [weak self] _ in
+                self?.submittedLessons.insert(index)
             }
             .store(in: &cancellables)
     }
@@ -120,6 +163,29 @@ class NotesViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
+    
+    func trashLessons(with unitIndex: Int, and subUnitIndex: Int) {
+        self.loadingIndexes_lessons.insert(self.curriculum.units[unitIndex].subUnits![subUnitIndex].unitNumber)
+        self.curriculum.units[unitIndex].subUnits![subUnitIndex].lessons = nil
+        
+        UnitService_firestore.shared.pushSubUnits(units: curriculum.units, courseID: curriculum.courseID!, docID: curriculum.documentID!)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .failure(let e):
+                    print("NotesViewModel: Failed to trash lessons")
+                    print("NotesViewModel-err: \(e)")
+                case .finished:
+                    print("NotesViewModel: Finished trashing lessons")
+                }
+            } receiveValue: { [weak self] _ in
+//                if !regenerating {
+                self?.loadingIndexes_lessons.remove(self!.curriculum.units[unitIndex].subUnits![subUnitIndex].unitNumber)
+//                }
+                self?.submittedLessons.remove(self!.curriculum.units[unitIndex].subUnits![subUnitIndex].unitNumber)
+            }
+            .store(in: &cancellables)
+    }
 }
 
 extension NotesViewModel {
@@ -140,6 +206,14 @@ extension NotesViewModel {
                     for i in 0..<self!.curriculum.units.count {
                         if self?.curriculum.units[i].subUnits != nil {
                             self?.submittedSubUnits.insert(i)
+                        }
+                        
+                        if let _ = self!.curriculum.units[i].subUnits {
+                            for j in 0..<self!.curriculum.units[i].subUnits!.count {
+                                if self!.curriculum.units[i].subUnits![j].lessons != nil {
+                                    self?.submittedLessons.insert(self!.curriculum.units[i].subUnits![j].unitNumber)
+                                }
+                            }
                         }
                     }
                 }

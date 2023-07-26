@@ -15,6 +15,7 @@ struct UnitDropDown: View {
     let subunitsActive: Bool 
     
     @ObservedObject var notesViewModel: NotesViewModel
+    @State var lessonsDroppedDown: Set<Int> = []
     
     var body: some View {
         
@@ -97,12 +98,14 @@ struct UnitDropDown: View {
                     if unit.subUnits != nil && !notesViewModel.loadingIndexes.contains(unit.unitNumber - 1){
                         subUnitsDropDown
                         
-                        HStack {
-                            regenerateButton
-                            if !self.notesViewModel.submittedSubUnits.contains(unit.unitNumber - 1) {
-                                submitButton
-                            }
-                        }.padding(.leading, screenWidth * 0.05)
+                        if !notesViewModel.showRegenerateSubUnits.contains(unit.unitNumber) {
+                            HStack {
+                                regenerateButton
+                                if !self.notesViewModel.submittedSubUnits.contains(unit.unitNumber - 1) {
+                                    submitButton
+                                }
+                            }.padding(.leading, screenWidth * 0.05)
+                        }
                     } else {
                         if notesViewModel.loadingIndexes.contains(unit.unitNumber - 1) {
                             LoadingView()
@@ -179,7 +182,7 @@ struct UnitDropDown: View {
                                 .foregroundColor(.primary)
                             Spacer()
                             
-                            if index == 0 {
+                            if index == 0 && unit.subUnits![index].lessons == nil && !notesViewModel.showRegenerateSubUnits.contains(unit.unitNumber) {
                                 Button(action: {
                                     withAnimation {
                                         notesViewModel.trashSubUnits(with: unit.unitNumber - 1)
@@ -188,6 +191,26 @@ struct UnitDropDown: View {
                                     Image(systemName: "trash")
                                         .font(.system(size: 16, weight: .bold, design: .rounded))
                                         .foregroundColor(.buttonPrimary)
+                                }
+                            } else if unit.subUnits![index].lessons != nil {
+                                Button(action: {
+                                    withAnimation {
+                                        let (didAdd, _ ) = lessonsDroppedDown.insert(index)
+                                        
+                                        if !didAdd {
+                                            lessonsDroppedDown.remove(index)
+                                        }
+                                    }
+                                }) {
+                                    if lessonsDroppedDown.contains(index) {
+                                        Image(systemName: "chevron.down")
+                                            .font(.system(size: 16, weight: .bold, design: .rounded))
+                                            .foregroundColor(.buttonPrimary)
+                                    } else {
+                                        Image(systemName: "chevron.up")
+                                            .font(.system(size: 16, weight: .bold, design: .rounded))
+                                            .foregroundColor(.buttonPrimary)
+                                    }
                                 }
                             }
                         }
@@ -231,31 +254,51 @@ struct UnitDropDown: View {
                         .padding(.leading, screenWidth * 0.05)
                         .fixedSize(horizontal: false, vertical: true)
                         
-                        HStack {
-                            Button(action: {
-                                notesViewModel.generateLessons(subunitNumber: unit.subUnits![index].unitNumber)
-                            }) {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .foregroundColor(.black)
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(lineWidth: 3)
-                                        .foregroundColor(.buttonPrimary)
+                        
+                        if unit.subUnits![index].lessons != nil {
+                            
+                            if let subunit = unit.subUnits {
+                                if !lessonsDroppedDown.contains(index) {
+                                    Divider()
+                                        .padding(.leading, screenWidth * 0.05)
                                     
-                                    HStack {
-                                        Image(systemName: "terminal")
-                                            .font(.system(size: 14, weight: .bold, design: .rounded))
-                                            .foregroundColor(.buttonPrimary)
-                                        
-                                        Text("Generate Lessons")
-                                            .font(.system(size: 14, weight: .bold, design: .rounded))
-                                            .foregroundColor(.primary)
-                                    }.padding()
+                                    LessonsDropDown(lessons: .constant(subunit[index].lessons!), subunitNumber: .constant(subunit[index].unitNumber), unitNumber: $unit.unitNumber, notesViewModel: notesViewModel)
                                 }
                             }
                         }
-                        .padding(.leading, screenWidth * 0.05)
-                        .fixedSize(horizontal: false, vertical: true)
+                        
+
+                        if unit.subUnits![index].lessons == nil {
+                            if notesViewModel.loadingIndexes_lessons.contains(unit.subUnits![index].unitNumber) {
+                                LoadingView()
+                            } else {
+                                HStack {
+                                    Button(action: {
+                                        notesViewModel.generateLessons(subunitNumber: unit.subUnits![index].unitNumber)
+                                    }) {
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .foregroundColor(.black)
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(lineWidth: 3)
+                                                .foregroundColor(.buttonPrimary)
+                                            
+                                            HStack {
+                                                Image(systemName: "terminal")
+                                                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                    .foregroundColor(.buttonPrimary)
+                                                
+                                                Text("Generate Lessons")
+                                                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                    .foregroundColor(.primary)
+                                            }.padding()
+                                        }
+                                    }
+                                }
+                                .padding(.leading, screenWidth * 0.05)
+                                .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
                         
                         RoundedRectangle(cornerRadius: 5)
                             .frame(height: 1)
