@@ -28,25 +28,25 @@ class NoteSectionService_Firestore {
     
     private init() {}
     
-    func addSection(_ section: NoteSection) -> AnyPublisher<String, Error> {
-        return firestore.create(collection: collection, data: section)
-    }
-
-    func getSection(with noteID: String, and index: Int) -> AnyPublisher<NoteSection?, Error> {
-        let query: Query = db.collection(collection)
-            .whereField("noteID", isEqualTo: noteID)
-            .whereField("index", isEqualTo: index)
-        
-        return firestore.read(query: query)
-            .tryMap { (sections: [NoteSection]) in
-                return sections.first
-            }
-            .eraseToAnyPublisher()
-    }
-    
-    func updateSection(_ section: NoteSection) -> AnyPublisher<Void, Error> {
-        return firestore.update(collection: collection, documentId: section.documentID!, data: section)
-    }
+//    func addSection(_ section: NoteSection) -> AnyPublisher<String, Error> {
+//        return firestore.create(collection: collection, data: section)
+//    }
+//
+//    func getSection(with noteID: String, and index: Int) -> AnyPublisher<NoteSection?, Error> {
+//        let query: Query = db.collection(collection)
+//            .whereField("noteID", isEqualTo: noteID)
+//            .whereField("index", isEqualTo: index)
+//        
+//        return firestore.read(query: query)
+//            .tryMap { (sections: [NoteSection]) in
+//                return sections.first
+//            }
+//            .eraseToAnyPublisher()
+//    }
+//    
+//    func updateSection(_ section: NoteSection) -> AnyPublisher<Void, Error> {
+//        return firestore.update(collection: collection, documentId: section.documentID!, data: section)
+//    }
     
     func deleteSection(with docID: String) -> AnyPublisher<Void, Error> {
         return firestore.delete(collection: collection, documentId: docID)

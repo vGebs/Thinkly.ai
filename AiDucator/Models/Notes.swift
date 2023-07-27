@@ -34,19 +34,27 @@ struct Chapter: Identifiable {
 //   - order
 //   - content
 
-struct Notes: FirestoreProtocol {
-    @DocumentID var documentID: String?
-    var title: String
-    var teacherID: String
-    var timestamp: Date
-    var numSections: Int
-    var classID: String
-    var content: String?
+//struct Notes: FirestoreProtocol {
+//    @DocumentID var documentID: String?
+//    var title: String
+//    var teacherID: String
+//    var timestamp: Date
+//    var numSections: Int
+//    var classID: String
+//    var content: String?
+//}
+
+//struct NoteSection: FirestoreProtocol {
+//    @DocumentID var documentID: String?
+//    var noteID: String
+//    var index: Int
+//    var content: String
+//}
+
+struct Notes: Codable {
+    var notes: [Paragraph]
 }
 
-struct NoteSection: FirestoreProtocol {
-    @DocumentID var documentID: String?
-    var noteID: String
-    var index: Int
-    var content: String
+struct Paragraph: Codable {
+    var paragraph: String
 }

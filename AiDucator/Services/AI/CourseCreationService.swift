@@ -52,6 +52,24 @@ public class CourseCreationService {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         return networkWrapper.request(with: request, timeout: 120, pingURLRequest: bundlePingRequest(), pingTimeout: 3)
     }
+    
+    func generateNotes(input: NotesInput) ->AnyPublisher<Notes, Error> {
+        let url = baseURL.appendingPathComponent("/generateNotesForLesson")
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = try? JSONEncoder().encode(input)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        return networkWrapper.request(with: request, timeout: 120, pingURLRequest: bundlePingRequest(), pingTimeout: 3)
+    }
+}
+
+struct NotesInput: Codable {
+    var lessonNumber: String
+    var unit: Unit
+}
+
+struct NotesOutput: Codable {
+    var notes: Notes
 }
 
 struct GetLessons: Codable {
@@ -76,6 +94,7 @@ struct Lesson: Codable {
     var lessonNumber: String
     var lessonDescription: String
     var lessonTitle: String
+    var notes: Notes? = nil
 }
 
 struct PreliminaryCurriculumInput: Codable {

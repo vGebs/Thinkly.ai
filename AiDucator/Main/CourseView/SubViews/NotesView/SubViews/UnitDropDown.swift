@@ -263,6 +263,7 @@ struct UnitDropDown: View {
                                         .padding(.leading, screenWidth * 0.05)
                                     
                                     LessonsDropDown(lessons: .constant(subunit[index].lessons!), subunitNumber: .constant(subunit[index].unitNumber), unitNumber: $unit.unitNumber, notesViewModel: notesViewModel)
+                                        .fixedSize(horizontal: false, vertical: true)
                                 }
                             }
                         }

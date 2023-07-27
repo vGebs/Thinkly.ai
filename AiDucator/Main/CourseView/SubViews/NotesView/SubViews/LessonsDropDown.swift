@@ -80,6 +80,34 @@ struct LessonsDropDown: View {
                 
                 Divider()
                     .padding(.leading, screenWidth * 0.035)
+                
+                if notesViewModel.submittedLessons.contains(subunitNumber) {
+                    Button(action: {
+                        notesViewModel.generateNotes(for: lessons[i].lessonNumber, unitNumber: unitNumber)
+                    }) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.black)
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(lineWidth: 3)
+                                .foregroundColor(.buttonPrimary)
+                            
+                            HStack {
+                                Image(systemName: "book")
+                                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                                    .foregroundColor(.buttonPrimary)
+                                
+                                Text("Generate Notes")
+                                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                                    .foregroundColor(.primary)
+                            }.padding()
+                        }
+                    }
+                    .padding(.leading, screenWidth * 0.035)
+                    
+                    Divider()
+                        .padding(.leading, screenWidth * 0.035)
+                }
             }
             
             HStack {
@@ -128,9 +156,8 @@ struct LessonsDropDown: View {
                         }
                     }
                 }
-                
             }
-            .padding(.horizontal)
+            .padding(.leading, screenWidth * 0.035)
             
         }
     }

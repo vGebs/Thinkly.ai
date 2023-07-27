@@ -25,25 +25,25 @@ class NotesService_Firestore {
         return firestore.create(collection: collection, data: notes)
     }
     
-    func getNotes(docID: String) -> AnyPublisher<Notes, Error> {
-        return firestore.read(collection: collection, documentId: docID)
-    }
-    
-    func getNotes(for classID: String) -> AnyPublisher<[Notes], Error> {
-        let query = db.collection(collection).whereField("classID", isEqualTo: classID)
-        
-        return firestore.read(query: query)
-    }
-    
-    func listenOnNotes(for classID: String) -> AnyPublisher<[(Notes, DocumentChangeType)], Error> {
-        let query = db.collection(collection).whereField("classID", isEqualTo: classID)
-        
-        return firestore.listenByQuery(query: query)
-    }
-    
-    func updateNotes(notes: Notes) -> AnyPublisher<Void, Error> {
-        return firestore.update(collection: collection, documentId: notes.documentID!, data: notes)
-    }
+//    func getNotes(docID: String) -> AnyPublisher<Notes, Error> {
+//        return firestore.read(collection: collection, documentId: docID)
+//    }
+//    
+//    func getNotes(for classID: String) -> AnyPublisher<[Notes], Error> {
+//        let query = db.collection(collection).whereField("classID", isEqualTo: classID)
+//        
+//        return firestore.read(query: query)
+//    }
+//    
+//    func listenOnNotes(for classID: String) -> AnyPublisher<[(Notes, DocumentChangeType)], Error> {
+//        let query = db.collection(collection).whereField("classID", isEqualTo: classID)
+//        
+//        return firestore.listenByQuery(query: query)
+//    }
+//    
+//    func updateNotes(notes: Notes) -> AnyPublisher<Void, Error> {
+//        return firestore.update(collection: collection, documentId: notes.documentID!, data: notes)
+//    }
     
     func deleteNotes(with docID: String) -> AnyPublisher<Void, Error> {
         return firestore.delete(collection: collection, documentId: docID)
