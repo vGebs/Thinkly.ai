@@ -320,6 +320,8 @@ class NotesViewModel: ObservableObject {
 
 extension NotesViewModel {
     private func fetchCurriculum(courseID: String) {
+        var fetchedLessonNumbers = Set<String>() // keep track of the lesson numbers fetched
+        
         UnitService_firestore.shared.fetchUnits(courseID: courseID)
             .receive(on: DispatchQueue.main)
             .sink { completion in
@@ -342,11 +344,52 @@ extension NotesViewModel {
                             for j in 0..<self!.curriculum.units[i].subUnits!.count {
                                 if self!.curriculum.units[i].subUnits![j].lessons != nil {
                                     self?.submittedLessons.insert(self!.curriculum.units[i].subUnits![j].unitNumber)
+                                    
+                                    for k in 0..<self!.curriculum.units[i].subUnits![j].lessons!.count {
+                                        let lessonNumber = self!.curriculum.units[i].subUnits![j].lessons![k].lessonNumber
+                                        
+                                        if !fetchedLessonNumbers.contains(lessonNumber) {
+                                            self!.fetchNotes(courseID: self!.curriculum.courseID!, lessonNumber: lessonNumber)
+                                            fetchedLessonNumbers.insert(lessonNumber)
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }.store(in: &cancellables)
+    }
+    
+    private func fetchNotes(courseID: String, lessonNumber: String) {
+        NotesService_Firestore.shared.getNotes(for: courseID, lessonNumber: lessonNumber)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .failure(let e):
+                    print("NotesViewModel: Failed to get notes with lessonNumber: \(lessonNumber)")
+                    print("NotesViewModel-err: \(e)")
+                case .finished:
+                    print("NotesViewModel: Finished fetching notes with lessonNumber: \(lessonNumber)")
+                }
+            } receiveValue: { [weak self] notesArr in
+                if notesArr.count > 0 {
+                    for i in 0..<self!.curriculum.units.count {
+                        if let _ = self!.curriculum.units[i].subUnits {
+                            for j in 0..<self!.curriculum.units[i].subUnits!.count {
+                                if let _ = self!.curriculum.units[i].subUnits![j].lessons {
+                                    for k in 0..<self!.curriculum.units[i].subUnits![j].lessons!.count {
+                                        if self!.curriculum.units[i].subUnits![j].lessons![k].lessonNumber == lessonNumber {
+                                            self!.curriculum.units[i].subUnits![j].lessons![k].notes = notesArr[0].notes
+                                            break
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }.store(in: &cancellables)
+
     }
 }

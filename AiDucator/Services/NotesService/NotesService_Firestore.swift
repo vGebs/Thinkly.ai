@@ -30,8 +30,8 @@ class NotesService_Firestore {
         return firestore.read(collection: collection, documentId: docID)
     }
 
-    func getNotes(for classID: String) -> AnyPublisher<[Notes_Firestore], Error> {
-        let query = db.collection(collection).whereField("classID", isEqualTo: classID)
+    func getNotes(for courseID: String, lessonNumber: String) -> AnyPublisher<[Notes_Firestore], Error> {
+        let query = db.collection(collection).whereField("courseID", isEqualTo: courseID).whereField("lessonNumber", isEqualTo: lessonNumber)
 
         return firestore.read(query: query)
     }
