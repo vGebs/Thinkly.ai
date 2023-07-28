@@ -15,7 +15,7 @@ class NotesViewModel: ObservableObject {
     @Published var submittedSubUnits: Set<Int> = []
     @Published var submittedLessons: Set<Double> = []
     
-    @Published var showRegenerateSubUnits: Set<Int> = []
+//    @Published var subUnitsThatHaveLessons: Set<Double> = []
     @Published var loadingNotesNumbers: Set<String> = []
     
     private var cancellables: [AnyCancellable] = []
@@ -66,18 +66,20 @@ class NotesViewModel: ObservableObject {
     
     func generateLessons(subunitNumber: Double) {
         loadingIndexes_lessons.insert(subunitNumber)
-        showRegenerateSubUnits.insert(Int(subunitNumber))
+        //subUnitsThatHaveLessons.insert(Int(subunitNumber))
         
         for i in 0..<self.curriculum.units.count {
-            for j in 0..<self.curriculum.units[i].subUnits!.count {
-                if self.curriculum.units[i].subUnits![j].unitNumber == subunitNumber {
-                    if self.curriculum.units[i].subUnits![j].lessons != nil {
-                        withAnimation {
-                            self.curriculum.units[i].subUnits![j].lessons = nil
-                            self.trashLessons(with: i, and: j)
+            if self.curriculum.units[i].subUnits != nil {
+                for j in 0..<self.curriculum.units[i].subUnits!.count {
+                    if self.curriculum.units[i].subUnits![j].unitNumber == subunitNumber {
+                        if self.curriculum.units[i].subUnits![j].lessons != nil {
+                            withAnimation {
+                                self.curriculum.units[i].subUnits![j].lessons = nil
+                                self.trashLessons(with: i, and: j)
+                            }
                         }
+                        break
                     }
-                    break
                 }
             }
         }
@@ -90,20 +92,26 @@ class NotesViewModel: ObservableObject {
                     print("NotesViewModel: failed to generate lessons")
                     print("NotesViewModel-err: \(e)")
                     self?.loadingIndexes_lessons.remove(subunitNumber)
-                    self?.showRegenerateSubUnits.remove(Int(subunitNumber))
+//                    self?.subUnitsThatHaveLessons.remove(Int(subunitNumber))
                 case .finished:
                     print("NotesViewModel: Finished generating lessons")
                 }
             } receiveValue: { [weak self] lessons in
-                for i in 0..<self!.curriculum.units.count {
-                    for j in 0..<self!.curriculum.units[i].subUnits!.count {
-                        if self!.curriculum.units[i].subUnits![j].unitNumber == subunitNumber {
-                            self!.curriculum.units[i].subUnits![j].lessons = lessons.lessons
-                            print("Lessons: \(lessons.lessons)")
-                            self?.loadingIndexes_lessons.remove(subunitNumber)
-                            break
+                if lessons.lessons.count != 0 {
+                    for i in 0..<self!.curriculum.units.count {
+                        if self!.curriculum.units[i].subUnits != nil {
+                            for j in 0..<self!.curriculum.units[i].subUnits!.count {
+                                if self!.curriculum.units[i].subUnits![j].unitNumber == subunitNumber {
+                                    self!.curriculum.units[i].subUnits![j].lessons = lessons.lessons
+                                    print("Lessons: \(lessons.lessons)")
+                                    self?.loadingIndexes_lessons.remove(subunitNumber)
+                                    break
+                                }
+                            }
                         }
                     }
+                } else {
+                    self?.loadingIndexes_lessons.remove(subunitNumber)
                 }
             }.store(in: &cancellables)
     }

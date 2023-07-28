@@ -31,7 +31,7 @@ struct LessonsDropDown: View {
                     
                     Spacer()
                     
-                    if i == 0 && !notesViewModel.subunitHasNotes(unitIndex: unitNumber - 1, subunitNumber: subunitNumber) || !notesViewModel.loadingNotesNumbers.isEmpty{
+                    if i == 0 && !notesViewModel.subunitHasNotes(unitIndex: unitNumber - 1, subunitNumber: subunitNumber) && notesViewModel.loadingNotesNumbers.isEmpty{
                         Button(action: {
                             notesViewModel.trashLessons(with: unitNumber - 1, and: i)
                         }) {
@@ -171,7 +171,7 @@ struct LessonsDropDown: View {
             }
             
             if !notesViewModel.subunitHasNotes(unitIndex: unitNumber - 1, subunitNumber: subunitNumber) {
-                HStack {
+                VStack {
                     Button(action: {
                         notesViewModel.generateLessons(subunitNumber: subunitNumber)
                     }) {

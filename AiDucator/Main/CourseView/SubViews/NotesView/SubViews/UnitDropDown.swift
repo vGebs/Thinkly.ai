@@ -98,14 +98,17 @@ struct UnitDropDown: View {
                     if unit.subUnits != nil && !notesViewModel.loadingIndexes.contains(unit.unitNumber - 1){
                         subUnitsDropDown
                         
-                        if !notesViewModel.showRegenerateSubUnits.contains(unit.unitNumber) {
-                            HStack {
-                                regenerateButton
-                                if !self.notesViewModel.submittedSubUnits.contains(unit.unitNumber - 1) {
+//                        if !notesViewModel.subUnitsThatHaveLessons.contains(unit.unitNumber) {
+                        if !self.notesViewModel.submittedSubUnits.contains(unit.unitNumber - 1) {
+                            VStack {
+//                                regenerateButton
+                                //if !self.notesViewModel.submittedSubUnits.contains(unit.unitNumber - 1) {
+                                    regenerateButton
                                     submitButton
-                                }
+//                                }
                             }.padding(.leading, screenWidth * 0.05)
                         }
+//                        }
                     } else {
                         if notesViewModel.loadingIndexes.contains(unit.unitNumber - 1) {
                             LoadingView()
@@ -182,7 +185,7 @@ struct UnitDropDown: View {
                                 .foregroundColor(.primary)
                             Spacer()
                             
-                            if index == 0 && unit.subUnits![index].lessons == nil && !notesViewModel.showRegenerateSubUnits.contains(unit.unitNumber) {
+                            if index == 0 && unit.subUnits![index].lessons == nil {
                                 Button(action: {
                                     withAnimation {
                                         notesViewModel.trashSubUnits(with: unit.unitNumber - 1)
@@ -263,6 +266,7 @@ struct UnitDropDown: View {
                                         .padding(.leading, screenWidth * 0.05)
                                     
                                     LessonsDropDown(lessons: .constant(subunit[index].lessons!), subunitNumber: .constant(subunit[index].unitNumber), unitNumber: $unit.unitNumber, notesViewModel: notesViewModel)
+                                        .padding(.leading, screenWidth * 0.1)
                                         .fixedSize(horizontal: false, vertical: true)
                                 }
                             }
