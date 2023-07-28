@@ -14,6 +14,9 @@ struct LessonsDropDown: View {
     @Binding var unitNumber: Int
     @ObservedObject var notesViewModel: NotesViewModel
     
+    @State private var showNotes = false
+    @State var notes: Notes? = nil
+    
     var body: some View {
         VStack {
             ForEach(lessons.indices, id: \.self) { i in
@@ -28,7 +31,7 @@ struct LessonsDropDown: View {
                     
                     Spacer()
                     
-                    if i == 0 {
+                    if i == 0 && !notesViewModel.subunitHasNotes(unitIndex: unitNumber - 1, subunitNumber: subunitNumber) || !notesViewModel.loadingNotesNumbers.isEmpty{
                         Button(action: {
                             notesViewModel.trashLessons(with: unitNumber - 1, and: i)
                         }) {
@@ -81,9 +84,9 @@ struct LessonsDropDown: View {
                 Divider()
                     .padding(.leading, screenWidth * 0.035)
                 
-                if notesViewModel.submittedLessons.contains(subunitNumber) {
+                if notesViewModel.submittedLessons.contains(subunitNumber) && !notesViewModel.lessonHasNotes(unitIndex: unitNumber - 1, subunitNumber: subunitNumber, lessonNumber: lessons[i].lessonNumber) && !notesViewModel.loadingNotesNumbers.contains(lessons[i].lessonNumber){
                     Button(action: {
-                        notesViewModel.generateNotes(for: lessons[i].lessonNumber, unitNumber: unitNumber)
+                        notesViewModel.generateNotes(for: lessons[i].lessonNumber, unitIndex: unitNumber - 1)
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -107,35 +110,10 @@ struct LessonsDropDown: View {
                     
                     Divider()
                         .padding(.leading, screenWidth * 0.035)
-                }
-            }
-            
-            HStack {
-                Button(action: {
-                    notesViewModel.generateLessons(subunitNumber: subunitNumber)
-                }) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundColor(.black)
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(lineWidth: 3)
-                            .foregroundColor(.buttonPrimary)
-                        
-                        HStack {
-                            Image(systemName: "terminal")
-                                .font(.system(size: 12, weight: .bold, design: .rounded))
-                                .foregroundColor(.buttonPrimary)
-                            
-                            Text("Regenerate")
-                                .font(.system(size: 14, weight: .bold, design: .rounded))
-                                .foregroundColor(.primary)
-                        }.padding()
-                    }
-                }
-                
-                if !notesViewModel.submittedLessons.contains(subunitNumber) {
+                } else if notesViewModel.lessonHasNotes(unitIndex: unitNumber - 1, subunitNumber: subunitNumber, lessonNumber: lessons[i].lessonNumber) {
                     Button(action: {
-                        notesViewModel.submitLessons(with: subunitNumber)
+                        self.showNotes = true
+                        self.notes = lessons[i].notes
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -145,20 +123,106 @@ struct LessonsDropDown: View {
                                 .foregroundColor(.buttonPrimary)
                             
                             HStack {
-                                Image(systemName: "checkmark.square")
+                                Image(systemName: "binoculars")
                                     .font(.system(size: 12, weight: .bold, design: .rounded))
                                     .foregroundColor(.buttonPrimary)
                                 
-                                Text("Submit")
+                                Text("View Notes")
                                     .font(.system(size: 14, weight: .bold, design: .rounded))
                                     .foregroundColor(.primary)
                             }.padding()
                         }
                     }
+                    .padding(.leading, screenWidth * 0.035)
+                    
+                    if !notesViewModel.submittedNotes.contains(lessons[i].lessonNumber) {
+                        Button(action: {
+                            notesViewModel.submitNotes(unitIndex: unitNumber - 1, subunitNumber: subunitNumber, lessonNumber: lessons[i].lessonNumber)
+                        }) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundColor(.black)
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(lineWidth: 3)
+                                    .foregroundColor(.buttonPrimary)
+                                
+                                HStack {
+                                    Image(systemName: "checkmark.square")
+                                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                                        .foregroundColor(.buttonPrimary)
+                                    
+                                    Text("Submit Notes")
+                                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                                        .foregroundColor(.primary)
+                                }.padding()
+                            }
+                        }
+                        .padding(.leading, screenWidth * 0.035)
+                    }
+                    
+                    Divider()
+                        .padding(.leading, screenWidth * 0.035)
+                } else if notesViewModel.loadingNotesNumbers.contains(lessons[i].lessonNumber) {
+                    LoadingView()
+                    
+                    Divider()
+                        .padding(.leading, screenWidth * 0.035)
                 }
             }
-            .padding(.leading, screenWidth * 0.035)
             
+            if !notesViewModel.subunitHasNotes(unitIndex: unitNumber - 1, subunitNumber: subunitNumber) {
+                HStack {
+                    Button(action: {
+                        notesViewModel.generateLessons(subunitNumber: subunitNumber)
+                    }) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.black)
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(lineWidth: 3)
+                                .foregroundColor(.buttonPrimary)
+                            
+                            HStack {
+                                Image(systemName: "terminal")
+                                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                                    .foregroundColor(.buttonPrimary)
+                                
+                                Text("Regenerate")
+                                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                                    .foregroundColor(.primary)
+                            }.padding()
+                        }
+                    }
+                    
+                    if !notesViewModel.submittedLessons.contains(subunitNumber) {
+                        Button(action: {
+                            notesViewModel.submitLessons(with: subunitNumber)
+                        }) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundColor(.black)
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(lineWidth: 3)
+                                    .foregroundColor(.buttonPrimary)
+                                
+                                HStack {
+                                    Image(systemName: "checkmark.square")
+                                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                                        .foregroundColor(.buttonPrimary)
+                                    
+                                    Text("Submit")
+                                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                                        .foregroundColor(.primary)
+                                }.padding()
+                            }
+                        }
+                    }
+                }
+                .padding(.leading, screenWidth * 0.035)
+            }
+            
+        }.sheet(isPresented: $showNotes) {
+            LessonNotesView(notes: $notes)
         }
     }
 }

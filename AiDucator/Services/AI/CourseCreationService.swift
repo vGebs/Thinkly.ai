@@ -68,9 +68,9 @@ struct NotesInput: Codable {
     var unit: Unit
 }
 
-struct NotesOutput: Codable {
-    var notes: Notes
-}
+//struct NotesOutput: Codable {
+//    var notes: Notes
+//}
 
 struct GetLessons: Codable {
     var curriculum: [Unit]

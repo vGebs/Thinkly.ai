@@ -21,6 +21,7 @@
 		FA149CC22A687700001E28C7 /* GrowingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA149CC12A687700001E28C7 /* GrowingTextView.swift */; };
 		FA149CC42A687754001E28C7 /* ClassType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA149CC32A687754001E28C7 /* ClassType.swift */; };
 		FA149CC62A71AF0E001E28C7 /* LessonsDropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA149CC52A71AF0E001E28C7 /* LessonsDropDown.swift */; };
+		FA149CC82A732C89001E28C7 /* LessonNotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA149CC72A732C89001E28C7 /* LessonNotesView.swift */; };
 		FA5115012A3FE6F8004AA1D9 /* NotesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5115002A3FE6F8004AA1D9 /* NotesViewModel.swift */; };
 		FA5115072A44F689004AA1D9 /* UnitDropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5115062A44F689004AA1D9 /* UnitDropDown.swift */; };
 		FA9CFA882A107893000BDE95 /* CourseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CFA872A107893000BDE95 /* CourseService.swift */; };
@@ -87,6 +88,7 @@
 		FA149CC12A687700001E28C7 /* GrowingTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowingTextView.swift; sourceTree = "<group>"; };
 		FA149CC32A687754001E28C7 /* ClassType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassType.swift; sourceTree = "<group>"; };
 		FA149CC52A71AF0E001E28C7 /* LessonsDropDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonsDropDown.swift; sourceTree = "<group>"; };
+		FA149CC72A732C89001E28C7 /* LessonNotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonNotesView.swift; sourceTree = "<group>"; };
 		FA5115002A3FE6F8004AA1D9 /* NotesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewModel.swift; sourceTree = "<group>"; };
 		FA5115062A44F689004AA1D9 /* UnitDropDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitDropDown.swift; sourceTree = "<group>"; };
 		FA9CFA872A107893000BDE95 /* CourseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseService.swift; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 			children = (
 				FA5115062A44F689004AA1D9 /* UnitDropDown.swift */,
 				FA149CC52A71AF0E001E28C7 /* LessonsDropDown.swift */,
+				FA149CC72A732C89001E28C7 /* LessonNotesView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -582,6 +585,7 @@
 				FA9CFABC2A194335000BDE95 /* NoteSectionService_Firestore.swift in Sources */,
 				FAEC5D182A0EF27B00A48F05 /* SigninSignupValidation.swift in Sources */,
 				FA149CC62A71AF0E001E28C7 /* LessonsDropDown.swift in Sources */,
+				FA149CC82A732C89001E28C7 /* LessonNotesView.swift in Sources */,
 				FA9CFA9F2A16AD36000BDE95 /* NavBar.swift in Sources */,
 				FA149CC42A687754001E28C7 /* ClassType.swift in Sources */,
 				FA0CDC452A0F281B007AF6E7 /* CoreDataWrapper.swift in Sources */,

@@ -16,6 +16,7 @@ class NotesViewModel: ObservableObject {
     @Published var submittedLessons: Set<Double> = []
     
     @Published var showRegenerateSubUnits: Set<Int> = []
+    @Published var loadingNotesNumbers: Set<String> = []
     
     private var cancellables: [AnyCancellable] = []
     
@@ -187,9 +188,9 @@ class NotesViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func generateNotes(for lessonNumber: String, unitNumber: Int) {
+    func generateNotes(for lessonNumber: String, unitIndex: Int) {
         
-        var unit = self.curriculum.units[unitNumber - 1]
+        var unit = self.curriculum.units[unitIndex]
         
         //We do not need the notes in the prompt as it will increase cost and wont increase output
         if unit.subUnits != nil {
@@ -202,22 +203,30 @@ class NotesViewModel: ObservableObject {
             }
         }
         
+        withAnimation {
+            self.loadingNotesNumbers.insert(lessonNumber)
+        }
+        
         CourseCreationService().generateNotes(input: NotesInput(lessonNumber: lessonNumber, unit: unit))
             .receive(on: DispatchQueue.main)
-            .sink { completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .failure(let e):
                     print("NotesViewModel: Failed to get notes")
                     print("NotesViewModel-err: \(e)")
+                    withAnimation {
+                        self!.loadingNotesNumbers.remove(lessonNumber)
+                    }
                 case .finished:
                     print("NotesViewModel: Finished generating notes")
                 }
             } receiveValue: { [weak self] notes in
-                for i in 0..<self!.curriculum.units[unitNumber].subUnits!.count {
-                    if self!.curriculum.units[unitNumber].subUnits![i].lessons != nil {
-                        for j in 0..<self!.curriculum.units[unitNumber].subUnits![i].lessons!.count {
-                            if self!.curriculum.units[unitNumber].subUnits![i].lessons![j].lessonNumber == lessonNumber {
-                                self!.curriculum.units[unitNumber].subUnits![i].lessons![j].notes = notes
+                for i in 0..<self!.curriculum.units[unitIndex].subUnits!.count {
+                    if self!.curriculum.units[unitIndex].subUnits![i].lessons != nil {
+                        for j in 0..<self!.curriculum.units[unitIndex].subUnits![i].lessons!.count {
+                            if self!.curriculum.units[unitIndex].subUnits![i].lessons![j].lessonNumber == lessonNumber {
+                                self!.curriculum.units[unitIndex].subUnits![i].lessons![j].notes = notes
+                                self!.loadingNotesNumbers.remove(lessonNumber)
                                 break
                             }
                         }
@@ -225,7 +234,79 @@ class NotesViewModel: ObservableObject {
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    func lessonHasNotes(unitIndex: Int, subunitNumber: Double, lessonNumber: String) -> Bool { //
+        if self.curriculum.units[unitIndex].subUnits != nil {
+            for i in 0..<curriculum.units[unitIndex].subUnits!.count {
+                if curriculum.units[unitIndex].subUnits![i].lessons != nil && curriculum.units[unitIndex].subUnits![i].unitNumber == subunitNumber{
+                    for j in 0..<curriculum.units[unitIndex].subUnits![i].lessons!.count {
+                        if curriculum.units[unitIndex].subUnits![i].lessons![j].notes != nil && curriculum.units[unitIndex].subUnits![i].lessons![j].lessonNumber == lessonNumber {
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+        
+        return false
+    }
+    
+    func subunitHasNotes(unitIndex: Int, subunitNumber: Double) -> Bool {
+        if self.curriculum.units[unitIndex].subUnits != nil {
+            for i in 0..<curriculum.units[unitIndex].subUnits!.count {
+                if curriculum.units[unitIndex].subUnits![i].lessons != nil && curriculum.units[unitIndex].subUnits![i].unitNumber == subunitNumber{
+                    for j in 0..<curriculum.units[unitIndex].subUnits![i].lessons!.count {
+                        if curriculum.units[unitIndex].subUnits![i].lessons![j].notes != nil {
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+        
+        return false
+    }
+    @Published var submittedNotes: Set<String> = []
+    func submitNotes(unitIndex: Int, subunitNumber: Double, lessonNumber: String) {
+        //courseID
+        //lesson number
+        //notes: [Paragraph]
+        var notes: Notes?
+        
+        if self.curriculum.units[unitIndex].subUnits != nil {
+            for i in 0..<curriculum.units[unitIndex].subUnits!.count {
+                if curriculum.units[unitIndex].subUnits![i].lessons != nil && curriculum.units[unitIndex].subUnits![i].unitNumber == subunitNumber{
+                    for j in 0..<curriculum.units[unitIndex].subUnits![i].lessons!.count {
+                        if curriculum.units[unitIndex].subUnits![i].lessons![j].notes != nil {
+                            notes = curriculum.units[unitIndex].subUnits![i].lessons![j].notes!
+                        }
+                    }
+                }
+            }
+        }
+        
+    
+        if let n = notes {
+            NotesService_Firestore.shared.addNotes(Notes_Firestore(notes: n, lessonNumber: lessonNumber, courseID: curriculum.courseID!))
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] completion in
+                    switch completion {
+                    case .failure(let e):
+                        print("NotesViewModel: Failed to push notes for lesson: \(lessonNumber)")
+                        print("NotesViewModel-err: \(e)")
+                    case .finished:
+                        print("NotesViewModel: Finished pushing notes for lesson: \(lessonNumber)")
+                        withAnimation {
+                            self!.submittedNotes.insert(lessonNumber)
+                        }
+                    }
+                } receiveValue: { _ in }
+                .store(in: &cancellables)
 
+        } else {
+            print("NotesViewModel: There is no notes to submit for this lesson: \(lessonNumber)")
+        }
     }
 }
 
