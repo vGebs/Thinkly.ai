@@ -11,12 +11,13 @@ struct SelfLearnCourseDefinitionSheet: View {
     
     @State var onCourseNamePage = false
     @ObservedObject var selfLearnCourseDefinitionSheetViewModel: SelfLearnCourseDefinitionSheetViewModel
+    @Binding var addClassPopUpPressed: Bool
     
     var body: some View {
         if !onCourseNamePage {
             CurriciulumSelectView(viewModel: selfLearnCourseDefinitionSheetViewModel, curriculumSelected: $onCourseNamePage)
         } else {
-            CourseNameSelectView(viewModel: CourseNameViewModel(curriculum: selfLearnCourseDefinitionSheetViewModel.selectedCurriculum!), onCourseNamePage: $onCourseNamePage)
+            CourseNameSelectView(viewModel: CourseNameViewModel(curriculum: selfLearnCourseDefinitionSheetViewModel.selectedCurriculum!), onCourseNamePage: $onCourseNamePage, isPoppedUp: $addClassPopUpPressed)
         }
     }
 }
@@ -97,7 +98,7 @@ class CourseNameViewModel: ObservableObject {
                 case .finished:
                     print("CourseNameViewModel: Finished pushing new course")
                 }
-            } receiveValue: { _ in }
+            } receiveValue: { [weak self] _ in }
             .store(in: &cancellables)
     }
 }
@@ -105,6 +106,7 @@ class CourseNameViewModel: ObservableObject {
 struct CourseNameSelectView: View {
     @ObservedObject var viewModel: CourseNameViewModel
     @Binding var onCourseNamePage: Bool
+    @Binding var isPoppedUp: Bool
     
     var body: some View {
         ZStack {
@@ -244,6 +246,7 @@ struct CourseNameSelectView: View {
     var createCourseButton: some View {
         Button(action: {
             viewModel.createCourse()
+            self.isPoppedUp = false
         }) {
             HStack {
                 Image(systemName: "note.text.badge.plus")

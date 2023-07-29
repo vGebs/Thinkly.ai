@@ -25,7 +25,7 @@ import Combine
 struct CourseList: View {
 
     @StateObject var viewModel = CourseListViewModel()
-    @StateObject var selfLearnCourseDefinitionSheetViewModel = SelfLearnCourseDefinitionSheetViewModel()
+//    @StateObject var selfLearnCourseDefinitionSheetViewModel = SelfLearnCourseDefinitionSheetViewModel()
     
     @Binding var currentCourse: CourseOverview?
     
@@ -109,7 +109,7 @@ struct CourseList: View {
 //                }
 //            }
         }.sheet(isPresented: $addClassPopUpPressed) {
-            SelfLearnCourseDefinitionSheet(selfLearnCourseDefinitionSheetViewModel: selfLearnCourseDefinitionSheetViewModel)
+            SelfLearnCourseDefinitionSheet(selfLearnCourseDefinitionSheetViewModel: SelfLearnCourseDefinitionSheetViewModel(), addClassPopUpPressed: $addClassPopUpPressed)
         }
     }
     
