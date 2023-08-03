@@ -54,7 +54,7 @@ struct CourseOverview: Codable, FirestoreProtocol {
     let courseTitle: String
     let courseDescription: String
     var sfSymbol: String? = nil
-    var teacherID: String? = nil 
+    var uid: String? = nil 
 }
 
 struct Prerequisite: Codable {

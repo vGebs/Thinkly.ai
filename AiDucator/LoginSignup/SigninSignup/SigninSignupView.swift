@@ -59,7 +59,7 @@ struct SigninSignupView: View {
                         emailTextField
                         passwordTextField
                         reEnterPasswordTextField
-                        teacherOrStudent
+                        //teacherOrStudent
                         if viewModel.signUpError {
                             HStack{
                                 Image(systemName: "exclamationmark.circle")

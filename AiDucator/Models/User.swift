@@ -19,7 +19,7 @@ struct UserFirestore: FirestoreProtocol {
     @DocumentID var documentID: String?
     
     var name: String
-    var role: String
+//    var role: String
     var uid: String
     var birthdate: Date
 }
@@ -28,7 +28,7 @@ struct User {
     var documentID: String
     
     var name: String
-    var role: String
+    //var role: String
     var uid: String
     var birthdate: Date
     

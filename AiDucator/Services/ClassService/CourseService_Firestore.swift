@@ -31,7 +31,7 @@ class CourseService_Firestore {
     
     func getCourses(for teacherID: String) -> AnyPublisher<[CourseOverview], Error> {
         
-        let query: Query = db.collection(collection).whereField("teacherID", isEqualTo: teacherID)
+        let query: Query = db.collection(collection).whereField("uid", isEqualTo: teacherID)
         
         return firestore.read(query: query)
     }
@@ -54,7 +54,7 @@ class CourseService_Firestore {
     }
     
     func listenOnCourses(for teacherID: String) -> AnyPublisher<[(CourseOverview, DocumentChangeType)], Error> {
-        let query: Query = db.collection(collection).whereField("teacherID", isEqualTo: teacherID)
+        let query: Query = db.collection(collection).whereField("uid", isEqualTo: teacherID)
         return firestore.listenByQuery(query: query)
     }
 }

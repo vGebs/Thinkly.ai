@@ -24,7 +24,7 @@ class UserService_CoreData {
             
             newUser.docID = docID
             newUser.name = user.name
-            newUser.role = user.role
+            //newUser.role = user.role
             newUser.uid = user.uid
             newUser.birthdate = user.birthdate
             
@@ -38,7 +38,7 @@ class UserService_CoreData {
         let userCD = fetchUser_(uid: uid)
         
         if let u = userCD {
-            return UserFirestore(documentID: u.docID, name: u.name!, role: u.role!, uid: u.uid!, birthdate: u.birthdate!)
+            return UserFirestore(documentID: u.docID, name: u.name!, uid: u.uid!, birthdate: u.birthdate!)
         } else {
             return nil
         }
@@ -57,7 +57,7 @@ class UserService_CoreData {
         userCD!.name = user.name
         userCD!.docID = user.documentID
         userCD!.birthdate = user.birthdate
-        userCD!.role = user.role
+//        userCD!.role = user.role
         
         self.saveContext()
     }

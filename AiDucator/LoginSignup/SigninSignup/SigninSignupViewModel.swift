@@ -61,9 +61,8 @@ final class SigninSignupViewModel: ObservableObject{
         nameIsValid &&
         emailIsValid &&
         passwordIsValid &&
-        rePasswordIsValid &&
-        teacherOrStudentValid
-        
+        rePasswordIsValid
+        //&& teacherOrStudentValid
     }
     
     var isValid: Bool {
@@ -255,15 +254,15 @@ final class SigninSignupViewModel: ObservableObject{
             .subscribe(on: DispatchQueue.global(qos: .userInitiated))
             .flatMap { [weak self] _ -> AnyPublisher<Void, Error> in
                 
-                var role: String
+//                var role: String
+//
+//                if self!.teacherSelected {
+//                    role = "teacher"
+//                } else {
+//                    role = "student"
+//                }
                 
-                if self!.teacherSelected {
-                    role = "teacher"
-                } else {
-                    role = "student"
-                }
-                
-                let user = UserFirestore(name: self!.nameText, role: role, uid: AuthService.shared.user!.uid, birthdate: self!.age)
+                let user = UserFirestore(name: self!.nameText, uid: AuthService.shared.user!.uid, birthdate: self!.age)
                 
                 return UserService.shared.createUser(user)
             }

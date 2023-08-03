@@ -84,7 +84,7 @@ class CourseNameViewModel: ObservableObject {
         
         var title = courseOverviewSuggestions[selectedCourseIndex]
         title.sfSymbol = selectedClassType.sfSymbol
-        title.teacherID = AppState.shared.user!.uid
+        title.uid = AppState.shared.user!.uid
         CourseService_Firestore.shared.addCourse(title)
             .flatMap { [weak self] docID in
                 UnitService_firestore.shared.pushUnits(units: self!.curriculum.units, courseID: docID)

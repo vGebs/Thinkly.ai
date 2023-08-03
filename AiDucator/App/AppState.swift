@@ -107,25 +107,25 @@ extension AppState {
                 self?.user = User(
                     documentID: u.documentID!,
                     name: u.name,
-                    role: u.role,
                     uid: u.uid,
                     birthdate: u.birthdate
                 )
                 
                 // 2. Determine if user is a teacher or student
-                if u.role == "teacher" {
-                    // 3a. Fetch classes for teacher
-                    self?.observeClasses(for: u.uid)
-                } else {
-                    // 3b. Fetch ClassUser documents for student, then fetch associated classes
-                    self?.observeClassesForStudent(uid: uid)
-                }
+                self?.observeClasses(for: u.uid)
+//                if u.role == "teacher" {
+//                    // 3a. Fetch classes for teacher
+//                    self?.observeClasses(for: u.uid)
+//                } else {
+//                    // 3b. Fetch ClassUser documents for student, then fetch associated classes
+//                    self?.observeClassesForStudent(uid: uid)
+//                }
                 self?.loading = false
             }).store(in: &cancellables)
     }
     
-    private func observeClasses(for teacherID: String) {
-        CourseService_Firestore.shared.listenOnCourses(for: teacherID)
+    private func observeClasses(for uid: String) {
+        CourseService_Firestore.shared.listenOnCourses(for: uid)
             .sink { completion in
                 switch completion {
                 case .failure(let e):
