@@ -33,7 +33,7 @@ struct LessonsDropDown: View {
                     
                     if i == 0 && !notesViewModel.subunitHasNotes(unitIndex: unitNumber - 1, subunitNumber: subunitNumber) && notesViewModel.loadingNotesNumbers.isEmpty{
                         Button(action: {
-                            notesViewModel.trashLessons(with: unitNumber - 1, and: i)
+                            notesViewModel.trashLessons(with: unitNumber - 1, and: subunitNumber)
                         }) {
                             Image(systemName: "trash")
                                 .font(.system(size: 14, weight: .bold, design: .rounded))

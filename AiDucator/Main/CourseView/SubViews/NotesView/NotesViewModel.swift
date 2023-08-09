@@ -85,7 +85,7 @@ class NotesViewModel: ObservableObject {
                         if self.curriculum.units[i].subUnits![j].lessons != nil {
                             withAnimation {
                                 self.curriculum.units[i].subUnits![j].lessons = nil
-                                self.trashLessons(with: i, and: j)
+                                self.trashLessons(with: i, and: self.curriculum.units[i].subUnits![j].unitNumber)
                             }
                         }
                         break
@@ -181,6 +181,9 @@ class NotesViewModel: ObservableObject {
                     print("NotesViewModel: Finished pushing lessons")
                 }
             } receiveValue: { [weak self] _ in
+                print("Index of some shit i need")
+                print(Int(index))
+                self?.submittedSubUnits.insert(Int(index))
                 self?.submittedLessons.insert(index)
             }
             .store(in: &cancellables)
@@ -209,8 +212,11 @@ class NotesViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func trashLessons(with unitIndex: Int, and subUnitIndex: Int) {
-        self.loadingIndexes_lessons.insert(self.curriculum.units[unitIndex].subUnits![subUnitIndex].unitNumber)
+    func trashLessons(with unitIndex: Int, and subUnitNumber: Double) {
+        let subUnitIndex = (Int(subUnitNumber * 10) % 10) - 1
+        print("SubunitIndex: \(subUnitIndex)")
+//        self.loadingIndexes_lessons.insert(self.curriculum.units[unitIndex].subUnits![subUnitIndex].unitNumber)
+        self.loadingIndexes_lessons.insert(subUnitNumber)
         self.curriculum.units[unitIndex].subUnits![subUnitIndex].lessons = nil
         
         UnitService_firestore.shared.pushSubUnits(units: curriculum.units, courseID: curriculum.courseID!, docID: curriculum.documentID!)
@@ -221,7 +227,7 @@ class NotesViewModel: ObservableObject {
                     print("NotesViewModel: Failed to trash lessons")
                     print("NotesViewModel-err: \(e)")
                 case .finished:
-                    print("NotesViewModel: Finished trashing lessons")
+                    print("NotesViewModel: Finished trashing lessons for subunitNumber: \(subUnitNumber)")
                 }
             } receiveValue: { [weak self] _ in
 //                if !regenerating {
