@@ -44,13 +44,23 @@ class NotesViewModel: ObservableObject {
             self.trashSubUnits(with: index, regenerating: true)
         }
         
+        //remove all other lessons for input, they are not needed for the prompt.
+        for i in 0..<c.units.count {
+            if c.units[i].subUnits != nil {
+                for j in 0..<c.units[i].subUnits!.count {
+                    c.units[i].subUnits![j].lessons = nil
+                }
+            }
+        }
+        
         CourseCreationService().getSubUnits(GetSubUnits(unitNumber: index + 1, curriculum: c.units))
             .receive(on: DispatchQueue.main)
-            .sink { completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .failure(let e):
                     print("NotesViewModel: Failed to get subunits")
                     print("NotesViewModel-err: \(e)")
+                    self?.loadingIndexes.remove(index)
                 case .finished:
                     print("NotesViewModel: Finished generating sub units for unit index: \(index)")
                 }
@@ -84,7 +94,18 @@ class NotesViewModel: ObservableObject {
             }
         }
         
-        CourseCreationService().generateLessonsForSubunit(GetLessons(curriculum: self.curriculum.units, subunitNumber: subunitNumber))
+        var inputUnits = self.curriculum.units
+        
+        //remove all other lessons for input, they are not needed for the prompt.
+        for i in 0..<inputUnits.count {
+            if inputUnits[i].subUnits != nil {
+                for j in 0..<inputUnits[i].subUnits!.count {
+                    inputUnits[i].subUnits![j].lessons = nil
+                }
+            }
+        }
+        
+        CourseCreationService().generateLessonsForSubunit(GetLessons(curriculum: inputUnits, subunitNumber: subunitNumber))
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 switch completion {
@@ -97,18 +118,33 @@ class NotesViewModel: ObservableObject {
                     print("NotesViewModel: Finished generating lessons")
                 }
             } receiveValue: { [weak self] lessons in
-                if lessons.lessons.count != 0 {
-                    for i in 0..<self!.curriculum.units.count {
-                        if self!.curriculum.units[i].subUnits != nil {
-                            for j in 0..<self!.curriculum.units[i].subUnits!.count {
-                                if self!.curriculum.units[i].subUnits![j].unitNumber == subunitNumber {
-                                    self!.curriculum.units[i].subUnits![j].lessons = lessons.lessons
-                                    print("Lessons: \(lessons.lessons)")
-                                    self?.loadingIndexes_lessons.remove(subunitNumber)
-                                    break
+                
+                var failed = false
+                
+                //Check to see if the lessonNumber contains the subunits number
+                for lesson in lessons.lessons {
+                    if lesson.lessonNumber.prefix(String(subunitNumber).count) != String(subunitNumber) {
+                        failed = true
+                        break
+                    }
+                }
+                
+                if !failed {
+                    if lessons.lessons.count != 0 {
+                        for i in 0..<self!.curriculum.units.count {
+                            if self!.curriculum.units[i].subUnits != nil {
+                                for j in 0..<self!.curriculum.units[i].subUnits!.count {
+                                    if self!.curriculum.units[i].subUnits![j].unitNumber == subunitNumber {
+                                        self!.curriculum.units[i].subUnits![j].lessons = lessons.lessons
+                                        print("Lessons: \(lessons.lessons)")
+                                        self?.loadingIndexes_lessons.remove(subunitNumber)
+                                        break
+                                    }
                                 }
                             }
                         }
+                    } else {
+                        self?.loadingIndexes_lessons.remove(subunitNumber)
                     }
                 } else {
                     self?.loadingIndexes_lessons.remove(subunitNumber)
