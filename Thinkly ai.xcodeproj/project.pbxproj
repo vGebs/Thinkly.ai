@@ -60,6 +60,7 @@
 		FACADAAE2A625AE600FC9F06 /* SelfLearnCourseDefinitionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACADAAD2A625AE600FC9F06 /* SelfLearnCourseDefinitionSheetViewModel.swift */; };
 		FAD21FD42A857846007DB709 /* AssignmentCreationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD21FD32A857846007DB709 /* AssignmentCreationService.swift */; };
 		FAD21FD62A858DEC007DB709 /* AssignmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD21FD52A858DEC007DB709 /* AssignmentView.swift */; };
+		FAD21FD92A859A1E007DB709 /* AssignmentService_Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD21FD82A859A1E007DB709 /* AssignmentService_Firestore.swift */; };
 		FAE0BEE22A327944003BF2CB /* CourseDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0BEE12A327944003BF2CB /* CourseDefinition.swift */; };
 		FAEC5D142A0EF1DD00A48F05 /* SigninSignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEC5D132A0EF1DD00A48F05 /* SigninSignupView.swift */; };
 		FAEC5D162A0EF21900A48F05 /* SigninSignupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEC5D152A0EF21900A48F05 /* SigninSignupViewModel.swift */; };
@@ -131,6 +132,7 @@
 		FACADAAD2A625AE600FC9F06 /* SelfLearnCourseDefinitionSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfLearnCourseDefinitionSheetViewModel.swift; sourceTree = "<group>"; };
 		FAD21FD32A857846007DB709 /* AssignmentCreationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentCreationService.swift; sourceTree = "<group>"; };
 		FAD21FD52A858DEC007DB709 /* AssignmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentView.swift; sourceTree = "<group>"; };
+		FAD21FD82A859A1E007DB709 /* AssignmentService_Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentService_Firestore.swift; sourceTree = "<group>"; };
 		FAE0BEE12A327944003BF2CB /* CourseDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDefinition.swift; sourceTree = "<group>"; };
 		FAEC5D132A0EF1DD00A48F05 /* SigninSignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninSignupView.swift; sourceTree = "<group>"; };
 		FAEC5D152A0EF21900A48F05 /* SigninSignupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninSignupViewModel.swift; sourceTree = "<group>"; };
@@ -404,6 +406,14 @@
 			path = UnitsService;
 			sourceTree = "<group>";
 		};
+		FAD21FD72A859A0B007DB709 /* AssignmentService */ = {
+			isa = PBXGroup;
+			children = (
+				FAD21FD82A859A1E007DB709 /* AssignmentService_Firestore.swift */,
+			);
+			path = AssignmentService;
+			sourceTree = "<group>";
+		};
 		FADA71322A4A3628009FF5E6 /* Self-Learn */ = {
 			isa = PBXGroup;
 			children = (
@@ -437,6 +447,7 @@
 		FAEC5D202A0EF3CB00A48F05 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				FAD21FD72A859A0B007DB709 /* AssignmentService */,
 				FA9E0B002A3556070096BCCF /* AI */,
 				FA9CFAB62A193D6B000BDE95 /* NotesService */,
 				FACADAA82A609B7700FC9F06 /* UnitsService */,
@@ -603,6 +614,7 @@
 				FA0CDC322A0F237D007AF6E7 /* FirestoreWrapper.swift in Sources */,
 				FAE0BEE22A327944003BF2CB /* CourseDefinition.swift in Sources */,
 				FA9CFAAE2A16D709000BDE95 /* SineWave.swift in Sources */,
+				FAD21FD92A859A1E007DB709 /* AssignmentService_Firestore.swift in Sources */,
 				FA0CDC412A0F25D4007AF6E7 /* User.swift in Sources */,
 				FA9E0B042A3556930096BCCF /* CourseCreationService.swift in Sources */,
 				FA9CFA902A157C42000BDE95 /* CourseRegristration.swift in Sources */,

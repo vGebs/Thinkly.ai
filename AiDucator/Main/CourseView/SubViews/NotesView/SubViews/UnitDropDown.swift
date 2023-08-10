@@ -334,8 +334,11 @@ struct UnitDropDown: View {
                                 }
                             } else {
                                 Button(action: {
-                                    selectedAssignmentSubunit = unit.subUnits![index]
-                                    showNotes = true
+                                    withAnimation {
+                                        selectedAssignmentSubunit = unit.subUnits![index]
+                                        subunitIndex = index
+                                        showNotes = true
+                                    }
                                 }) {
                                     ZStack {
                                         RoundedRectangle(cornerRadius: 10)
@@ -368,11 +371,12 @@ struct UnitDropDown: View {
                 }
             }
         }.sheet(isPresented: $showNotes) {
-            AssignmentView(subunit: selectedAssignmentSubunit!, show: $showNotes)
+            AssignmentView(unitIndex: unit.unitNumber - 1, subunitIndex: subunitIndex!, subunit: selectedAssignmentSubunit!, show: $showNotes, notesViewModel: notesViewModel)
         }
     }
     
     @State var selectedAssignmentSubunit: SubUnit?
+    @State var subunitIndex: Int?
     @State var showNotes = false
     
     var generateSubunitsButton: some View {

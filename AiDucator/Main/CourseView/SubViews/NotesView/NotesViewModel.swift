@@ -394,6 +394,59 @@ class NotesViewModel: ObservableObject {
                 }.store(in: &cancellables)
         }
     }
+    
+    @Published var submittedAssignments: Set<Double> = []
+    
+    func submitAssignment(unitIndex: Int, subunitIndex: Int) {
+        
+        if let subunits = self.curriculum.units[unitIndex].subUnits {
+            
+            let subunit = subunits[subunitIndex]
+            let assignment = Assignment_Firestore(assignment: subunit.assignment!, courseID: self.curriculum.courseID!, subunitNumber: subunit.unitNumber)
+            AssignmentService_Firestore.shared.pushAssignment(assignment: assignment)
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] completion in
+                    switch completion {
+                    case .failure(let e):
+                        print("NotesViewModel: Failed pushing assignment")
+                        print("NotesViewModel-err: \(e)")
+                    case .finished:
+                        print("NotesViewModel: Finished pushing assignment")
+                        self!.submittedAssignments.insert(subunit.unitNumber)
+                    }
+                } receiveValue: { docID in
+                    self.curriculum.units[unitIndex].subUnits![subunitIndex].assignment!.docID = docID
+                }
+                .store(in: &cancellables)
+        }
+    }
+    
+    func deleteAssignment(unitIndex: Int, subunitIndex: Int) {
+        if let subunits = self.curriculum.units[unitIndex].subUnits {
+            
+            let subunit = subunits[subunitIndex]
+            
+            if let assignment = subunit.assignment {
+                if let docID = assignment.docID {
+                    AssignmentService_Firestore.shared.deleteAssignment(docID: docID)
+                        .receive(on: DispatchQueue.main)
+                        .sink { [weak self] completion in
+                            switch completion {
+                            case .failure(let e):
+                                print("NotesViewModel: Failed deleting assignment")
+                                print("NotesViewModel-err: \(e)")
+                            case .finished:
+                                print("NotesViewModel: Finished deleting assignment")
+                                self!.curriculum.units[unitIndex].subUnits![subunitIndex].assignment = nil
+                            }
+                        } receiveValue: { _ in }
+                        .store(in: &cancellables)
+                } else {
+                    self.curriculum.units[unitIndex].subUnits![subunitIndex].assignment = nil
+                }
+            }
+        }
+    }
 }
 
 extension NotesViewModel {

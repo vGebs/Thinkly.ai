@@ -9,8 +9,11 @@ import Foundation
 import SwiftUI
 
 struct AssignmentView: View {
+    var unitIndex: Int
+    var subunitIndex: Int
     var subunit: SubUnit
     @Binding var show: Bool
+    @ObservedObject var notesViewModel: NotesViewModel
     
     var body: some View {
         ZStack {
@@ -52,8 +55,10 @@ struct AssignmentView: View {
                     .padding(.horizontal)
                     .padding(.bottom)
                     
-                    submitButton
-                        .padding(.bottom)
+                    if !notesViewModel.submittedAssignments.contains(subunit.unitNumber) {
+                        submitButton
+                            .padding(.bottom)
+                    }
                     
                     HStack {
                         regenerateButton
@@ -68,7 +73,7 @@ struct AssignmentView: View {
     
     var submitButton: some View {
         Button(action: {
-            
+            notesViewModel.submitAssignment(unitIndex: unitIndex, subunitIndex: subunitIndex)
         }) {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
@@ -122,6 +127,7 @@ struct AssignmentView: View {
     var trashButton: some View {
         Button(action: {
             withAnimation {
+                notesViewModel.deleteAssignment(unitIndex: unitIndex, subunitIndex: subunitIndex)
                 show = false
             }
         }) {

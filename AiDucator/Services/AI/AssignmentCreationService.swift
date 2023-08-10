@@ -37,4 +37,5 @@ class AssignmentCreationService {
 
 struct Assignment: Codable {
     var questions: [String]
+    var docID: String? = nil
 }
