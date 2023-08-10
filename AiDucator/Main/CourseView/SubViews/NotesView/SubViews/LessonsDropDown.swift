@@ -224,7 +224,7 @@ struct LessonsDropDown: View {
             }
             
         }.sheet(isPresented: $showNotes) {
-            LessonNotesView(notes: $notes, notesViewModel: notesViewModel, unitIndex: unitNumber - 1, subunitNumber: subunitNumber, lessonNumber: lessonNumber)
+            LessonNotesView(notes: $notes, showNotes: $showNotes, notesViewModel: notesViewModel, unitIndex: unitNumber - 1, subunitNumber: subunitNumber, lessonNumber: lessonNumber)
         }
     }
 }

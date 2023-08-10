@@ -419,6 +419,7 @@ extension NotesViewModel {
                                     for k in 0..<self!.curriculum.units[i].subUnits![j].lessons!.count {
                                         if self!.curriculum.units[i].subUnits![j].lessons![k].lessonNumber == lessonNumber {
                                             self!.curriculum.units[i].subUnits![j].lessons![k].notes = notesArr[0].notes
+                                            self!.curriculum.units[i].subUnits![j].lessons![k].notes?.docID = notesArr[0].documentID
                                             self!.submittedNotes.insert(self!.curriculum.units[i].subUnits![j].lessons![k].lessonNumber)
                                             break
                                         }
@@ -430,5 +431,43 @@ extension NotesViewModel {
                 }
             }.store(in: &cancellables)
 
+    }
+    
+    func deleteNotes(unitIndex: Int, subunitNumber: Double, lessonNumber: String) {
+        
+        let subunitIndex = Int((subunitNumber * 10).truncatingRemainder(dividingBy: 10)) - 1
+        
+        let lastCharacter = lessonNumber.last!
+        let lastNumber = Int(String(lastCharacter))!
+        let lessonIndex = lastNumber - 1
+        
+        deleteNotes(unitIndex: unitIndex, subunitIndex: subunitIndex, lessonIndex: lessonIndex, lessonNumber: lessonNumber)
+    }
+    
+    private func deleteNotes(unitIndex: Int, subunitIndex: Int, lessonIndex: Int, lessonNumber: String) {
+        
+        if let subUnits = self.curriculum.units[unitIndex].subUnits {
+            if let lessons = subUnits[subunitIndex].lessons {
+                if let notes = lessons[lessonIndex].notes {
+                    if let docID = notes.docID {
+                        NotesService_Firestore.shared.deleteNotes(with: docID)
+                            .receive(on: DispatchQueue.main)
+                            .sink { [weak self] completion in
+                                switch completion {
+                                case .failure(let e):
+                                    print("NotesViewModel: Failed to delete notes")
+                                    print("NotesViewModel-err: \(e)")
+                                case .finished:
+                                    print("NotesViewModel: Finished deleting notes")
+                                    self!.submittedNotes.remove(lessonNumber)
+                                    self!.curriculum.units[unitIndex].subUnits![subunitIndex].lessons![lessonIndex].notes = nil
+                                }
+                            } receiveValue: { _ in }
+                            .store(in: &cancellables)
+
+                    }
+                }
+            }
+        }
     }
 }

@@ -10,6 +10,7 @@ import SwiftUI
 
 struct LessonNotesView: View {
     @Binding var notes: Notes?
+    @Binding var showNotes: Bool 
     @ObservedObject var notesViewModel: NotesViewModel
     var unitIndex: Int
     var subunitNumber: Double
@@ -34,12 +35,30 @@ struct LessonNotesView: View {
                                 Spacer()
                             }
                             
-                            Text(notes.notes[0].paragraph)
-                                .font(.system(size: 15, weight: .bold, design: .rounded))
-                                .foregroundColor(.primary)
-                                .lineLimit(nil)  // Line breaks as needed
-                                .fixedSize(horizontal: false, vertical: true)
+                            VStack {
+                                Text(notes.notes[0].paragraph)
+                                    .font(.system(size: 15, weight: .bold, design: .rounded))
+                                    .foregroundColor(.primary)
+                                    .lineLimit(nil)  // Line breaks as needed
+                                    .fixedSize(horizontal: false, vertical: true)
+                                
+                                Spacer()
+                            }
                             Spacer()
+                            
+                            VStack {
+                                Button(action: {
+                                    showNotes = false
+                                    notesViewModel.deleteNotes(unitIndex: unitIndex, subunitNumber: subunitNumber, lessonNumber: lessonNumber)
+                                }) {
+                                    Image(systemName: "trash")
+                                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                                        .foregroundColor(.buttonPrimary)
+                                }
+                                .padding(.horizontal)
+                                
+                                Spacer()
+                            }
                         }
                         .padding(.top)
                         .padding(.leading)

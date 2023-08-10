@@ -53,6 +53,7 @@ struct Chapter: Identifiable {
 
 struct Notes: Codable {
     var notes: [Paragraph]
+    var docID: String?
 }
 
 struct Paragraph: Codable {
