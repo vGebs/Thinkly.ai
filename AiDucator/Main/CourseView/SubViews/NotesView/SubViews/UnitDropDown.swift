@@ -205,7 +205,7 @@ struct UnitDropDown: View {
                                         }
                                     }
                                 }) {
-                                    if lessonsDroppedDown.contains(index) {
+                                    if !lessonsDroppedDown.contains(index) {
                                         Image(systemName: "chevron.down")
                                             .font(.system(size: 16, weight: .bold, design: .rounded))
                                             .foregroundColor(.buttonPrimary)
@@ -261,7 +261,7 @@ struct UnitDropDown: View {
                         if unit.subUnits![index].lessons != nil {
                             
                             if let subunit = unit.subUnits {
-                                if !lessonsDroppedDown.contains(index) {
+                                if lessonsDroppedDown.contains(index) {
                                     Divider()
                                         .padding(.leading, screenWidth * 0.05)
                                     
@@ -303,6 +303,61 @@ struct UnitDropDown: View {
                                 .padding(.leading, screenWidth * 0.05)
                                 .fixedSize(horizontal: false, vertical: true)
                             }
+                        } else {
+                            if unit.subUnits![index].assignment == nil {
+                                if notesViewModel.generatingAssignments.contains(unit.subUnits![index].unitNumber) {
+                                    LoadingView()
+                                } else {
+                                    Button(action: {
+                                        notesViewModel.generateAssignment(unitIndex: unit.unitNumber - 1, subunitIndex: index)
+                                    }) {
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .foregroundColor(.black)
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(lineWidth: 3)
+                                                .foregroundColor(.buttonPrimary)
+                                            
+                                            HStack {
+                                                Image(systemName: "tray")
+                                                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                    .foregroundColor(.buttonPrimary)
+                                                
+                                                Text("Generate Assignment")
+                                                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                    .foregroundColor(.primary)
+                                            }.padding()
+                                        }
+                                    }
+                                    .padding(.leading, screenWidth * 0.05)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                }
+                            } else {
+                                Button(action: {
+                                    selectedAssignmentSubunit = unit.subUnits![index]
+                                    showNotes = true
+                                }) {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .foregroundColor(.black)
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(lineWidth: 3)
+                                            .foregroundColor(.buttonPrimary)
+                                        
+                                        HStack {
+                                            Image(systemName: "binoculars")
+                                                .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                .foregroundColor(.buttonPrimary)
+                                            
+                                            Text("View Assignment")
+                                                .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                .foregroundColor(.primary)
+                                        }.padding()
+                                    }
+                                }
+                                .padding(.leading, screenWidth * 0.05)
+                                .fixedSize(horizontal: false, vertical: true)
+                            }
                         }
                         
                         RoundedRectangle(cornerRadius: 5)
@@ -312,8 +367,13 @@ struct UnitDropDown: View {
                     }
                 }
             }
+        }.sheet(isPresented: $showNotes) {
+            AssignmentView(subunit: selectedAssignmentSubunit!, show: $showNotes)
         }
     }
+    
+    @State var selectedAssignmentSubunit: SubUnit?
+    @State var showNotes = false
     
     var generateSubunitsButton: some View {
         Button(action: {

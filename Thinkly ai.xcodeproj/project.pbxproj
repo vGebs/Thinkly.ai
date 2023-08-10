@@ -58,6 +58,8 @@
 		FACADAAA2A609B9700FC9F06 /* UnitService_firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACADAA92A609B9700FC9F06 /* UnitService_firestore.swift */; };
 		FACADAAC2A62580E00FC9F06 /* SelfLearnCourseDefinitionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACADAAB2A62580E00FC9F06 /* SelfLearnCourseDefinitionSheet.swift */; };
 		FACADAAE2A625AE600FC9F06 /* SelfLearnCourseDefinitionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACADAAD2A625AE600FC9F06 /* SelfLearnCourseDefinitionSheetViewModel.swift */; };
+		FAD21FD42A857846007DB709 /* AssignmentCreationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD21FD32A857846007DB709 /* AssignmentCreationService.swift */; };
+		FAD21FD62A858DEC007DB709 /* AssignmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD21FD52A858DEC007DB709 /* AssignmentView.swift */; };
 		FAE0BEE22A327944003BF2CB /* CourseDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0BEE12A327944003BF2CB /* CourseDefinition.swift */; };
 		FAEC5D142A0EF1DD00A48F05 /* SigninSignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEC5D132A0EF1DD00A48F05 /* SigninSignupView.swift */; };
 		FAEC5D162A0EF21900A48F05 /* SigninSignupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEC5D152A0EF21900A48F05 /* SigninSignupViewModel.swift */; };
@@ -127,6 +129,8 @@
 		FACADAA92A609B9700FC9F06 /* UnitService_firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitService_firestore.swift; sourceTree = "<group>"; };
 		FACADAAB2A62580E00FC9F06 /* SelfLearnCourseDefinitionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfLearnCourseDefinitionSheet.swift; sourceTree = "<group>"; };
 		FACADAAD2A625AE600FC9F06 /* SelfLearnCourseDefinitionSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfLearnCourseDefinitionSheetViewModel.swift; sourceTree = "<group>"; };
+		FAD21FD32A857846007DB709 /* AssignmentCreationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentCreationService.swift; sourceTree = "<group>"; };
+		FAD21FD52A858DEC007DB709 /* AssignmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentView.swift; sourceTree = "<group>"; };
 		FAE0BEE12A327944003BF2CB /* CourseDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDefinition.swift; sourceTree = "<group>"; };
 		FAEC5D132A0EF1DD00A48F05 /* SigninSignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninSignupView.swift; sourceTree = "<group>"; };
 		FAEC5D152A0EF21900A48F05 /* SigninSignupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninSignupViewModel.swift; sourceTree = "<group>"; };
@@ -247,6 +251,7 @@
 				FA5115062A44F689004AA1D9 /* UnitDropDown.swift */,
 				FA149CC52A71AF0E001E28C7 /* LessonsDropDown.swift */,
 				FA149CC72A732C89001E28C7 /* LessonNotesView.swift */,
+				FAD21FD52A858DEC007DB709 /* AssignmentView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -325,6 +330,7 @@
 			children = (
 				FA9E0B012A35561C0096BCCF /* CourseDefinitionService.swift */,
 				FA9E0B032A3556930096BCCF /* CourseCreationService.swift */,
+				FAD21FD32A857846007DB709 /* AssignmentCreationService.swift */,
 			);
 			path = AI;
 			sourceTree = "<group>";
@@ -548,6 +554,7 @@
 				FA9CFAB52A182672000BDE95 /* AddCourseStudentPopup.swift in Sources */,
 				FA9CFAAC2A16B390000BDE95 /* GradesView.swift in Sources */,
 				FA0CDC482A0F71BC007AF6E7 /* ThinklyModel.xcdatamodeld in Sources */,
+				FAD21FD62A858DEC007DB709 /* AssignmentView.swift in Sources */,
 				FAEC5D322A0EFD9500A48F05 /* CourseList.swift in Sources */,
 				FA0CDC392A0F24E3007AF6E7 /* UserService.swift in Sources */,
 				FA9CFA882A107893000BDE95 /* CourseService.swift in Sources */,
@@ -579,6 +586,7 @@
 				FA070DEF2A0E0A7E008EF241 /* LandingView.swift in Sources */,
 				FABD79B32A098CA100201145 /* ContentView.swift in Sources */,
 				FA9CFAA12A16AFD0000BDE95 /* Pager.swift in Sources */,
+				FAD21FD42A857846007DB709 /* AssignmentCreationService.swift in Sources */,
 				FA9CFAA62A16B337000BDE95 /* AssignmentsView.swift in Sources */,
 				FA9E0B022A35561C0096BCCF /* CourseDefinitionService.swift in Sources */,
 				FACADAAC2A62580E00FC9F06 /* SelfLearnCourseDefinitionSheet.swift in Sources */,

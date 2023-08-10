@@ -364,6 +364,36 @@ class NotesViewModel: ObservableObject {
             print("NotesViewModel: There is no notes to submit for this lesson: \(lessonNumber)")
         }
     }
+    
+    @Published var generatingAssignments: Set<Double> = []
+    
+    func generateAssignment(unitIndex: Int, subunitIndex: Int) {
+        if let subunits = self.curriculum.units[unitIndex].subUnits {
+            
+            var subunit = subunits[subunitIndex]
+            for i in 0..<subunit.lessons!.count {
+                subunit.lessons![i].notes = nil
+            }
+            
+            generatingAssignments.insert(subunit.unitNumber)
+            
+            AssignmentCreationService().generateAssignment(subunit: subunit)
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] completion in
+                    switch completion {
+                    case .failure(let e):
+                        print("NotesViewModel: Failed to generate assignment")
+                        print("NotesViewModel-err: \(e)")
+                        self!.generatingAssignments.remove(subunit.unitNumber)
+                    case .finished:
+                        print("NotesViewModel: Finished generating assignment")
+                    }
+                } receiveValue: { [weak self] assignment in
+                    self!.curriculum.units[unitIndex].subUnits![subunitIndex].assignment = assignment
+                    self!.generatingAssignments.remove(subunit.unitNumber)
+                }.store(in: &cancellables)
+        }
+    }
 }
 
 extension NotesViewModel {

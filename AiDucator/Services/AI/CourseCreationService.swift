@@ -124,6 +124,7 @@ struct SubUnit: Codable {
     var unitDescription: String
     var unitTitle: String
     var lessons: [Lesson]? = nil
+    var assignment: Assignment? = nil 
 }
 
 struct CurriculumOutput: Codable {

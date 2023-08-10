@@ -126,7 +126,7 @@ struct LessonNotesView: View {
                                 }
                             }
                             .padding(.horizontal)
-//                            .padding(.bottom)
+                            .padding(.bottom)
                         }
                         
                         HStack {
@@ -231,11 +231,11 @@ struct LessonNotesView: View {
                 
 //                VStack {
 //                    Spacer()
-//                    
+//
 //                    Image(systemName: "brain")
 //                        .font(.system(size: 20, weight: .black, design: .rounded))
 //                        .foregroundColor(Color.black)
-//                    
+//
 //                    Text("Thinkly.ai")
 //                        .font(.system(size: 20, weight: .black, design: .rounded))
 //                        .foregroundColor(Color.buttonPrimary)
