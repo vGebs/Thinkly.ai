@@ -16,6 +16,7 @@ struct LessonsDropDown: View {
     
     @State private var showNotes = false
     @State var notes: Notes? = nil
+    @State var lessonNumber = ""
     
     var body: some View {
         VStack {
@@ -114,6 +115,7 @@ struct LessonsDropDown: View {
                     Button(action: {
                         self.showNotes = true
                         self.notes = lessons[i].notes
+                        self.lessonNumber = lessons[i].lessonNumber
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -173,7 +175,7 @@ struct LessonsDropDown: View {
             if !notesViewModel.subunitHasNotes(unitIndex: unitNumber - 1, subunitNumber: subunitNumber) {
                 VStack {
                     Button(action: {
-                        notesViewModel.generateLessons(subunitNumber: subunitNumber)
+                        notesViewModel.generateLessons(subunitNumber: Double(Int(subunitNumber * 10)) / 10)
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -222,7 +224,7 @@ struct LessonsDropDown: View {
             }
             
         }.sheet(isPresented: $showNotes) {
-            LessonNotesView(notes: $notes)
+            LessonNotesView(notes: $notes, notesViewModel: notesViewModel, unitIndex: unitNumber - 1, subunitNumber: subunitNumber, lessonNumber: lessonNumber)
         }
     }
 }

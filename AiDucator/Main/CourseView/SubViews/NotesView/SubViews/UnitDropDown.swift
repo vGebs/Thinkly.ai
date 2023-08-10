@@ -274,12 +274,12 @@ struct UnitDropDown: View {
                         
 
                         if unit.subUnits![index].lessons == nil {
-                            if notesViewModel.loadingIndexes_lessons.contains(unit.subUnits![index].unitNumber) {
+                            if notesViewModel.loadingIndexes_lessons.contains(Double(Int(unit.subUnits![index].unitNumber * 10)) / 10) {
                                 LoadingView()
                             } else {
                                 HStack {
                                     Button(action: {
-                                        notesViewModel.generateLessons(subunitNumber: unit.subUnits![index].unitNumber)
+                                        notesViewModel.generateLessons(subunitNumber: Double(Int(unit.subUnits![index].unitNumber * 10)) / 10)
                                     }) {
                                         ZStack {
                                             RoundedRectangle(cornerRadius: 10)
@@ -328,11 +328,11 @@ struct UnitDropDown: View {
                 
                 HStack {
                     Image(systemName: "terminal")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.buttonPrimary)
                     
                     Text("Generate Sub-Units")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.primary)
                 }.padding()
             }

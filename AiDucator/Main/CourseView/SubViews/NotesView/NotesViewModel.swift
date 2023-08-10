@@ -181,8 +181,6 @@ class NotesViewModel: ObservableObject {
                     print("NotesViewModel: Finished pushing lessons")
                 }
             } receiveValue: { [weak self] _ in
-                print("Index of some shit i need")
-                print(Int(index))
                 self?.submittedSubUnits.insert(Int(index))
                 self?.submittedLessons.insert(index)
             }
@@ -214,8 +212,6 @@ class NotesViewModel: ObservableObject {
     
     func trashLessons(with unitIndex: Int, and subUnitNumber: Double) {
         let subUnitIndex = (Int(subUnitNumber * 10) % 10) - 1
-        print("SubunitIndex: \(subUnitIndex)")
-//        self.loadingIndexes_lessons.insert(self.curriculum.units[unitIndex].subUnits![subUnitIndex].unitNumber)
         self.loadingIndexes_lessons.insert(subUnitNumber)
         self.curriculum.units[unitIndex].subUnits![subUnitIndex].lessons = nil
         
@@ -423,6 +419,7 @@ extension NotesViewModel {
                                     for k in 0..<self!.curriculum.units[i].subUnits![j].lessons!.count {
                                         if self!.curriculum.units[i].subUnits![j].lessons![k].lessonNumber == lessonNumber {
                                             self!.curriculum.units[i].subUnits![j].lessons![k].notes = notesArr[0].notes
+                                            self!.submittedNotes.insert(self!.curriculum.units[i].subUnits![j].lessons![k].lessonNumber)
                                             break
                                         }
                                     }

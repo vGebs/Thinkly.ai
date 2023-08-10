@@ -10,6 +10,10 @@ import SwiftUI
 
 struct LessonNotesView: View {
     @Binding var notes: Notes?
+    @ObservedObject var notesViewModel: NotesViewModel
+    var unitIndex: Int
+    var subunitNumber: Double
+    var lessonNumber: String
     
     var body: some View {
         
@@ -69,6 +73,33 @@ struct LessonNotesView: View {
                         }
                         .padding(.horizontal)
                         .padding(.bottom)
+                        
+                        if !notesViewModel.submittedNotes.contains(lessonNumber) {
+                            Button(action: {
+                                notesViewModel.submitNotes(unitIndex: unitIndex, subunitNumber: subunitNumber, lessonNumber: lessonNumber)
+                            }) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundColor(.black)
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(lineWidth: 3)
+                                        .foregroundColor(.buttonPrimary)
+                                    
+                                    HStack {
+                                        Image(systemName: "checkmark.square")
+                                            .font(.system(size: 12, weight: .bold, design: .rounded))
+                                            .foregroundColor(.buttonPrimary)
+                                        
+                                        Text("Submit Notes")
+                                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                                            .foregroundColor(.primary)
+                                    }.padding()
+                                }
+                            }
+                            .padding(.horizontal)
+                            .padding(.bottom)
+                            .padding(.bottom)
+                        }
                     }
                 }.edgesIgnoringSafeArea(.all)
             }
