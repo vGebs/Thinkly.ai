@@ -49,13 +49,23 @@ struct LessonNotesView: View {
                             VStack {
                                 Button(action: {
                                     showNotes = false
-                                    notesViewModel.deleteNotes(unitIndex: unitIndex, subunitNumber: subunitNumber, lessonNumber: lessonNumber)
+//                                    notesViewModel.deleteNotes(unitIndex: unitIndex, subunitNumber: subunitNumber, lessonNumber: lessonNumber)
                                 }) {
-                                    Image(systemName: "trash")
-                                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                                    Image(systemName: "chevron.down")
+                                        .font(.system(size: 16, weight: .bold, design: .rounded))
                                         .foregroundColor(.buttonPrimary)
                                 }
                                 .padding(.horizontal)
+                                
+//                                Button(action: {
+//                                    showNotes = false
+//                                    notesViewModel.deleteNotes(unitIndex: unitIndex, subunitNumber: subunitNumber, lessonNumber: lessonNumber)
+//                                }) {
+//                                    Image(systemName: "trash")
+//                                        .font(.system(size: 13, weight: .bold, design: .rounded))
+//                                        .foregroundColor(.buttonPrimary)
+//                                }
+//                                .padding(.horizontal)
                                 
                                 Spacer()
                             }
@@ -107,7 +117,7 @@ struct LessonNotesView: View {
                                     HStack {
                                         Image(systemName: "checkmark.square")
                                             .font(.system(size: 12, weight: .bold, design: .rounded))
-                                            .foregroundColor(.buttonPrimary)
+                                            .foregroundColor(.accent)
                                         
                                         Text("Submit Notes")
                                             .font(.system(size: 14, weight: .bold, design: .rounded))
@@ -116,9 +126,59 @@ struct LessonNotesView: View {
                                 }
                             }
                             .padding(.horizontal)
-                            .padding(.bottom)
-                            .padding(.bottom)
+//                            .padding(.bottom)
                         }
+                        
+                        HStack {
+                            Button(action: {
+    //                            notesViewModel.submitNotes(unitIndex: unitIndex, subunitNumber: subunitNumber, lessonNumber: lessonNumber)
+                                notesViewModel.generateNotes(for: lessonNumber, unitIndex: unitIndex)
+                                withAnimation {
+                                    showNotes = false
+                                }
+                            }) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundColor(.black)
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(lineWidth: 3)
+                                        .foregroundColor(.buttonPrimary)
+                                    
+                                    HStack {
+                                        Image(systemName: "terminal")
+                                            .font(.system(size: 12, weight: .bold, design: .rounded))
+                                            .foregroundColor(.accent)
+                                        
+                                        Text("Regenerate")
+                                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                                            .foregroundColor(.primary)
+                                    }.padding()
+                                }
+                            }
+                            .padding(.leading)
+                            
+                            
+                            Button(action: {
+                                showNotes = false
+                                notesViewModel.deleteNotes(unitIndex: unitIndex, subunitNumber: subunitNumber, lessonNumber: lessonNumber)
+                            }) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundColor(.black)
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(lineWidth: 3)
+                                        .foregroundColor(.buttonPrimary)
+                                    
+                                    Image(systemName: "trash")
+                                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                                        .foregroundColor(.buttonPrimary)
+                                }.frame(width: screenWidth / 6)
+                            }
+                            .padding(.trailing)
+                        }
+                        .padding(.bottom)
+                        .padding(.bottom)
+                        
                     }
                 }.edgesIgnoringSafeArea(.all)
             }
@@ -169,18 +229,18 @@ struct LessonNotesView: View {
                         }
                 }.offset(y: 200)
                 
-                VStack {
-                    Spacer()
-                    
-                    Image(systemName: "brain")
-                        .font(.system(size: 20, weight: .black, design: .rounded))
-                        .foregroundColor(Color.black)
-                    
-                    Text("Thinkly.ai")
-                        .font(.system(size: 20, weight: .black, design: .rounded))
-                        .foregroundColor(Color.buttonPrimary)
-                }
-                .frame(width: screenWidth, height: screenHeight * 0.85)
+//                VStack {
+//                    Spacer()
+//                    
+//                    Image(systemName: "brain")
+//                        .font(.system(size: 20, weight: .black, design: .rounded))
+//                        .foregroundColor(Color.black)
+//                    
+//                    Text("Thinkly.ai")
+//                        .font(.system(size: 20, weight: .black, design: .rounded))
+//                        .foregroundColor(Color.buttonPrimary)
+//                }
+//                .frame(width: screenWidth, height: screenHeight * 0.85)
             }
         }
     }

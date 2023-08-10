@@ -243,6 +243,16 @@ class NotesViewModel: ObservableObject {
             for i in 0..<unit.subUnits!.count {
                 if unit.subUnits![i].lessons != nil {
                     for j in 0..<unit.subUnits![i].lessons!.count {
+                        //If there is existing notes where we are generating, we need to clear them/delete them from db
+                        if unit.subUnits![i].lessons![j].lessonNumber == lessonNumber {
+                            if unit.subUnits![i].lessons![j].notes != nil {
+                                if submittedNotes.contains(lessonNumber) {
+                                    self.deleteNotes(unitIndex: unitIndex, subunitNumber: self.curriculum.units[unitIndex].subUnits![i].unitNumber, lessonNumber: lessonNumber)
+                                } else {
+                                    self.curriculum.units[unitIndex].subUnits![i].lessons![j].notes = nil
+                                }
+                            }
+                        }
                         unit.subUnits![i].lessons![j].notes = nil
                     }
                 }

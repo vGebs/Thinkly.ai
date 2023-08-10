@@ -16,10 +16,11 @@ struct NotesView: View {
             VStack {
                 ScrollView(showsIndicators: false) {
                     
-                    note
-                        .padding()
+//                    note
+//                        .padding()
                     
                     units
+                        .padding(.top)
                         .padding(.bottom, screenHeight * 0.14)
                 }
                 .padding(.top, screenHeight * 0.155)

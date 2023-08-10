@@ -331,7 +331,7 @@ struct UnitDropDown: View {
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.buttonPrimary)
                     
-                    Text("Generate Sub-Units")
+                    Text("Generate Subunits")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.primary)
                 }.padding()
