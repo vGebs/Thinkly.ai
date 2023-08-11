@@ -61,6 +61,7 @@
 		FAD21FD42A857846007DB709 /* AssignmentCreationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD21FD32A857846007DB709 /* AssignmentCreationService.swift */; };
 		FAD21FD62A858DEC007DB709 /* AssignmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD21FD52A858DEC007DB709 /* AssignmentView.swift */; };
 		FAD21FD92A859A1E007DB709 /* AssignmentService_Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD21FD82A859A1E007DB709 /* AssignmentService_Firestore.swift */; };
+		FAD21FDB2A85CDD7007DB709 /* SubunitNotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD21FDA2A85CDD7007DB709 /* SubunitNotesView.swift */; };
 		FAE0BEE22A327944003BF2CB /* CourseDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0BEE12A327944003BF2CB /* CourseDefinition.swift */; };
 		FAEC5D142A0EF1DD00A48F05 /* SigninSignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEC5D132A0EF1DD00A48F05 /* SigninSignupView.swift */; };
 		FAEC5D162A0EF21900A48F05 /* SigninSignupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEC5D152A0EF21900A48F05 /* SigninSignupViewModel.swift */; };
@@ -133,6 +134,7 @@
 		FAD21FD32A857846007DB709 /* AssignmentCreationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentCreationService.swift; sourceTree = "<group>"; };
 		FAD21FD52A858DEC007DB709 /* AssignmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentView.swift; sourceTree = "<group>"; };
 		FAD21FD82A859A1E007DB709 /* AssignmentService_Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentService_Firestore.swift; sourceTree = "<group>"; };
+		FAD21FDA2A85CDD7007DB709 /* SubunitNotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubunitNotesView.swift; sourceTree = "<group>"; };
 		FAE0BEE12A327944003BF2CB /* CourseDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDefinition.swift; sourceTree = "<group>"; };
 		FAEC5D132A0EF1DD00A48F05 /* SigninSignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninSignupView.swift; sourceTree = "<group>"; };
 		FAEC5D152A0EF21900A48F05 /* SigninSignupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninSignupViewModel.swift; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 				FA149CC52A71AF0E001E28C7 /* LessonsDropDown.swift */,
 				FA149CC72A732C89001E28C7 /* LessonNotesView.swift */,
 				FAD21FD52A858DEC007DB709 /* AssignmentView.swift */,
+				FAD21FDA2A85CDD7007DB709 /* SubunitNotesView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -583,6 +586,7 @@
 				FA9CFAAA2A16B37C000BDE95 /* QuizView.swift in Sources */,
 				FAEC5D1A2A0EF2E800A48F05 /* View.swift in Sources */,
 				FAEC5D222A0EF3D900A48F05 /* AuthService.swift in Sources */,
+				FAD21FDB2A85CDD7007DB709 /* SubunitNotesView.swift in Sources */,
 				FAEC5D1F2A0EF37900A48F05 /* LoadingView.swift in Sources */,
 				FA0CDC352A0F23FD007AF6E7 /* DocumentSnapshotPublisher.swift in Sources */,
 				FA070DF22A0E0AF5008EF241 /* Colors.swift in Sources */,

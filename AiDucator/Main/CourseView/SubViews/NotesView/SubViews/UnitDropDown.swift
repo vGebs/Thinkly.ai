@@ -304,6 +304,37 @@ struct UnitDropDown: View {
                                 .fixedSize(horizontal: false, vertical: true)
                             }
                         } else {
+                            
+                            //add logic to show notes button view
+                            if notesViewModel.hasNotes(for: unit.subUnits![index]) {
+                                Button(action: {
+                                    withAnimation {
+                                        subunitIndexForNotes = index
+                                        showNotes = true
+                                    }
+                                }) {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .foregroundColor(.black)
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(lineWidth: 3)
+                                            .foregroundColor(.buttonPrimary)
+                                        
+                                        HStack {
+                                            Image(systemName: "binoculars")
+                                                .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                .foregroundColor(.buttonPrimary)
+                                            
+                                            Text("View Notes")
+                                                .font(.system(size: 14, weight: .bold, design: .rounded))
+                                                .foregroundColor(.primary)
+                                        }.padding()
+                                    }
+                                }
+                                .padding(.leading, screenWidth * 0.05)
+                                .fixedSize(horizontal: false, vertical: true)
+                            }
+                            
                             if unit.subUnits![index].assignment == nil {
                                 if notesViewModel.generatingAssignments.contains(unit.subUnits![index].unitNumber) {
                                     LoadingView()
@@ -337,7 +368,7 @@ struct UnitDropDown: View {
                                     withAnimation {
                                         selectedAssignmentSubunit = unit.subUnits![index]
                                         subunitIndex = index
-                                        showNotes = true
+                                        showAssignment = true
                                     }
                                 }) {
                                     ZStack {
@@ -370,14 +401,20 @@ struct UnitDropDown: View {
                     }
                 }
             }
-        }.sheet(isPresented: $showNotes) {
-            AssignmentView(unitIndex: unit.unitNumber - 1, subunitIndex: subunitIndex!, subunit: selectedAssignmentSubunit!, show: $showNotes, notesViewModel: notesViewModel)
+        }.sheet(isPresented: $showAssignment) {
+            AssignmentView(unitIndex: unit.unitNumber - 1, subunitIndex: subunitIndex!, subunit: selectedAssignmentSubunit!, show: $showAssignment, notesViewModel: notesViewModel)
+        }
+        .sheet(isPresented: $showNotes) {
+            SubunitNotesView(unitIndex: unit.unitNumber - 1, subunitIndex: subunitIndexForNotes, showNotes: $showNotes, notesViewModel: notesViewModel)
         }
     }
     
+    @State var showNotes = false
+    @State var subunitIndexForNotes = -1
+    
     @State var selectedAssignmentSubunit: SubUnit?
     @State var subunitIndex: Int?
-    @State var showNotes = false
+    @State var showAssignment = false
     
     var generateSubunitsButton: some View {
         Button(action: {

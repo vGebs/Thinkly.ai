@@ -365,6 +365,18 @@ class NotesViewModel: ObservableObject {
         }
     }
     
+    func hasNotes(for subunit: SubUnit) -> Bool {
+        if let lessons = subunit.lessons {
+            for lesson in lessons {
+                if lesson.notes != nil {
+                    return true
+                }
+            }
+        }
+        
+        return false
+    }
+    
     @Published var generatingAssignments: Set<Double> = []
     
     func generateAssignment(unitIndex: Int, subunitIndex: Int) {
