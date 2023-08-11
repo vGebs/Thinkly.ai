@@ -475,6 +475,7 @@ extension NotesViewModel {
                             for j in 0..<self!.curriculum.units[i].subUnits!.count {
                                 if self!.curriculum.units[i].subUnits![j].lessons != nil {
                                     self?.submittedLessons.insert(self!.curriculum.units[i].subUnits![j].unitNumber)
+                                    self?.fetchAssignments(unitIndex: i, subunitIndex: j, subunitNumber: self!.curriculum.units[i].subUnits![j].unitNumber)
                                     
                                     for k in 0..<self!.curriculum.units[i].subUnits![j].lessons!.count {
                                         let lessonNumber = self!.curriculum.units[i].subUnits![j].lessons![k].lessonNumber
@@ -488,6 +489,25 @@ extension NotesViewModel {
                             }
                         }
                     }
+                }
+            }.store(in: &cancellables)
+    }
+    
+    private func fetchAssignments(unitIndex: Int, subunitIndex: Int, subunitNumber: Double) {
+        AssignmentService_Firestore.shared.fetchAssignment(courseID: self.curriculum.courseID!, subunitNumber: subunitNumber)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .failure(let e):
+                    print("NotesViewModel: Failed to fetch assignment with subunitNumber: \(subunitNumber)")
+                    print("NotesViewModel-err: \(e)")
+                case .finished:
+                    print("NotesViewModel: Finished fetching assignment for subunit: \(subunitNumber) ")
+                }
+            } receiveValue: { [weak self] assignments in
+                if assignments.count > 0 {
+                    self!.curriculum.units[unitIndex].subUnits![subunitIndex].assignment = assignments[0].assignment
+                    self!.submittedAssignments.insert(subunitNumber)
                 }
             }.store(in: &cancellables)
     }

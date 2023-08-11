@@ -87,7 +87,7 @@ struct AssignmentView: View {
                         .font(.system(size: 12, weight: .bold, design: .rounded))
                         .foregroundColor(.accent)
                     
-                    Text("Submit Notes")
+                    Text("Submit Assignment")
                         .font(.system(size: 14, weight: .bold, design: .rounded))
                         .foregroundColor(.primary)
                 }.padding()
