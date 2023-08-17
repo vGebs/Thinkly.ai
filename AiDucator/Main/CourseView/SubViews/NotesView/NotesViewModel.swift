@@ -153,7 +153,44 @@ class NotesViewModel: ObservableObject {
     }
     
     func submitUnits(with index: Int) {
-        UnitService_firestore.shared.pushSubUnits(units: curriculum.units, courseID: curriculum.courseID!, docID: curriculum.documentID!)
+        //remove all other units and all lessons+notes
+        var units = curriculum.units
+        
+        for i in 0..<units.count {
+            //make sure we dont push sub units that are not submitted
+            if !submittedSubUnits.contains(units[i].unitNumber - 1) {
+                if i != index {
+                    units[i].subUnits = nil
+                }
+                
+                if let _ = units[i].subUnits {
+                    for j in 0..<units[i].subUnits!.count {
+                        
+                        if !submittedLessons.contains(units[i].subUnits![j].unitNumber) {
+                            units[i].subUnits![j].lessons = nil
+                        }
+                    }
+                }
+            } else if submittedSubUnits.contains(units[i].unitNumber - 1) {
+                
+                if let _ = units[i].subUnits {
+                    for j in 0..<units[i].subUnits!.count {
+                        
+                        if !submittedLessons.contains(units[i].subUnits![j].unitNumber) {
+                            units[i].subUnits![j].lessons = nil
+                        } else {
+                            if let _ = units[i].subUnits![j].lessons {
+                                for k in 0..<units[i].subUnits![j].lessons!.count {
+                                    units[i].subUnits![j].lessons![k].notes = nil
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        UnitService_firestore.shared.pushSubUnits(units: units, courseID: curriculum.courseID!, docID: curriculum.documentID!)
             .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
@@ -170,7 +207,51 @@ class NotesViewModel: ObservableObject {
     }
     
     func submitLessons(with index: Double) {
-        UnitService_firestore.shared.pushSubUnits(units: curriculum.units, courseID: curriculum.courseID!, docID: curriculum.documentID!)
+        //we need to make sure we push the right subunits that are submitted as well as the correct lesson
+        
+        var units = curriculum.units
+        
+        for i in 0..<units.count {
+            //make sure we dont push sub units that are not submitted
+            if !submittedSubUnits.contains(units[i].unitNumber - 1) {
+                
+                if let _ = units[i].subUnits {
+                    for j in 0..<units[i].subUnits!.count {
+                        
+                        if !submittedLessons.contains(units[i].subUnits![j].unitNumber) {
+                            if index != units[i].subUnits![j].unitNumber {
+                                units[i].subUnits![j].lessons = nil
+                            }
+                        }
+                    }
+                }
+            } else if submittedSubUnits.contains(units[i].unitNumber - 1) {
+                
+                if let _ = units[i].subUnits {
+                    for j in 0..<units[i].subUnits!.count {
+                        
+                        if !submittedLessons.contains(units[i].subUnits![j].unitNumber) {
+                            if index != units[i].subUnits![j].unitNumber {
+                                units[i].subUnits![j].lessons = nil
+                            }
+                        } else {
+                            if let _ = units[i].subUnits![j].lessons {
+                                for k in 0..<units[i].subUnits![j].lessons!.count {
+                                    units[i].subUnits![j].lessons![k].notes = nil
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        //we need to generate two lessons, submit one and see if it works
+        
+        //we need to generate some notes now for a sub topic that has lessons submitted.
+            //from there we will see if notes are submitted
+        
+        UnitService_firestore.shared.pushSubUnits(units: units, courseID: curriculum.courseID!, docID: curriculum.documentID!)
             .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
