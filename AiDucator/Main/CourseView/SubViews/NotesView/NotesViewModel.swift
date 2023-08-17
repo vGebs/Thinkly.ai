@@ -335,7 +335,10 @@ class NotesViewModel: ObservableObject {
                 if curriculum.units[unitIndex].subUnits![i].lessons != nil && curriculum.units[unitIndex].subUnits![i].unitNumber == subunitNumber{
                     for j in 0..<curriculum.units[unitIndex].subUnits![i].lessons!.count {
                         if curriculum.units[unitIndex].subUnits![i].lessons![j].notes != nil {
-                            notes = curriculum.units[unitIndex].subUnits![i].lessons![j].notes!
+                            if curriculum.units[unitIndex].subUnits![i].lessons![j].lessonNumber == lessonNumber {
+                                notes = curriculum.units[unitIndex].subUnits![i].lessons![j].notes!
+                                break
+                            }
                         }
                     }
                 }
