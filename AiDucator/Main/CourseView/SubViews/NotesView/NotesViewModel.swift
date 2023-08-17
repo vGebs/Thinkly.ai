@@ -46,11 +46,9 @@ class NotesViewModel: ObservableObject {
         
         //remove all other lessons for input, they are not needed for the prompt.
         for i in 0..<c.units.count {
-            if c.units[i].subUnits != nil {
-                for j in 0..<c.units[i].subUnits!.count {
-                    c.units[i].subUnits![j].lessons = nil
-                }
-            }
+            
+            //we need to remove all other subunits when fetching
+            c.units[i].subUnits = nil
         }
         
         CourseCreationService().getSubUnits(GetSubUnits(unitNumber: index + 1, curriculum: c.units))
@@ -207,7 +205,6 @@ class NotesViewModel: ObservableObject {
     }
     
     func submitLessons(with index: Double) {
-        //we need to make sure we push the right subunits that are submitted as well as the correct lesson
         
         var units = curriculum.units
         
@@ -245,11 +242,6 @@ class NotesViewModel: ObservableObject {
                 }
             }
         }
-        
-        //we need to generate two lessons, submit one and see if it works
-        
-        //we need to generate some notes now for a sub topic that has lessons submitted.
-            //from there we will see if notes are submitted
         
         UnitService_firestore.shared.pushSubUnits(units: units, courseID: curriculum.courseID!, docID: curriculum.documentID!)
             .receive(on: DispatchQueue.main)
