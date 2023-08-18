@@ -17,11 +17,13 @@ struct CourseView: View {
         ZStack {
             wave
             
-            mainSwipeView
+//            mainSwipeView
+            NotesView(viewModel: NotesViewModel(courseDef: course))
             
             VStack {
                 header
                     .frame(width: screenWidth, height: screenHeight * 0.07)
+                    .padding(.top, screenHeight * 0.025)
                 Divider()
                     .foregroundColor(.primary)
                 
@@ -173,24 +175,24 @@ struct CourseView: View {
         GeometryReader { proxy in
             let rect = proxy.frame(in: .global)
             
-            Pager(tabs: tabs, rect: rect, offset: $offsetManager.offset) {
+            Pager(tabs: ["notes"], rect: rect, offset: $offsetManager.offset) { //tabs
                 
                 HStack(spacing: 0){
                     NotesView(viewModel: NotesViewModel(courseDef: course))
-                    AssignmentsView()
-                    FeedView()
-                    QuizView()
-                    GradesView()
+//                    AssignmentsView()
+//                    FeedView()
+//                    QuizView()
+//                    GradesView()
                 }
             }
         }
         .edgesIgnoringSafeArea(.all)
-        .overlay(
-            NavBar(offset: $offsetManager.offset)
-                .padding(.bottom, screenHeight * 0.035),
-            alignment: .bottom
-        )
-        .edgesIgnoringSafeArea(.all)
+//        .overlay(
+//            NavBar(offset: $offsetManager.offset)
+//                .padding(.bottom, screenHeight * 0.035),
+//            alignment: .bottom
+//        )
+//        .edgesIgnoringSafeArea(.all)
     }
     
     

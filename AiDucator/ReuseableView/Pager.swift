@@ -14,7 +14,7 @@ import SwiftUI
 class OffsetManager: ObservableObject {
     static let shared = OffsetManager()
 
-    @Published var offset: CGFloat = screenWidth * 2
+    @Published var offset: CGFloat = 0 //screenWidth * 2
 
     private init() {}
 }

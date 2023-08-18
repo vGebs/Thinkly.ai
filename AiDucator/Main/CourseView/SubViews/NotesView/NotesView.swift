@@ -21,7 +21,7 @@ struct NotesView: View {
                     
                     units
                         .padding(.top)
-                        .padding(.bottom, screenHeight * 0.14)
+                        .padding(.bottom, screenHeight * 0.04)//0.14
                 }
                 .padding(.top, screenHeight * 0.155)
             }
