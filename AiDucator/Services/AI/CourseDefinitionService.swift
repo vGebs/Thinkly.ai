@@ -61,7 +61,7 @@ class CourseDefinitionService {
         return networkWrapper.request(with: request, timeout: 120, pingURLRequest: bundlePingRequest(), pingTimeout: 3)
     }
     
-    public func getCourseTitleSuggestionsFromCurriculum(from curriculum: [Unit]) -> AnyPublisher<CourseOverviewSuggestions, Error> {
+    public func getCourseTitleSuggestionsFromCurriculum(from curriculum: CourseTitleSuggestionInput) -> AnyPublisher<CourseOverviewSuggestions, Error> {
         let url = baseURL.appendingPathComponent("/getCourseTitleSuggestionFromCurriculum")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -89,6 +89,10 @@ class CourseDefinitionService {
     }
 }
 
+struct CourseTitleSuggestionInput: Codable {
+    let uid: String
+    let units: [Unit]
+}
 
 struct ConceptResponse: Codable {
     let concepts: [Concept]

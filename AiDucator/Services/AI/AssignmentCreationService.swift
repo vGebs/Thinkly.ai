@@ -25,7 +25,7 @@ class AssignmentCreationService {
         return request
     }
     
-    func generateAssignment(subunit: SubUnit) -> AnyPublisher<Assignment, Error> {
+    func generateAssignment(subunit: GenerateAssignment_Input) -> AnyPublisher<Assignment, Error> {
         let url = baseURL.appendingPathComponent("/makeAssignment")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -33,6 +33,11 @@ class AssignmentCreationService {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         return networkWrapper.request(with: request, timeout: 120, pingURLRequest: bundlePingRequest(), pingTimeout: 3)
     }
+}
+
+struct GenerateAssignment_Input: Codable {
+    var subunit: SubUnit
+    var uid: String
 }
 
 struct Assignment: Codable {

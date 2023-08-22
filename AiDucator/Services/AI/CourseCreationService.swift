@@ -26,7 +26,7 @@ public class CourseCreationService {
         return request
     }
     
-    func getCurriculum(prompt: String) -> AnyPublisher<CurriculumOutput, Error> {
+    func getCurriculum(prompt: promptInput) -> AnyPublisher<CurriculumOutput, Error> {
         let url = baseURL.appendingPathComponent("/generateCurriculum")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -63,7 +63,13 @@ public class CourseCreationService {
     }
 }
 
+struct promptInput: Codable {
+    let uid: String
+    let prompt: String
+}
+
 struct NotesInput: Codable {
+    var uid: String 
     var lessonNumber: String
     var unit: Unit
 }
@@ -73,11 +79,13 @@ struct NotesInput: Codable {
 //}
 
 struct GetLessons: Codable {
+    var uid: String 
     var curriculum: [Unit]
     var subunitNumber: Double
 }
 
 struct GetSubUnits: Codable {
+    var uid: String 
     var unitNumber: Int
     var curriculum: [Unit]
 }

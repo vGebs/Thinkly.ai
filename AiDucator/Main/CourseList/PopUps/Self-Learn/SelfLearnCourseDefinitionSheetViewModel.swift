@@ -60,7 +60,9 @@ class SelfLearnCourseDefinitionSheetViewModel: ObservableObject {
     private func getCurriculum(selectedVersion: Int) {
         self.loading = true
         
-        courseCreation.getCurriculum(prompt: userPrompt)
+        let prompt = promptInput(uid: AuthService.shared.user!.uid, prompt: userPrompt)
+        
+        courseCreation.getCurriculum(prompt: prompt)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 switch completion {

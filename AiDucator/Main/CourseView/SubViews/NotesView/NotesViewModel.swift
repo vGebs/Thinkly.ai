@@ -51,7 +51,7 @@ class NotesViewModel: ObservableObject {
             c.units[i].subUnits = nil
         }
         
-        CourseCreationService().getSubUnits(GetSubUnits(unitNumber: index + 1, curriculum: c.units))
+        CourseCreationService().getSubUnits(GetSubUnits(uid: AuthService.shared.user!.uid, unitNumber: index + 1, curriculum: c.units))
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 switch completion {
@@ -103,7 +103,7 @@ class NotesViewModel: ObservableObject {
             }
         }
         
-        CourseCreationService().generateLessonsForSubunit(GetLessons(curriculum: inputUnits, subunitNumber: subunitNumber))
+        CourseCreationService().generateLessonsForSubunit(GetLessons(uid: AuthService.shared.user!.uid, curriculum: inputUnits, subunitNumber: subunitNumber))
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 switch completion {
@@ -336,7 +336,7 @@ class NotesViewModel: ObservableObject {
             self.loadingNotesNumbers.insert(lessonNumber)
         }
         
-        CourseCreationService().generateNotes(input: NotesInput(lessonNumber: lessonNumber, unit: unit))
+        CourseCreationService().generateNotes(input: NotesInput(uid: AuthService.shared.user!.uid, lessonNumber: lessonNumber, unit: unit))
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 switch completion {
@@ -465,7 +465,7 @@ class NotesViewModel: ObservableObject {
             
             generatingAssignments.insert(subunit.unitNumber)
             
-            AssignmentCreationService().generateAssignment(subunit: subunit)
+            AssignmentCreationService().generateAssignment(subunit: GenerateAssignment_Input(subunit: subunit, uid: AuthService.shared.user!.uid))
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] completion in
                     switch completion {

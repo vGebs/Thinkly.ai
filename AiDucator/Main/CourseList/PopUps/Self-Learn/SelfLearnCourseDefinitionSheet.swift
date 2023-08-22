@@ -43,7 +43,10 @@ class CourseNameViewModel: ObservableObject {
     
     func getCourseTitleSuggestion() {
         self.loading = true
-        courseDefService.getCourseTitleSuggestionsFromCurriculum(from: curriculum.units)
+        
+        let input = CourseTitleSuggestionInput(uid: AuthService.shared.user!.uid, units: curriculum.units)
+        
+        courseDefService.getCourseTitleSuggestionsFromCurriculum(from: input)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 switch completion {
