@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		FA070DEF2A0E0A7E008EF241 /* LandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA070DEE2A0E0A7E008EF241 /* LandingView.swift */; };
 		FA070DF22A0E0AF5008EF241 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA070DF12A0E0AF5008EF241 /* Colors.swift */; };
+		FA0ACBE02A96876500A3C653 /* BillingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0ACBDF2A96876500A3C653 /* BillingView.swift */; };
 		FA0CDC322A0F237D007AF6E7 /* FirestoreWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC312A0F237D007AF6E7 /* FirestoreWrapper.swift */; };
 		FA0CDC352A0F23FD007AF6E7 /* DocumentSnapshotPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC342A0F23FD007AF6E7 /* DocumentSnapshotPublisher.swift */; };
 		FA0CDC372A0F241A007AF6E7 /* QuerySnapshotPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC362A0F241A007AF6E7 /* QuerySnapshotPublisher.swift */; };
@@ -80,6 +81,7 @@
 /* Begin PBXFileReference section */
 		FA070DEE2A0E0A7E008EF241 /* LandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingView.swift; sourceTree = "<group>"; };
 		FA070DF12A0E0AF5008EF241 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		FA0ACBDF2A96876500A3C653 /* BillingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillingView.swift; sourceTree = "<group>"; };
 		FA0CDC312A0F237D007AF6E7 /* FirestoreWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreWrapper.swift; sourceTree = "<group>"; };
 		FA0CDC342A0F23FD007AF6E7 /* DocumentSnapshotPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentSnapshotPublisher.swift; sourceTree = "<group>"; };
 		FA0CDC362A0F241A007AF6E7 /* QuerySnapshotPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuerySnapshotPublisher.swift; sourceTree = "<group>"; };
@@ -317,6 +319,7 @@
 			children = (
 				FADA71322A4A3628009FF5E6 /* Self-Learn */,
 				FA9CFAB42A182672000BDE95 /* AddCourseStudentPopup.swift */,
+				FA0ACBDF2A96876500A3C653 /* BillingView.swift */,
 			);
 			path = PopUps;
 			sourceTree = "<group>";
@@ -582,6 +585,7 @@
 				FAEC5D2C2A0EF5DF00A48F05 /* AuthPublisher.swift in Sources */,
 				FA9CFA8C2A10789F000BDE95 /* CourseService_Firestore.swift in Sources */,
 				FA9CFA9A2A15DF68000BDE95 /* MainView.swift in Sources */,
+				FA0ACBE02A96876500A3C653 /* BillingView.swift in Sources */,
 				FA5115072A44F689004AA1D9 /* UnitDropDown.swift in Sources */,
 				FA9CFAAA2A16B37C000BDE95 /* QuizView.swift in Sources */,
 				FAEC5D1A2A0EF2E800A48F05 /* View.swift in Sources */,

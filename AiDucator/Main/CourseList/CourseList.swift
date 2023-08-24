@@ -30,6 +30,7 @@ struct CourseList: View {
     @Binding var currentCourse: CourseOverview?
     
     @State var addClassPopUpPressed = false
+    @State var settingsPressed = false
     
     @State private var phase = AnimatableData(phase: 0)
     @State private var phase1 = AnimatableData(phase: 45)
@@ -108,8 +109,12 @@ struct CourseList: View {
 //                        .opacity(addClassPopUpPressed ? 1 : 0)
 //                }
 //            }
-        }.sheet(isPresented: $addClassPopUpPressed) {
+        }
+        .sheet(isPresented: $addClassPopUpPressed) {
             SelfLearnCourseDefinitionSheet(selfLearnCourseDefinitionSheetViewModel: SelfLearnCourseDefinitionSheetViewModel(), addClassPopUpPressed: $addClassPopUpPressed)
+        }
+        .sheet(isPresented: $settingsPressed) {
+            BillingView()
         }
     }
     
@@ -141,7 +146,7 @@ struct CourseList: View {
             }
             
             Menu {
-                Button("Settings", action: settingsTapped)
+                Button("Billing", action: billingTapped)
                 Button("Logout", action: logoutPressed)
             } label: {
                 Image(systemName: "gear")
@@ -264,8 +269,10 @@ struct CourseList: View {
         }.frame(width: screenWidth * 0.9, height: screenHeight / 20)
     }
     
-    func settingsTapped() {
-        print("Settings tapped")
+    func billingTapped() {
+        withAnimation {
+            settingsPressed = true
+        }
     }
     
     func logoutPressed() {

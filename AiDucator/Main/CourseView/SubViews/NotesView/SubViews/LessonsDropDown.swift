@@ -175,7 +175,7 @@ struct LessonsDropDown: View {
             if !notesViewModel.subunitHasNotes(unitIndex: unitNumber - 1, subunitNumber: subunitNumber) {
                 VStack {
                     Button(action: {
-                        notesViewModel.generateLessons(subunitNumber: Double(Int(subunitNumber * 10)) / 10)
+                        notesViewModel.generateLessons(subunitNumber: subunitNumber)
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)

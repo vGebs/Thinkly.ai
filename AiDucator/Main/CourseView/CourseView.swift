@@ -102,59 +102,59 @@ struct CourseView: View {
                     .font(.system(size: 30, weight: .bold, design: .rounded))
                 Spacer()
             }
-            .opacity(self.offsetManager.offset >= 0 && self.offsetManager.offset < (screenWidth - screenWidth * 0.5) ? 1 : 0)
-            
-            HStack {
-                Image(systemName: "tray")
-                    .font(.system(size: 25, weight: .bold, design: .rounded))
-                    .foregroundColor(.accent)
-                    .padding(.leading)
-                
-                Text("Assignments")
-                    .foregroundColor(.primary)
-                    .font(.system(size: 30, weight: .bold, design: .rounded))
-                Spacer()
-            }
-            .opacity(self.offsetManager.offset >= screenWidth * 0.5 && self.offsetManager.offset < ((screenWidth * 2) - screenWidth * 0.5) ? 1 : 0)
-            
-            HStack {
-                Image(systemName: "list.bullet.rectangle")
-                    .font(.system(size: 25, weight: .bold, design: .rounded))
-                    .foregroundColor(.accent)
-                    .padding(.leading)
-                
-                Text("Feed")
-                    .foregroundColor(.primary)
-                    .font(.system(size: 30, weight: .bold, design: .rounded))
-                Spacer()
-            }
-            .opacity(self.offsetManager.offset >= ((screenWidth * 2) - screenWidth * 0.5) && self.offsetManager.offset < ((screenWidth * 3) - screenWidth * 0.5) ? 1 : 0)
-            
-            HStack {
-                Image(systemName: "list.bullet.clipboard")
-                    .font(.system(size: 25, weight: .bold, design: .rounded))
-                    .foregroundColor(.accent)
-                    .padding(.leading)
-                
-                Text("Quizzes")
-                    .foregroundColor(.primary)
-                    .font(.system(size: 30, weight: .bold, design: .rounded))
-                Spacer()
-            }
-            .opacity(self.offsetManager.offset >= ((screenWidth * 3) - screenWidth * 0.5) && self.offsetManager.offset < ((screenWidth * 4) - screenWidth * 0.5) ? 1 : 0)
-            
-            HStack {
-                Image(systemName: "chart.dots.scatter")
-                    .font(.system(size: 25, weight: .bold, design: .rounded))
-                    .foregroundColor(.accent)
-                    .padding(.leading)
-                
-                Text("Grades")
-                    .foregroundColor(.primary)
-                    .font(.system(size: 30, weight: .bold, design: .rounded))
-                Spacer()
-            }
-            .opacity(self.offsetManager.offset >= ((screenWidth * 4) - screenWidth * 0.5) && self.offsetManager.offset < ((screenWidth * 5) - screenWidth * 0.5) ? 1 : 0)
+//            .opacity(self.offsetManager.offset >= 0 && self.offsetManager.offset < (screenWidth - screenWidth * 0.5) ? 1 : 0)
+//
+//            HStack {
+//                Image(systemName: "tray")
+//                    .font(.system(size: 25, weight: .bold, design: .rounded))
+//                    .foregroundColor(.accent)
+//                    .padding(.leading)
+//
+//                Text("Assignments")
+//                    .foregroundColor(.primary)
+//                    .font(.system(size: 30, weight: .bold, design: .rounded))
+//                Spacer()
+//            }
+//            .opacity(self.offsetManager.offset >= screenWidth * 0.5 && self.offsetManager.offset < ((screenWidth * 2) - screenWidth * 0.5) ? 1 : 0)
+//
+//            HStack {
+//                Image(systemName: "list.bullet.rectangle")
+//                    .font(.system(size: 25, weight: .bold, design: .rounded))
+//                    .foregroundColor(.accent)
+//                    .padding(.leading)
+//
+//                Text("Feed")
+//                    .foregroundColor(.primary)
+//                    .font(.system(size: 30, weight: .bold, design: .rounded))
+//                Spacer()
+//            }
+//            .opacity(self.offsetManager.offset >= ((screenWidth * 2) - screenWidth * 0.5) && self.offsetManager.offset < ((screenWidth * 3) - screenWidth * 0.5) ? 1 : 0)
+//
+//            HStack {
+//                Image(systemName: "list.bullet.clipboard")
+//                    .font(.system(size: 25, weight: .bold, design: .rounded))
+//                    .foregroundColor(.accent)
+//                    .padding(.leading)
+//
+//                Text("Quizzes")
+//                    .foregroundColor(.primary)
+//                    .font(.system(size: 30, weight: .bold, design: .rounded))
+//                Spacer()
+//            }
+//            .opacity(self.offsetManager.offset >= ((screenWidth * 3) - screenWidth * 0.5) && self.offsetManager.offset < ((screenWidth * 4) - screenWidth * 0.5) ? 1 : 0)
+//
+//            HStack {
+//                Image(systemName: "chart.dots.scatter")
+//                    .font(.system(size: 25, weight: .bold, design: .rounded))
+//                    .foregroundColor(.accent)
+//                    .padding(.leading)
+//
+//                Text("Grades")
+//                    .foregroundColor(.primary)
+//                    .font(.system(size: 30, weight: .bold, design: .rounded))
+//                Spacer()
+//            }
+//            .opacity(self.offsetManager.offset >= ((screenWidth * 4) - screenWidth * 0.5) && self.offsetManager.offset < ((screenWidth * 5) - screenWidth * 0.5) ? 1 : 0)
         }
     }
     
