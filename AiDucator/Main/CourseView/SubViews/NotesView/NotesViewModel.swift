@@ -73,7 +73,9 @@ class NotesViewModel: ObservableObject {
     @Published var loadingIndexes_lessons: Set<Double> = []
     
     func generateLessons(subunitNumber: Double) {
-        loadingIndexes_lessons.insert(subunitNumber)
+        withAnimation {
+            loadingIndexes_lessons.insert(subunitNumber)
+        }
         //subUnitsThatHaveLessons.insert(Int(subunitNumber))
         
         for i in 0..<self.curriculum.units.count {
@@ -218,6 +220,7 @@ class NotesViewModel: ObservableObject {
                         if !submittedLessons.contains(units[i].subUnits![j].unitNumber) {
                             if index != units[i].subUnits![j].unitNumber {
                                 units[i].subUnits![j].lessons = nil
+                                units[i].subUnits![j].assignment = nil
                             }
                         }
                     }
@@ -230,11 +233,13 @@ class NotesViewModel: ObservableObject {
                         if !submittedLessons.contains(units[i].subUnits![j].unitNumber) {
                             if index != units[i].subUnits![j].unitNumber {
                                 units[i].subUnits![j].lessons = nil
+                                units[i].subUnits![j].assignment = nil
                             }
                         } else {
                             if let _ = units[i].subUnits![j].lessons {
                                 for k in 0..<units[i].subUnits![j].lessons!.count {
                                     units[i].subUnits![j].lessons![k].notes = nil
+                                    units[i].subUnits![j].assignment = nil
                                 }
                             }
                         }
@@ -264,7 +269,7 @@ class NotesViewModel: ObservableObject {
         self.loadingIndexes.insert(index)
         self.curriculum.units[index].subUnits = nil
         
-        UnitService_firestore.shared.pushSubUnits(units: curriculum.units, courseID: curriculum.courseID!, docID: curriculum.documentID!)
+        UnitService_firestore.shared.pushSubUnits(units: remove_notes_assignments_unSubmittedItems(), courseID: curriculum.courseID!, docID: curriculum.documentID!)
             .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
@@ -288,7 +293,7 @@ class NotesViewModel: ObservableObject {
         self.loadingIndexes_lessons.insert(subUnitNumber)
         self.curriculum.units[unitIndex].subUnits![subUnitIndex].lessons = nil
         
-        UnitService_firestore.shared.pushSubUnits(units: curriculum.units, courseID: curriculum.courseID!, docID: curriculum.documentID!)
+        UnitService_firestore.shared.pushSubUnits(units: remove_notes_assignments_unSubmittedItems(), courseID: curriculum.courseID!, docID: curriculum.documentID!)
             .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
@@ -670,5 +675,33 @@ extension NotesViewModel {
                 }
             }
         }
+    }
+    
+    private func remove_notes_assignments_unSubmittedItems() -> [Unit] {
+        var units = curriculum.units
+        
+        for i in 0..<units.count {
+            if !submittedSubUnits.contains(i) {
+                units[i].subUnits = nil
+            } else {
+                if units[i].subUnits != nil {
+                    for j in 0..<units[i].subUnits!.count {
+                        if !submittedLessons.contains(units[i].subUnits![j].unitNumber) {
+                            units[i].subUnits![j].lessons = nil
+                        } else {
+                            units[i].subUnits![j].assignment = nil
+                            
+                            if units[i].subUnits![j].lessons != nil {
+                                for k in 0..<units[i].subUnits![j].lessons!.count {
+                                    units[i].subUnits![j].lessons![k].notes = nil
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return units
     }
 }
