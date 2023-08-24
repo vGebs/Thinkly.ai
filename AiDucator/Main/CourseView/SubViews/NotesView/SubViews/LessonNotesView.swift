@@ -180,7 +180,20 @@ struct LessonNotesView: View {
                         .padding(.bottom)
                         
                     }
-                }.edgesIgnoringSafeArea(.all)
+                }
+                .padding(.top)
+                .edgesIgnoringSafeArea(.all)
+                
+                VStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .frame(width: screenWidth / 6, height: screenHeight / 300)
+                        .foregroundColor(.buttonPrimary)
+                        .onTapGesture {
+                            self.showNotes = false
+                        }
+                    
+                    Spacer()
+                }.padding(.top)
             }
             
         }
