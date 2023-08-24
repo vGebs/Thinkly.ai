@@ -306,7 +306,7 @@ struct UnitDropDown: View {
                         } else {
                             
                             //add logic to show notes button view
-                            if notesViewModel.hasNotes(for: unit.subUnits![index]) {
+                            //if notesViewModel.hasNotes(for: unit.subUnits![index]) {
                                 Button(action: {
                                     withAnimation {
                                         subunitIndexForNotes = index
@@ -333,7 +333,7 @@ struct UnitDropDown: View {
                                 }
                                 .padding(.leading, screenWidth * 0.05)
                                 .fixedSize(horizontal: false, vertical: true)
-                            }
+                            //}
                             
                             if unit.subUnits![index].assignment == nil {
                                 if notesViewModel.generatingAssignments.contains(unit.subUnits![index].unitNumber) {
