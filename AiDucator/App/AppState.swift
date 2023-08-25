@@ -91,6 +91,91 @@ class AppState: ObservableObject {
                 self?.user = nil
             }.store(in: &cancellables)
     }
+    
+    func deleteCourse(courseDocID: String) {
+        deleteCourse(id: courseDocID)
+        deleteUnits(courseID: courseDocID)
+        deleteAssignments(courseID: courseDocID)
+        deleteNotes(courseID: courseDocID)
+    }
+    
+    private func deleteCourse(id: String) {
+        CourseService_Firestore.shared.deleteCourse(docID: id)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .failure(let e):
+                    print("AppState: Failed to delete course")
+                    print("AppState-err: \(e)")
+                case .finished:
+                    print("AppState: Finished deleting course")
+                }
+            } receiveValue: { _ in }
+            .store(in: &cancellables)
+    }
+    
+    private func deleteUnits(courseID: String) {
+        //we need to fetch the units then delete it given the docID
+        UnitService_firestore.shared.fetchUnits(courseID: courseID)
+            .flatMap { curriculums -> AnyPublisher<Void, Error> in
+                let publishers = curriculums.map { curriculum in
+                    return UnitService_firestore.shared.deleteUnit(docID: curriculum.documentID!)
+                }
+                return Publishers.MergeMany(publishers).eraseToAnyPublisher()
+            }
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("AppState: Successfully deleted all units.")
+                case .failure(let error):
+                    print("AppState: Failed to delete units")
+                    print("AppState-err: \(error)")
+                }
+            } receiveValue: { _ in }
+            .store(in: &cancellables)
+    }
+    
+    private func deleteAssignments(courseID: String) {
+        //we need to fetch the assignments and delete them given the docID
+        AssignmentService_Firestore.shared.fetchAssignments(courseID: courseID)
+            .flatMap { assignments -> AnyPublisher<Void, Error> in
+                let publishers = assignments.map { a in
+                    return AssignmentService_Firestore.shared.deleteAssignment(docID: a.documentID!)
+                }
+                return Publishers.MergeMany(publishers).eraseToAnyPublisher()
+            }
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("AppState: Successfully deleted all assignments.")
+                case .failure(let error):
+                    print("AppState: Failed to delete assignments")
+                    print("AppState-err: \(error)")
+                }
+            } receiveValue: { _ in }
+            .store(in: &cancellables)
+    }
+    
+    private func deleteNotes(courseID: String) {
+        //we need to fetch the notes and delete them given the docID
+        NotesService_Firestore.shared.getNotes(courseID: courseID)
+            .flatMap { notes -> AnyPublisher<Void, Error> in
+                let publishers = notes.map { note in
+                    return NotesService_Firestore.shared.deleteNotes(with: note.documentID!)
+                }
+                return Publishers.MergeMany(publishers).eraseToAnyPublisher()
+            }
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("AppState: Successfully deleted all notes.")
+                case .failure(let error):
+                    print("AppState: Failed to delete notes")
+                    print("AppState-err: \(error)")
+                }
+            } receiveValue: { _ in }
+            .store(in: &cancellables)
+    }
 }
 
 extension AppState {

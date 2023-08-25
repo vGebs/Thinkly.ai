@@ -33,6 +33,10 @@ class UnitService_firestore {
         let units = Units_firestore(units: units, courseID: courseID)
         return FirestoreWrapper.shared.update(collection: collection, documentId: docID, data: units)
     }
+    
+    func deleteUnit(docID: String) -> AnyPublisher<Void, Error> {
+        return FirestoreWrapper.shared.delete(collection: collection, documentId: docID)
+    }
 }
 
 import FirebaseFirestoreSwift

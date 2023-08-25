@@ -31,6 +31,11 @@ class AssignmentService_Firestore {
         return firestore.read(query: query)
     }
     
+    func fetchAssignments(courseID: String) -> AnyPublisher<[Assignment_Firestore], Error> {
+        let query = db.collection(collection).whereField("courseID", isEqualTo: courseID)
+        return firestore.read(query: query)
+    }
+    
     func deleteAssignment(docID: String) -> AnyPublisher<Void, Error> {
         return firestore.delete(collection: collection, documentId: docID)
     }

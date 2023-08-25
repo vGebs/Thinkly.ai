@@ -19,6 +19,15 @@ struct CourseView: View {
             
 //            mainSwipeView
             NotesView(viewModel: NotesViewModel(courseDef: course))
+                .blur(radius: deleteCoursePopUp ? 5 : 0)
+                .disabled(deleteCoursePopUp)
+                .onTapGesture {
+                    if deleteCoursePopUp {
+                        withAnimation {
+                            deleteCoursePopUp = false
+                        }
+                    }
+                }
             
             VStack {
                 header
@@ -50,6 +59,61 @@ struct CourseView: View {
                 
                 Spacer()
             }
+            .disabled(deleteCoursePopUp)
+            .onTapGesture {
+                if deleteCoursePopUp {
+                    withAnimation {
+                        deleteCoursePopUp = false
+                    }
+                }
+            }
+            
+            if deleteCoursePopUp {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundColor(.black)
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(lineWidth: 3)
+                        .foregroundColor(.buttonPrimary)
+                    
+                    VStack {
+                        
+                        Text("Are you sure you want to delete this course?")
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(.primary)
+                            .font(.system(size: 16, weight: .regular, design: .rounded))
+                        
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                withAnimation {
+                                    deleteCoursePopUp = false
+                                    AppState.shared.deleteCourse(courseDocID: course!.documentID!)
+                                    course = nil
+                                }
+                            }) {
+                                Text("Yes")
+                                    .foregroundColor(.buttonPrimary)
+                                    .font(.system(size: 18, weight: .black, design: .rounded))
+                            }
+                            Spacer()
+                            
+                            Button(action: {
+                                withAnimation {
+                                    deleteCoursePopUp = false
+                                }
+                            }) {
+                                Text("No")
+                                    .foregroundColor(.buttonPrimary)
+                                    .font(.system(size: 18, weight: .black, design: .rounded))
+                            }
+                            
+                            Spacer()
+                        }
+                        .padding()
+                    }
+                }.frame(width: screenWidth * 0.75, height: screenHeight / 5)
+            }
         }
     }
     
@@ -64,11 +128,11 @@ struct CourseView: View {
             Button(action: {
                 withAnimation {
                     course = nil
-                    DispatchQueue.main.async {
-                        withAnimation {
-                            self.offsetManager.offset = screenWidth * 2
-                        }
-                    }
+//                    DispatchQueue.main.async {
+//                        withAnimation {
+//                            self.offsetManager.offset = screenWidth * 2
+//                        }
+//                    }
                 }
             }) {
                 Image(systemName: "house.fill")
@@ -77,7 +141,7 @@ struct CourseView: View {
             }.padding(.trailing)
             
             Menu {
-                Button("Settings", action: settingsTapped)
+                Button("Delete Course", action: deleteCourse)
                 Button("Logout", action: logoutPressed)
             } label: {
                 Image(systemName: "gear")
@@ -164,6 +228,14 @@ struct CourseView: View {
     
     func logoutPressed() {
         AppState.shared.logout()
+    }
+    
+    @State var deleteCoursePopUp = false
+    
+    func deleteCourse() {
+        withAnimation {
+            deleteCoursePopUp = true
+        }
     }
     
     @State private var phase = AnimatableData(phase: 0)

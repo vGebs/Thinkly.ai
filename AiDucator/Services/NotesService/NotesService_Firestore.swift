@@ -35,7 +35,12 @@ class NotesService_Firestore {
 
         return firestore.read(query: query)
     }
-
+    
+    func getNotes(courseID: String) -> AnyPublisher<[Notes_Firestore], Error> {
+        let query = db.collection(collection).whereField("courseID", isEqualTo: courseID)
+        return firestore.read(query: query)
+    }
+    
     func listenOnNotes(for classID: String) -> AnyPublisher<[(Notes_Firestore, DocumentChangeType)], Error> {
         let query = db.collection(collection).whereField("classID", isEqualTo: classID)
 
