@@ -10,6 +10,8 @@
 		FA070DEF2A0E0A7E008EF241 /* LandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA070DEE2A0E0A7E008EF241 /* LandingView.swift */; };
 		FA070DF22A0E0AF5008EF241 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA070DF12A0E0AF5008EF241 /* Colors.swift */; };
 		FA0ACBE02A96876500A3C653 /* BillingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0ACBDF2A96876500A3C653 /* BillingView.swift */; };
+		FA0ACBE22A9987E200A3C653 /* IAPWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0ACBE12A9987E200A3C653 /* IAPWrapper.swift */; };
+		FA0ACBE42A99882900A3C653 /* IAPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0ACBE32A99882900A3C653 /* IAPService.swift */; };
 		FA0CDC322A0F237D007AF6E7 /* FirestoreWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC312A0F237D007AF6E7 /* FirestoreWrapper.swift */; };
 		FA0CDC352A0F23FD007AF6E7 /* DocumentSnapshotPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC342A0F23FD007AF6E7 /* DocumentSnapshotPublisher.swift */; };
 		FA0CDC372A0F241A007AF6E7 /* QuerySnapshotPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0CDC362A0F241A007AF6E7 /* QuerySnapshotPublisher.swift */; };
@@ -82,6 +84,9 @@
 		FA070DEE2A0E0A7E008EF241 /* LandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingView.swift; sourceTree = "<group>"; };
 		FA070DF12A0E0AF5008EF241 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		FA0ACBDF2A96876500A3C653 /* BillingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillingView.swift; sourceTree = "<group>"; };
+		FA0ACBE12A9987E200A3C653 /* IAPWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPWrapper.swift; sourceTree = "<group>"; };
+		FA0ACBE32A99882900A3C653 /* IAPService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPService.swift; sourceTree = "<group>"; };
+		FA0ACBE92AA006F600A3C653 /* Thinkly.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Thinkly.storekit; sourceTree = "<group>"; };
 		FA0CDC312A0F237D007AF6E7 /* FirestoreWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreWrapper.swift; sourceTree = "<group>"; };
 		FA0CDC342A0F23FD007AF6E7 /* DocumentSnapshotPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentSnapshotPublisher.swift; sourceTree = "<group>"; };
 		FA0CDC362A0F241A007AF6E7 /* QuerySnapshotPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuerySnapshotPublisher.swift; sourceTree = "<group>"; };
@@ -172,6 +177,15 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		FA0ACBE52A9988A100A3C653 /* Billing */ = {
+			isa = PBXGroup;
+			children = (
+				FA0ACBDF2A96876500A3C653 /* BillingView.swift */,
+				FA0ACBE92AA006F600A3C653 /* Thinkly.storekit */,
+			);
+			path = Billing;
+			sourceTree = "<group>";
+		};
 		FA0CDC2F2A0F0AB9007AF6E7 /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -229,6 +243,7 @@
 				FA0CDC432A0F27F4007AF6E7 /* CoreDataWrapper */,
 				FA0CDC302A0F231B007AF6E7 /* FirestoreWrapper */,
 				FA9E0B072A3558E80096BCCF /* NetworkWrapperCombine.swift */,
+				FA0ACBE12A9987E200A3C653 /* IAPWrapper.swift */,
 			);
 			path = Wrappers;
 			sourceTree = "<group>";
@@ -285,6 +300,7 @@
 		FA9CFA962A158312000BDE95 /* CourseList */ = {
 			isa = PBXGroup;
 			children = (
+				FA0ACBE52A9988A100A3C653 /* Billing */,
 				FAEC5D312A0EFD9500A48F05 /* CourseList.swift */,
 				FA9CFA972A158322000BDE95 /* CourseListViewModel.swift */,
 				FA9CFAB32A18265C000BDE95 /* PopUps */,
@@ -319,7 +335,6 @@
 			children = (
 				FADA71322A4A3628009FF5E6 /* Self-Learn */,
 				FA9CFAB42A182672000BDE95 /* AddCourseStudentPopup.swift */,
-				FA0ACBDF2A96876500A3C653 /* BillingView.swift */,
 			);
 			path = PopUps;
 			sourceTree = "<group>";
@@ -462,6 +477,7 @@
 				FA9CFA912A157D13000BDE95 /* ClassUserService */,
 				FAEC5D2A2A0EF5D100A48F05 /* Auth */,
 				FA9CFA8D2A11CF8E000BDE95 /* ThinklyModel.swift */,
+				FA0ACBE32A99882900A3C653 /* IAPService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -602,6 +618,7 @@
 				FA9CFA9D2A15E2EB000BDE95 /* CourseView.swift in Sources */,
 				FA9CFA8A2A10789C000BDE95 /* CourseService_CoreData.swift in Sources */,
 				FABD79C52A098DD800201145 /* AppState.swift in Sources */,
+				FA0ACBE22A9987E200A3C653 /* IAPWrapper.swift in Sources */,
 				FA070DEF2A0E0A7E008EF241 /* LandingView.swift in Sources */,
 				FABD79B32A098CA100201145 /* ContentView.swift in Sources */,
 				FA9CFAA12A16AFD0000BDE95 /* Pager.swift in Sources */,
@@ -624,6 +641,7 @@
 				FA9CFAAE2A16D709000BDE95 /* SineWave.swift in Sources */,
 				FAD21FD92A859A1E007DB709 /* AssignmentService_Firestore.swift in Sources */,
 				FA0CDC412A0F25D4007AF6E7 /* User.swift in Sources */,
+				FA0ACBE42A99882900A3C653 /* IAPService.swift in Sources */,
 				FA9E0B042A3556930096BCCF /* CourseCreationService.swift in Sources */,
 				FA9CFA902A157C42000BDE95 /* CourseRegristration.swift in Sources */,
 				FA9CFABA2A193FA4000BDE95 /* Notes.swift in Sources */,

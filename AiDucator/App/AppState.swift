@@ -22,6 +22,8 @@ class AppState: ObservableObject {
     
     @Published var onMainView = false
     
+    @Published var billing = InAppPurchasesService(productIdentifiers: ["com.brickSquad.thinklyPremium"], entitlementManager: EntitlementManager())
+    
     private var cancellables: [AnyCancellable] = []
     
     private init() {
@@ -351,5 +353,11 @@ extension AppState {
 extension AppState {
     func clearCache() {
         //ThinklyModel.shared.courseService.clearCache()
+    }
+}
+
+extension AppState {
+    func updatePurchasedProducts() async {
+        await billing.updatePurchasedProducts()
     }
 }

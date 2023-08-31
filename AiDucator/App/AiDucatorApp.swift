@@ -23,6 +23,9 @@ struct AiDucatorApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .task {
+                    await AppState.shared.updatePurchasedProducts()
+                }
         }
     }
 }

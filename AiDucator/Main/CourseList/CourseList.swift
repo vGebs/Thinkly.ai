@@ -146,7 +146,10 @@ struct CourseList: View {
             }
             
             Menu {
-                Button("Billing", action: billingTapped)
+//                if !AppState.shared.billing.entitlementManager.hasPro {
+//                    Button("Premium", action: billingTapped)
+//                }
+                Button("Premium", action: billingTapped)
                 Button("Logout", action: logoutPressed)
             } label: {
                 Image(systemName: "gear")
