@@ -18,6 +18,8 @@ struct LessonsDropDown: View {
     @State var notes: Notes? = nil
     @State var lessonNumber = ""
     
+    @State var showPremiumOffer = false
+    
     var body: some View {
         VStack {
             ForEach(lessons.indices, id: \.self) { i in
@@ -87,7 +89,11 @@ struct LessonsDropDown: View {
                 
                 if notesViewModel.submittedLessons.contains(subunitNumber) && !notesViewModel.lessonHasNotes(unitIndex: unitNumber - 1, subunitNumber: subunitNumber, lessonNumber: lessons[i].lessonNumber) && !notesViewModel.loadingNotesNumbers.contains(lessons[i].lessonNumber){
                     Button(action: {
-                        notesViewModel.generateNotes(for: lessons[i].lessonNumber, unitIndex: unitNumber - 1)
+                        if AppState.shared.billing.entitlementManager.hasPro {
+                            notesViewModel.generateNotes(for: lessons[i].lessonNumber, unitIndex: unitNumber - 1)
+                        } else {
+                            showPremiumOffer = true
+                        }
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -175,7 +181,11 @@ struct LessonsDropDown: View {
             if !notesViewModel.subunitHasNotes(unitIndex: unitNumber - 1, subunitNumber: subunitNumber) {
                 VStack {
                     Button(action: {
-                        notesViewModel.generateLessons(subunitNumber: subunitNumber)
+                        if AppState.shared.billing.entitlementManager.hasPro {
+                            notesViewModel.generateLessons(subunitNumber: subunitNumber)
+                        } else {
+                            showPremiumOffer = false
+                        }
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -225,6 +235,9 @@ struct LessonsDropDown: View {
             
         }.sheet(isPresented: $showNotes) {
             LessonNotesView(notes: $notes, showNotes: $showNotes, notesViewModel: notesViewModel, unitIndex: unitNumber - 1, subunitNumber: subunitNumber, lessonNumber: lessonNumber)
+        }
+        .sheet(isPresented: $showPremiumOffer) {
+            BillingView(show: $showPremiumOffer)
         }
     }
 }

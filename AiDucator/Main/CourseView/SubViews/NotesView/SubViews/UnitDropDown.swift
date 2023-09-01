@@ -119,12 +119,22 @@ struct UnitDropDown: View {
                     }
                 }
             }
-        }.padding(.horizontal)
+        }
+        .padding(.horizontal)
+        .sheet(isPresented: $showPremiumOffer) {
+            BillingView(show: $showPremiumOffer)
+        }
     }
+    
+    @State var showPremiumOffer = false
     
     var regenerateButton: some View {
         Button(action: {
-            notesViewModel.generateSubUnits(with: unit.unitNumber - 1)
+            if AppState.shared.billing.entitlementManager.hasPro {
+                notesViewModel.generateSubUnits(with: unit.unitNumber - 1)
+            } else {
+                showPremiumOffer = true
+            }
         }){
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
@@ -279,7 +289,11 @@ struct UnitDropDown: View {
                             } else {
                                 HStack {
                                     Button(action: {
-                                        notesViewModel.generateLessons(subunitNumber: unit.subUnits![index].unitNumber)
+                                        if AppState.shared.billing.entitlementManager.hasPro {
+                                            notesViewModel.generateLessons(subunitNumber: unit.subUnits![index].unitNumber)
+                                        } else {
+                                            showPremiumOffer = true 
+                                        }
                                     }) {
                                         ZStack {
                                             RoundedRectangle(cornerRadius: 10)
@@ -340,7 +354,11 @@ struct UnitDropDown: View {
                                     LoadingView()
                                 } else {
                                     Button(action: {
-                                        notesViewModel.generateAssignment(unitIndex: unit.unitNumber - 1, subunitIndex: index)
+                                        if AppState.shared.billing.entitlementManager.hasPro {
+                                            notesViewModel.generateAssignment(unitIndex: unit.unitNumber - 1, subunitIndex: index)
+                                        } else {
+                                            showPremiumOffer = true
+                                        }
                                     }) {
                                         ZStack {
                                             RoundedRectangle(cornerRadius: 10)
@@ -418,7 +436,11 @@ struct UnitDropDown: View {
     
     var generateSubunitsButton: some View {
         Button(action: {
-            notesViewModel.generateSubUnits(with: unit.unitNumber - 1)
+            if AppState.shared.billing.entitlementManager.hasPro {
+                notesViewModel.generateSubUnits(with: unit.unitNumber - 1)
+            } else {
+                showPremiumOffer = true
+            }
         }) {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)

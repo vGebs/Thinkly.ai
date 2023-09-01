@@ -61,8 +61,8 @@ struct NotesView: View {
             VStack {
                 ForEach(viewModel.curriculum.units.indices, id: \.self) { index in
                     UnitDropDown(unit: $viewModel.curriculum.units[index], subunitsActive: true, notesViewModel: viewModel)
-                    .padding(index == viewModel.curriculum.units.count - 1 ? .bottom : [])
-                    .padding(.top, index == 0 ? 5 : 0)
+                        .padding(index == viewModel.curriculum.units.count - 1 ? .bottom : [])
+                        .padding(.top, index == 0 ? 5 : 0)
                     if index != viewModel.curriculum.units.count - 1 {
                         RoundedRectangle(cornerRadius: 5)
                             .frame(height: 2)

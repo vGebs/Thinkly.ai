@@ -68,7 +68,11 @@ struct AssignmentView: View {
                     .padding(.bottom)
                 }
             }
-        }.edgesIgnoringSafeArea(.all)
+        }
+        .edgesIgnoringSafeArea(.all)
+        .sheet(isPresented: $showPremiumOffer) {
+            BillingView(show: $showPremiumOffer)
+        }
     }
     
     var submitButton: some View {
@@ -96,11 +100,18 @@ struct AssignmentView: View {
         .padding(.horizontal)
     }
     
+    @State var showPremiumOffer = false
+    
     var regenerateButton: some View {
         
         Button(action: {
-            withAnimation {
-                show = false
+            if AppState.shared.billing.entitlementManager.hasPro {
+                withAnimation {
+                    notesViewModel.generateAssignment(unitIndex: unitIndex, subunitIndex: subunitIndex)
+                    show = false
+                }
+            } else {
+                showPremiumOffer = true
             }
         }) {
             ZStack {

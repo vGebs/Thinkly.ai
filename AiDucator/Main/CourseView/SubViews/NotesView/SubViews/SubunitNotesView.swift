@@ -14,6 +14,8 @@ struct SubunitNotesView: View {
     @Binding var showNotes: Bool
     @ObservedObject var notesViewModel: NotesViewModel
     
+    @State var showPremiumOffer = false
+    
     var body: some View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
@@ -46,7 +48,11 @@ struct SubunitNotesView: View {
                                     LoadingView()
                                 } else {
                                     Button(action: {
-                                        notesViewModel.generateNotes(for: notesViewModel.curriculum.units[unitIndex].subUnits![subunitIndex].lessons![i].lessonNumber, unitIndex: unitIndex)
+                                        if AppState.shared.billing.entitlementManager.hasPro {
+                                            notesViewModel.generateNotes(for: notesViewModel.curriculum.units[unitIndex].subUnits![subunitIndex].lessons![i].lessonNumber, unitIndex: unitIndex)
+                                        } else {
+                                            showPremiumOffer = true
+                                        }
                                     }) {
                                         ZStack {
                                             RoundedRectangle(cornerRadius: 10)
@@ -151,7 +157,11 @@ struct SubunitNotesView: View {
                 Spacer()
             }.padding(.top)
             
-        }.edgesIgnoringSafeArea(.all)
+        }
+        .edgesIgnoringSafeArea(.all)
+        .sheet(isPresented: $showPremiumOffer) {
+            BillingView(show: $showPremiumOffer)
+        }
     }
     
     var header: some View {

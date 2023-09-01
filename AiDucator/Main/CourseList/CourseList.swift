@@ -32,6 +32,8 @@ struct CourseList: View {
     @State var addClassPopUpPressed = false
     @State var settingsPressed = false
     
+    @State var showPremiumOffer = false
+    
     @State private var phase = AnimatableData(phase: 0)
     @State private var phase1 = AnimatableData(phase: 45)
     @State private var phase2 = AnimatableData(phase: 90)
@@ -114,7 +116,10 @@ struct CourseList: View {
             SelfLearnCourseDefinitionSheet(selfLearnCourseDefinitionSheetViewModel: SelfLearnCourseDefinitionSheetViewModel(), addClassPopUpPressed: $addClassPopUpPressed)
         }
         .sheet(isPresented: $settingsPressed) {
-            BillingView()
+            BillingView(show: $settingsPressed)
+        }
+        .sheet(isPresented: $showPremiumOffer) {
+            BillingView(show: $showPremiumOffer)
         }
     }
     
@@ -135,7 +140,11 @@ struct CourseList: View {
                 if viewModel.courses!.count != 0 {
                     Button(action: {
                         withAnimation {
-                            addClassPopUpPressed = true
+                            if AppState.shared.billing.entitlementManager.hasPro {
+                                addClassPopUpPressed = true
+                            } else {
+                                showPremiumOffer = true
+                            }
                         }
                     }) {
                         Image(systemName: "plus.app")
@@ -146,10 +155,10 @@ struct CourseList: View {
             }
             
             Menu {
-//                if !AppState.shared.billing.entitlementManager.hasPro {
-//                    Button("Premium", action: billingTapped)
-//                }
-                Button("Premium", action: billingTapped)
+                if !AppState.shared.billing.entitlementManager.hasPro {
+                    Button("Premium", action: billingTapped)
+                }
+//                Button("Premium", action: billingTapped)
                 Button("Logout", action: logoutPressed)
             } label: {
                 Image(systemName: "gear")
@@ -251,7 +260,11 @@ struct CourseList: View {
     var addClassButton_big: some View {
         Button(action: {
             withAnimation {
-                addClassPopUpPressed = true
+                if AppState.shared.billing.entitlementManager.hasPro {
+                    addClassPopUpPressed = true
+                } else {
+                    showPremiumOffer = true
+                }
             }
         }) {
             ZStack {

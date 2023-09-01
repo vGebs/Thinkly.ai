@@ -11,6 +11,7 @@ import SwiftUI
 struct BillingView: View {
     
     @StateObject var viewModel = AppState.shared.billing
+    @Binding var show: Bool
     
     var body: some View {
         ZStack {
@@ -61,6 +62,7 @@ struct BillingView: View {
                 
                 Button(action: {
                     viewModel.restore()
+                    show = false
                 }) {
                     Text("Restore Purchases")
                         .font(.system(size: 17, weight: .bold, design: .rounded))

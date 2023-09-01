@@ -940,11 +940,17 @@ struct CurriciulumSelectView: View {
         .padding(.top)
     }
     
+    @State var showPremiumOffer = false
+    
     var generatePreliminaryCurriculumButton: some View {
         Button(action: {
-            withAnimation {
-                viewModel.errorOccurred = -1
-                viewModel.generateNewCurriculum(selectedVersion)
+            if AppState.shared.billing.entitlementManager.hasPro {
+                withAnimation {
+                    viewModel.errorOccurred = -1
+                    viewModel.generateNewCurriculum(selectedVersion)
+                }
+            } else {
+                showPremiumOffer = true
             }
         }) {
             ZStack {

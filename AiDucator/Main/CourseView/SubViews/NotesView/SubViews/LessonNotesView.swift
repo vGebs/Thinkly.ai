@@ -16,6 +16,8 @@ struct LessonNotesView: View {
     var subunitNumber: Double
     var lessonNumber: String
     
+    @State var showPremiumOffer = false
+    
     var body: some View {
         
         if let notes = notes {
@@ -132,9 +134,13 @@ struct LessonNotesView: View {
                         HStack {
                             Button(action: {
     //                            notesViewModel.submitNotes(unitIndex: unitIndex, subunitNumber: subunitNumber, lessonNumber: lessonNumber)
-                                notesViewModel.generateNotes(for: lessonNumber, unitIndex: unitIndex)
-                                withAnimation {
-                                    showNotes = false
+                                if AppState.shared.billing.entitlementManager.hasPro {
+                                    notesViewModel.generateNotes(for: lessonNumber, unitIndex: unitIndex)
+                                    withAnimation {
+                                        showNotes = false
+                                    }
+                                } else {
+                                    showPremiumOffer = true
                                 }
                             }) {
                                 ZStack {
@@ -194,6 +200,8 @@ struct LessonNotesView: View {
                     
                     Spacer()
                 }.padding(.top)
+            }.sheet(isPresented: $showPremiumOffer) {
+                BillingView(show: $showPremiumOffer)
             }
             
         }
