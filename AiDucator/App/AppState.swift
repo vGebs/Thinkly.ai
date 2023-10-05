@@ -24,6 +24,8 @@ class AppState: ObservableObject {
     
     @Published var billing = InAppPurchasesService(productIdentifiers: ["com.brickSquad.thinklyPremium"], entitlementManager: EntitlementManager())
     
+    @Published var backend_BaseUrl: URL?
+    
     private var cancellables: [AnyCancellable] = []
     
     private init() {
@@ -73,6 +75,7 @@ class AppState: ObservableObject {
                 if let u = user {
                     self?.onMainView = true
                     self?.fetchClasses(for: u.uid)
+                    self?.fetchBackendURL()
                 }
             }.store(in: &cancellables)
     }
@@ -100,7 +103,42 @@ class AppState: ObservableObject {
         deleteAssignments(courseID: courseDocID)
         deleteNotes(courseID: courseDocID)
     }
+}
+
+import Firebase
+import FirebaseFirestoreSwift
+
+extension AppState {
+    private func fetchBackendURL() {
+        fetchBackendURL_()
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .failure(let e):
+                    print("AppState: Failed to fetch base URL")
+                    print("AppState-err: \(e)")
+                case .finished:
+                    print("AppState: Finished fetching URL")
+                }
+            } receiveValue: { [weak self] (url, docChange) in
+                let fullURL = "http://" + url.baseURL
+                self?.backend_BaseUrl = URL(string: fullURL)
+                print("BaseURL-String: ")
+                print(self?.backend_BaseUrl)
+            }.store(in: &cancellables)
+    }
     
+    struct BackendURL: FirestoreProtocol {
+        @DocumentID var documentID: String?
+        var baseURL: String
+    }
+    
+    private func fetchBackendURL_() -> AnyPublisher<(BackendURL,DocumentChangeType), Error> {
+        return FirestoreWrapper.shared.listenByDocument(collection: "BackendURL", documentId: "url")
+    }
+}
+
+extension AppState {
     private func deleteCourse(id: String) {
         CourseService_Firestore.shared.deleteCourse(docID: id)
             .receive(on: DispatchQueue.main)
