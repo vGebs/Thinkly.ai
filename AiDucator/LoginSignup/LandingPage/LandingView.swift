@@ -17,179 +17,149 @@ struct LandingView: View {
     var body: some View {
         ZStack{
             Color.black.edgesIgnoringSafeArea(.all)
+            wave
+            
             VStack {
-                logoThreeHStack(opacity: $opacity, opacity2: $opacity2)
                 Spacer()
-                logoThreeHStackInverse(opacity: $opacity, opacity2: $opacity2)
-                Spacer()
-                logoThreeHStack(opacity: $opacity, opacity2: $opacity2)
-                Spacer()
-                logoThreeHStackInverse(opacity: $opacity, opacity2: $opacity2)
-                Spacer()
-                logoThreeHStack(opacity: $opacity, opacity2: $opacity2)
-            }
-
-            RoundedRectangle(cornerRadius: 40).stroke(lineWidth: 5)
-                .foregroundColor(Color.accent)
-                .frame(width: screenWidth - 1, height: screenHeight - 1)
-                .edgesIgnoringSafeArea(.all)
-            
-            RoundedRectangle(cornerRadius: 23).stroke(lineWidth: 5)
-                .foregroundColor(Color.accent)
-                .frame(width: screenWidth * 0.56, height: screenHeight * 0.062)
-                .offset(y: -screenHeight / 2)
-            
-            VStack{
+                
                 Image(systemName: "brain")
-                    .font(.system(size: 90, weight: .thin, design: .rounded))
+                    .font(.system(size: 90, weight: .regular, design: .rounded))
                     .foregroundColor(.accent)
                     
                 Text("Thinkly.ai")
-                    .font(.system(size: 30, weight: .black, design: .rounded)) //size 15
-                    .foregroundColor(.buttonPrimary)
-            }
-            .offset(y: -screenHeight * 0.12)
-            
-            VStack {
-                Button(action: {
-                    withAnimation {
-                        viewModel.signupPressed()
-                    }
-                }){
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .edgesIgnoringSafeArea(.all)
-                        
-                        RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 3)
-                            .foregroundColor(.buttonPrimary)
-                            .edgesIgnoringSafeArea(.all)
-                        
-                        HStack {
-                            Spacer()
-                            Image(systemName: "newspaper")
-                                .font(.system(size: 20, weight: .bold, design: .rounded))
-                                .foregroundColor(.accent)
-                            
-                            Text("Sign up")
-                                .font(.system(size: 30, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                            Spacer()
-                        }
-                    }
-                }
-                .frame(width: screenWidth * 0.6, height: screenHeight * 0.1)
-                .foregroundColor(.black)
-                .padding(.bottom)
+                    .font(.system(size: 35, weight: .black, design: .rounded)) //size 15
+                    .foregroundColor(.primary)
                 
-                Button(action: {
-                    withAnimation {
-                        viewModel.loginPressed()
-                    }
-                }){
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .edgesIgnoringSafeArea(.all)
-                        
-                        RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 3)
-                            .foregroundColor(.buttonPrimary)
-                            .edgesIgnoringSafeArea(.all)
-                        
-                        HStack {
-                            Spacer()
-                            Image(systemName: "lock")
-                                .font(.system(size: 25, weight: .bold, design: .rounded))
-                                .foregroundColor(.accent)
-                            
-                            Text("Log in")
-                                .font(.system(size: 30, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                            Spacer()
-                        }
-                    }
-                }
-                .frame(width: screenWidth * 0.6, height: screenHeight * 0.1)
-                .foregroundColor(.black)
+                Spacer()
+                
+                signupButton
+                
+                loginButton
             }
-            .offset(y: screenHeight * 0.33)
+            .padding(.bottom, screenHeight * 0.05)
         }
         .preferredColorScheme(.dark)
     }
-}
-
-struct FlashingLogo: View {
-    @Binding var opacity: Double
-    var body: some View {
-        Text("Thinkly.ai")
-            .font(.system(size: 20, weight: .black, design: .rounded))
-            .frame(width: 110, height: 40)
-            .foregroundColor(Color.buttonPrimary)
-            .opacity(opacity)
-            .animation(Animation.easeInOut(duration: 3).repeatForever(autoreverses: true))
-            .onAppear{
-                opacity = 1
-            }
-    }
-}
-
-struct FlashingLogoInverse: View {
-    @Binding var opacity: Double
-    var body: some View {
-        Text("Thinkly.ai")
-            .font(.system(size: 20, weight: .black, design: .rounded))
-            .frame(width: 110, height: 40)
-            .foregroundColor(Color.primary)
-            .opacity(opacity)
-            .animation(Animation.easeInOut(duration: 3).repeatForever(autoreverses: true))
-            .onAppear{
-                opacity = 0
-            }
-    }
-}
-
-struct logoThreeHStack: View {
-    @Binding var opacity: Double
-    @Binding var opacity2: Double
-    @State var posX = 0
     
-    var body: some View {
-        HStack {
-            FlashingLogo(opacity: $opacity)
-            Spacer()
-            FlashingLogoInverse(opacity: $opacity2)
-            Spacer()
-            FlashingLogo(opacity: $opacity)
-            Spacer()
-            FlashingLogoInverse(opacity: $opacity2)
+    var signupButton: some View {
+        Button(action: {
+            withAnimation {
+                viewModel.signupPressed()
+            }
+        }){
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .edgesIgnoringSafeArea(.all)
+                
+                RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 3)
+                    .foregroundColor(.buttonPrimary)
+                    .edgesIgnoringSafeArea(.all)
+                
+                HStack {
+                    Spacer()
+                    Image(systemName: "newspaper")
+                        .font(.system(size: 20, weight: .bold, design: .rounded))
+                        .foregroundColor(.accent)
+                    
+                    Text("Sign up")
+                        .font(.system(size: 30, weight: .bold, design: .rounded))
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+            }
         }
-        .frame(width: screenWidth * 1.2)
-        .offset(x: CGFloat(posX))
-        .animation(Animation.easeInOut(duration: 5).repeatForever(autoreverses: true))
-        .onAppear{
-            posX += 140
-        }
+        .frame(width: screenWidth * 0.6, height: screenHeight * 0.1)
+        .foregroundColor(.black)
+        .padding(.bottom)
     }
-}
-
-struct logoThreeHStackInverse: View {
-    @Binding var opacity: Double
-    @Binding var opacity2: Double
-    @State var posX = 0
     
-    var body: some View {
-        HStack {
-            FlashingLogoInverse(opacity: $opacity2)
-            Spacer()
-            FlashingLogo(opacity: $opacity)
-            Spacer()
-            FlashingLogoInverse(opacity: $opacity2)
-            Spacer()
-            FlashingLogo(opacity: $opacity)
+    var loginButton: some View {
+        Button(action: {
+            withAnimation {
+                viewModel.loginPressed()
+            }
+        }){
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .edgesIgnoringSafeArea(.all)
+                
+                RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 3)
+                    .foregroundColor(.buttonPrimary)
+                    .edgesIgnoringSafeArea(.all)
+                
+                HStack {
+                    Spacer()
+                    Image(systemName: "lock")
+                        .font(.system(size: 25, weight: .bold, design: .rounded))
+                        .foregroundColor(.accent)
+                    
+                    Text("Log in")
+                        .font(.system(size: 30, weight: .bold, design: .rounded))
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+            }
         }
-        .frame(width: screenWidth * 1.2)
-        .offset(x: CGFloat(posX))
-        .animation(Animation.easeInOut(duration: 5).repeatForever(autoreverses: true))
-        .onAppear{
-            posX -= 140
+        .frame(width: screenWidth * 0.6, height: screenHeight * 0.1)
+        .foregroundColor(.black)
+    }
+    
+    @State private var phase = AnimatableData(phase: 0)
+    @State private var phase1 = AnimatableData(phase: 45)
+    @State private var phase2 = AnimatableData(phase: 90)
+    
+    var wave: some View {
+        ZStack {
+            VStack {
+                Spacer()
+                SineWave(frequency: 0.3, amplitude: 0.035, phase: phase)
+                    .fill(Color.accent)
+                    .edgesIgnoringSafeArea(.all)
+                    .onAppear {
+                        withAnimation(.linear(duration: 5).repeatForever(autoreverses: false)) {
+                            phase.phase += 1
+                        }
+                    }
+            }
+            
+            VStack {
+                Spacer()
+                SineWave(frequency: 0.5, amplitude: 0.03, phase: phase1)
+                    .fill(Color.buttonPrimary)
+                    .edgesIgnoringSafeArea(.all)
+                    .onAppear {
+                        withAnimation(.linear(duration: 5).repeatForever(autoreverses: false)) {
+                            phase1.phase += 1
+                        }
+                    }
+            }.offset(y: 130)
+            
+            ZStack {
+                VStack {
+                    Spacer()
+                    SineWave(frequency: 0.5, amplitude: 0.025, phase: phase2)
+                        .fill(Color.primary)
+                        .edgesIgnoringSafeArea(.all)
+                        .onAppear {
+                            withAnimation(.linear(duration: 5).repeatForever(autoreverses: false)) {
+                                phase2.phase += 1
+                            }
+                        }
+                }.offset(y: 200)
+                
+//                VStack {
+//                    Spacer()
+//
+//                    Image(systemName: "brain")
+//                        .font(.system(size: 20, weight: .black, design: .rounded))
+//                        .foregroundColor(Color.black)
+//
+//                    Text("Thinkly.ai")
+//                        .font(.system(size: 20, weight: .black, design: .rounded))
+//                        .foregroundColor(Color.buttonPrimary)
+//                }
+//                .frame(width: screenWidth, height: screenHeight * 0.85)
+            }
         }
     }
 }

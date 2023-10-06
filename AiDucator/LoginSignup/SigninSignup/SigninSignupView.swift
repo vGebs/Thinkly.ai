@@ -44,6 +44,7 @@ struct SigninSignupView: View {
                     }){
                         HStack {
                             Image(systemName: "arrow.backward")
+                                .foregroundColor(.buttonPrimary)
                                 .font(.system(size: 25))
                             Spacer()
                         }
